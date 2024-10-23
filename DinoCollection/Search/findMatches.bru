@@ -1,0 +1,16 @@
+meta {
+  name: findMatches
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{BACKEND_URL}}/search/matches/?query=a&categories=sopas,principal
+  body: none
+  auth: none
+}
+
+params:query {
+  query: a
+  categories: sopas,principal
+}

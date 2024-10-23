@@ -1,0 +1,299 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// datasource db {
+//  provider = "postgresql"
+//  url      = env("DATABASE_URL")
+// }
+
+model Recipe {
+  id           Int                 @id @default(autoincrement())
+  title        String
+  description  String
+  // instructions String
+  imageUrl     String?
+  prepTime     Int
+  servings     Int
+  difficulty   String
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+  authorId     Int
+  author       User                @relation(fields: [authorId], references: [id])
+  categories   RecipeCategory[]
+  ingredients  RecipeIngredient[]
+  instructions RecipeInstruction[]
+
+  @@index([title, difficulty])
+}
+
+model RecipeInstruction {
+  id          Int    @id @default(autoincrement())
+  // instructionOrder Int
+  description String
+
+  recipeId Int
+  recipe   Recipe @relation(fields: [recipeId], references: [id])
+  // complementType   String? 
+
+  // @@index([recipeId])
+}
+
+model RecipeIngredient {
+  id       Int    @id @default(autoincrement())
+  name     String
+  recipeId Int
+  recipe   Recipe @relation(fields: [recipeId], references: [id])
+
+  // @@id([recipeId])
+}
+
+model Category {
+  id                    Int                     @id @default(autoincrement())
+  name                  String                  @unique
+  recipes               RecipeCategory[]
+  PendingRecipeCategory PendingRecipeCategory[]
+}
+
+model RecipeCategory {
+  recipeId   Int
+  categoryId Int
+  recipe     Recipe   @relation(fields: [recipeId], references: [id])
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  @@id([recipeId, categoryId])
+}
+
+model User {
+  id            Int             @id @default(autoincrement())
+  username      String          @unique
+  email         String          @unique
+  password      String
+  roleId        Int
+  role          Role            @relation(fields: [roleId], references: [id])
+  recipes       Recipe[]
+  PendingRecipe PendingRecipe[]
+}
+
+model Role {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  user User[]
+}
+
+/////////PENDING
+model PendingRecipe {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  imageUrl    String?
+  prepTime    Int
+  servings    Int
+  difficulty  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  authorId    Int
+  author      User     @relation(fields: [authorId], references: [id])
+  status      String   @default("pending")
+
+  pendingCategories   PendingRecipeCategory[]
+  pendingIngredients  PendingRecipeIngredient[]
+  pendingInstructions PendingRecipeInstruction[]
+}
+
+model PendingRecipeInstruction {
+  id          Int           @id @default(autoincrement())
+  recipeId    Int
+  recipe      PendingRecipe @relation(fields: [recipeId], references: [id])
+  // instructionOrder Int
+  description String
+  // complementType   String? 
+
+  // @@index([recipeId])
+}
+
+model PendingRecipeIngredient {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  recipeId Int
+  recipe   PendingRecipe @relation(fields: [recipeId], references: [id])
+
+  // @@id([pendingRecipeId, pendingIngredientId])
+}
+
+model PendingRecipeCategory {
+  pendingRecipeId   Int
+  pendingCategoryId Int
+
+  pendingRecipe   PendingRecipe @relation(fields: [pendingRecipeId], references: [id])
+  pendingCategory Category      @relation(fields: [pendingCategoryId], references: [id])
+
+  @@id([pendingRecipeId, pendingCategoryId])
+}
+
+// -------------------------------------
+// model Recipe {
+//   id           Int                @id @default(autoincrement())
+//   title        String
+//   description  String
+//   instructions String
+//   imageUrl     String?
+//   prepTime     Int
+//   servings     Int
+//   difficulty   String
+//   createdAt    DateTime           @default(now())
+//   updatedAt    DateTime           @updatedAt
+//   authorId     Int
+//   author       User               @relation(fields: [authorId], references: [id])
+//   categories   RecipeCategory[]
+//   ingredients  RecipeIngredient[]
+// }
+
+// model Ingredient {
+//   id                      Int                       @id @default(autoincrement())
+//   name                    String                    @unique
+//   recipes                 RecipeIngredient[]
+//   PendingRecipeIngredient PendingRecipeIngredient[]
+// }
+
+// model RecipeIngredient {
+//   recipeId     Int
+//   ingredientId Int
+//   quantity     String
+//   unit         String
+//   recipe       Recipe     @relation(fields: [recipeId], references: [id])
+//   ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+
+//   @@id([recipeId, ingredientId])
+// }
+
+// model Category {
+//   id                    Int                     @id @default(autoincrement())
+//   name                  String                  @unique
+//   recipes               RecipeCategory[]
+//   PendingRecipeCategory PendingRecipeCategory[]
+// }
+
+// model RecipeCategory {
+//   recipeId   Int
+//   categoryId Int
+//   recipe     Recipe   @relation(fields: [recipeId], references: [id])
+//   category   Category @relation(fields: [categoryId], references: [id])
+
+//   @@id([recipeId, categoryId])
+// }
+
+// model User {
+//   id            Int             @id @default(autoincrement())
+//   name          String
+//   email         String          @unique
+//   password      String
+//   recipes       Recipe[]
+//   PendingRecipe PendingRecipe[]
+// }
+
+// /////////PENDING
+// model PendingRecipe {
+//   id                 Int                       @id @default(autoincrement())
+//   title              String
+//   description        String
+//   instructions       String
+//   imageUrl           String?
+//   prepTime           Int
+//   servings           Int
+//   difficulty         String
+//   createdAt          DateTime                  @default(now())
+//   updatedAt          DateTime                  @updatedAt
+//   authorId           Int
+//   author             User                      @relation(fields: [authorId], references: [id])
+//   status             String                    @default("pending")
+//   pendingCategories  PendingRecipeCategory[]
+//   pendingIngredients PendingRecipeIngredient[]
+// }
+
+// model PendingRecipeIngredient {
+//   pendingRecipeId     Int
+//   pendingIngredientId Int
+//   quantity            String
+//   unit                String
+
+//   pendingRecipe     PendingRecipe @relation(fields: [pendingRecipeId], references: [id])
+//   pendingIngredient Ingredient    @relation(fields: [pendingIngredientId], references: [id])
+
+//   @@id([pendingRecipeId, pendingIngredientId])
+// }
+
+// model PendingRecipeCategory {
+//   pendingRecipeId   Int
+//   pendingCategoryId Int
+
+//   pendingRecipe   PendingRecipe @relation(fields: [pendingRecipeId], references: [id])
+//   pendingCategory Category      @relation(fields: [pendingCategoryId], references: [id])
+
+//   @@id([pendingRecipeId, pendingCategoryId])
+// }
+
+// ----------------------------------------------------
+// model Recipe {
+//   id           String   @id @default(cuid())
+//   title        String
+//   description  String
+//   instructions String
+//   prep_time    String
+//   servings     String
+//   difficulty   String
+//   author       String
+//   created_at   DateTime @default(now())
+// }
+
+// model Ingredients {
+//   id   String @id @default(cuid())
+//   name String
+// }
+
+// model Recipe_Ingredients {
+//   id          String @id @default(cuid())
+//   recipe_id   String
+//   ingredients String
+// }
+
+// model Categories {
+//   id   String @id @default(cuid())
+//   name String
+// }
+
+// model Recipe_Categories {
+//   id          String @id @default(cuid())
+//   recipe_id   String
+//   category_id String
+// }
+
+// model Users {
+//   id       String @id @default(cuid())
+//   name     String
+//   email    String
+//   password String
+//   role     String
+// }
+
+// model Comments {
+//   id         String   @id @default(cuid())
+//   recipe_id  String
+//   user_id    String
+//   content    String
+//   rating     String
+//   created_at DateTime @default(now())
+// }
