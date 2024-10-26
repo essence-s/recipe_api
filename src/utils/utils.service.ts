@@ -26,6 +26,10 @@ export class UtilsService {
     }
   }
 
+  async utilCreateManyRoles(createRoleDto) {
+    return this.prisma.role.createMany({ data: createRoleDto });
+  }
+
   async createRecipesUtils(recipes) {
     // console.log({ recipes });
 

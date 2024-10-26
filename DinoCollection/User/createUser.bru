@@ -1,0 +1,30 @@
+meta {
+  name: createUser
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{BACKEND_URL}}/users
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFyZGlsbGEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3Mjk4OTU4MjgsImV4cCI6MTcyOTk4MjIyOH0.vqKNcTrA4UNAvFqLMSoydK2DS5JbZ1P1cNQC5qteyos
+    "username": "ardilla",
+    "email": "ardilla@gmail.com",
+    "password": "tunometecabrasarabambiche",
+    "roleId":1
+    
+  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFyZGlsbGEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3Mjk4OTU4MjgsImV4cCI6MTcyOTk4MjIyOH0.vqKNcTrA4UNAvFqLMSoydK2DS5JbZ1P1cNQC5qteyos
+}
+
+body:json {
+  {
+    "username": "ardilla",
+    "email": "ardilla@gmail.com",
+    "password": "tunometecabrasarabambiche",
+    "roleId": 1
+  }
+}

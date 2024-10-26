@@ -14,4 +14,9 @@ export class UtilsController {
   async createRecipes(@Body() recipes) {
     return this.utils.createRecipesUtils(recipes);
   }
+
+  @Post('util-create-roles')
+  async utilCreateManyRoles(@Body() roles) {
+    return this.utils.utilCreateManyRoles(roles);
+  }
 }

@@ -1,0 +1,26 @@
+meta {
+  name: utilCreateRoles
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{BACKEND_URL}}/utils/util-create-roles
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFyZGlsbGEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3Mjk2MTcxMDEsImV4cCI6MTcyOTcwMzUwMX0.lXlYugs5ZZUQbsptnbYhSuYOWp-uTUwqy7oFQbYWJe8
+}
+
+body:json {
+  [
+    {
+      "name": "admin"
+    },
+    {
+      "name": "user"
+    }
+  ]
+}

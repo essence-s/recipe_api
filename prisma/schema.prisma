@@ -9,28 +9,30 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 // datasource db {
-//  provider = "postgresql"
-//  url      = env("DATABASE_URL")
+//   provider = "sqlite"
+//   url      = env("DATABASE_URL")
 // }
 
 model Recipe {
-  id           Int                 @id @default(autoincrement())
-  title        String
-  description  String
-  // instructions String
-  imageUrl     String?
-  prepTime     Int
-  servings     Int
-  difficulty   String
-  createdAt    DateTime            @default(now())
-  updatedAt    DateTime            @updatedAt
-  authorId     Int
-  author       User                @relation(fields: [authorId], references: [id])
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  imageUrl    String?
+  videoUrl    String?
+  prepTime    Int
+  servings    Int
+  difficulty  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  authorId    Int
+  author      User     @relation(fields: [authorId], references: [id])
+
   categories   RecipeCategory[]
   ingredients  RecipeIngredient[]
   instructions RecipeInstruction[]
@@ -59,11 +61,20 @@ model RecipeIngredient {
   // @@id([recipeId])
 }
 
+model CategoryGroup {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  Category Category[]
+}
+
 model Category {
-  id                    Int                     @id @default(autoincrement())
-  name                  String                  @unique
-  recipes               RecipeCategory[]
-  PendingRecipeCategory PendingRecipeCategory[]
+  id      Int              @id @default(autoincrement())
+  name    String           @unique
+  groupId Int
+  group   CategoryGroup    @relation(fields: [groupId], references: [id])
+  recipes RecipeCategory[]
+  // PendingRecipeCategory PendingRecipeCategory[]
 }
 
 model RecipeCategory {
@@ -89,6 +100,13 @@ model User {
 model Role {
   id   Int    @id @default(autoincrement())
   name String @unique
+  // auth       String @default("{create:false,delete:false,update:false,find:false}")
+  // role       String @default("{create:false,delete:false,update:false,find:false}")
+  // users      String @default("{create:false,delete:false,update:false,find:false}")
+  // recipe     String @default("{create:false,delete:false,update:false,find:false}")
+  // ingredient String @default("{create:false,delete:false,update:false,find:false}")
+  // category   String @default("{create:false,delete:false,update:false,find:false}")
+  // search     String @default("{find:true}")
 
   user User[]
 }
@@ -99,6 +117,7 @@ model PendingRecipe {
   title       String
   description String
   imageUrl    String?
+  videoUrl    String?
   prepTime    Int
   servings    Int
   difficulty  String
@@ -134,12 +153,27 @@ model PendingRecipeIngredient {
   // @@id([pendingRecipeId, pendingIngredientId])
 }
 
+model PendingCategoryGroup {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  PendingCategory PendingCategory[]
+}
+
+model PendingCategory {
+  id                    Int                     @id @default(autoincrement())
+  name                  String                  @unique
+  groupId               Int
+  group                 PendingCategoryGroup    @relation(fields: [groupId], references: [id])
+  PendingRecipeCategory PendingRecipeCategory[]
+}
+
 model PendingRecipeCategory {
   pendingRecipeId   Int
   pendingCategoryId Int
 
-  pendingRecipe   PendingRecipe @relation(fields: [pendingRecipeId], references: [id])
-  pendingCategory Category      @relation(fields: [pendingCategoryId], references: [id])
+  pendingRecipe   PendingRecipe   @relation(fields: [pendingRecipeId], references: [id])
+  pendingCategory PendingCategory @relation(fields: [pendingCategoryId], references: [id])
 
   @@id([pendingRecipeId, pendingCategoryId])
 }

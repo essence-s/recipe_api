@@ -13,14 +13,14 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async register(register: RegisterDto) {
-    return this.usersService.create({
-      username: register.username,
-      email: register.email,
-      password: await bcrypt.hash(register.password, 10),
-      roleId: register.roleId,
-    });
-  }
+  // async register(register: RegisterDto) {
+  //   return this.usersService.create({
+  //     username: register.username,
+  //     email: register.email,
+  //     password: await bcrypt.hash(register.password, 10),
+  //     roleId: register.roleId,
+  //   });
+  // }
 
   async login(login: loginDto) {
     const user = await this.usersService.findOneByUsername(login.username);
@@ -40,6 +40,7 @@ export class AuthService {
     const token = await this.jwtService.signAsync(payload);
 
     return {
+      username: user.username,
       token,
     };
   }

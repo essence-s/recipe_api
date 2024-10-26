@@ -15,10 +15,10 @@ import { ActiveUserInterface } from 'src/common/interfaces/active-user.interface
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('register')
-  async register(@Body() register: RegisterDto) {
-    return await this.authService.register(register);
-  }
+  // @Post('register')
+  // async register(@Body() register: RegisterDto) {
+  //   return await this.authService.register(register);
+  // }
 
   @Post('login')
   async login(@Body() login: loginDto) {

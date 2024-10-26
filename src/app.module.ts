@@ -11,6 +11,8 @@ import { SearchModule } from './search/search.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { RoleModule } from './role/role.module';
+import { PrismaModule } from './prisma.module';
+import { MemoRoleModule } from './memo-role/memo-role.module';
 
 @Module({
   imports: [
@@ -20,6 +22,9 @@ import { RoleModule } from './role/role.module';
     //   autoLoadEntities: true,
     //   synchronize: true, // Solo en desarrollo, no en producción
     // }),
+    MemoRoleModule,
+    PrismaModule,
+
     RecipeModule,
     IngredientModule,
     CategoryModule,
