@@ -23,7 +23,7 @@ export class RolesGuard implements CanActivate {
 
     // const { user } = context.switchToHttp().getRequest();
     const contextRequest = context.switchToHttp().getRequest();
-    console.log(contextRequest);
+    // console.log(contextRequest);
 
     const validRoles = this.memoRoleService.getRoles().map((role) => role.name);
 

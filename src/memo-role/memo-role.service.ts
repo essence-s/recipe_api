@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { Role } from '@prisma/client'; // Asegúrate de que tu modelo de Prisma tenga una tabla de roles
 import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class MemoRoleService {
-  private roles: Role[] = [];
+  private roles = [];
 
   constructor(private readonly prisma: PrismaService) {}
 
@@ -15,7 +14,7 @@ export class MemoRoleService {
   }
 
   // Obtener la lista de roles
-  getRoles(): Role[] {
+  getRoles() {
     return this.roles;
   }
 }
