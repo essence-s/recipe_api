@@ -1,0 +1,18 @@
+meta {
+  name: createCategoryGroup
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{BACKEND_URL}}/category-group
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id":4,
+    "name":"Temperatura"
+  }
+}

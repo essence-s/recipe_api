@@ -13,6 +13,7 @@ import { UsersModule } from './users/users.module';
 import { RoleModule } from './role/role.module';
 import { PrismaModule } from './prisma.module';
 import { MemoRoleModule } from './memo-role/memo-role.module';
+import { CategoryGroupModule } from './category-group/category-group.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { MemoRoleModule } from './memo-role/memo-role.module';
     AuthModule,
     UsersModule,
     RoleModule,
+    CategoryGroupModule,
   ],
   controllers: [AppController],
   providers: [AppService],

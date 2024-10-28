@@ -1,0 +1,17 @@
+meta {
+  name: updateCategoryGroup
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{BACKEND_URL}}/category-group/4
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name":"Temperaturaerre"
+  }
+}
