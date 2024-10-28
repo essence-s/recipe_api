@@ -19,4 +19,16 @@ export class CategoryService {
       throw new BadRequestException(infoError);
     }
   }
+
+  findOne(id: number) {
+    return this.prisma.category.findUnique({ where: { id } });
+  }
+
+  update(id: number, data) {
+    return this.prisma.category.update({ where: { id }, data: data });
+  }
+
+  remove(id: number) {
+    return this.prisma.category.delete({ where: { id } });
+  }
 }

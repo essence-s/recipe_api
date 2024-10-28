@@ -1,0 +1,17 @@
+meta {
+  name: updateCategory
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{BACKEND_URL}}/category/14
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name":"principale"
+  }
+}

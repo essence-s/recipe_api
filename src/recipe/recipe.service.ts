@@ -51,6 +51,7 @@ export class RecipeService {
       return recipeRes;
     } catch (error) {
       //No in production messague :V error.meta.cause
+      console.log(error);
       throw new BadRequestException(error.meta.cause);
     }
   }

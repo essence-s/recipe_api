@@ -13,7 +13,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { Role } from 'src/common/enums/role.enum';
 
-// @Auth([Role.ADMIN])
+@Auth([Role.ADMIN])
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
