@@ -29,7 +29,16 @@ export class CategoryService {
   }
 
   findOne(id: number) {
-    return this.prisma.category.findUnique({ where: { id } });
+    return this.prisma.category.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        group: {
+          select: { name: true },
+        },
+      },
+    });
   }
 
   update(id: number, data) {
