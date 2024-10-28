@@ -7,7 +7,15 @@ export class CategoryService {
   constructor(private prisma: PrismaService) {}
 
   async findAll() {
-    return this.prisma.category.findMany();
+    return this.prisma.category.findMany({
+      select: {
+        id: true,
+        name: true,
+        group: {
+          select: { name: true },
+        },
+      },
+    });
   }
 
   async createCategory(categories: categoryDto) {
