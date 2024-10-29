@@ -12,7 +12,7 @@ export class CategoryService {
         id: true,
         name: true,
         group: {
-          select: { name: true },
+          select: { id: true, name: true },
         },
       },
     });
@@ -34,8 +34,9 @@ export class CategoryService {
       select: {
         id: true,
         name: true,
+        groupId: true,
         group: {
-          select: { name: true },
+          select: { id: true, name: true },
         },
       },
     });
