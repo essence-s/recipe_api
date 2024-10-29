@@ -1,0 +1,33 @@
+meta {
+  name: utilvalidationRoles
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{BACKEND_URL}}/role/validacion-role
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFyZGlsbGFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzMwMjA2NDIwLCJleHAiOjE3MzAyOTI4MjB9.yhMGjJlbI7Av8ty3cU4135Ifhvyg5vg9BzKhlc25Q-g
+}
+
+body:json {
+  {
+    "permissions": [
+      {
+        "name": "auth",
+        "permission": {
+          "create": true,
+          "delete": true
+        }
+      },
+      {
+        "name": "recipe"
+        
+      }
+    ]
+  }
+}

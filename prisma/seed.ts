@@ -14,6 +14,7 @@ async function main() {
     update: {},
     create: {
       name: 'admin',
+      permission: [],
     },
   });
 
@@ -25,6 +26,8 @@ async function main() {
       email,
       password: hashedPassword,
       roleId: adminRole.id,
+      phone: '999999999',
+      state: 'active',
     },
   });
 

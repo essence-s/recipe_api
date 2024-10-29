@@ -23,10 +23,12 @@ export class AuthService {
   // }
 
   async login(login: loginDto) {
-    const user = await this.usersService.findOneByUsername(login.username);
+    const user = await this.usersService.findOneByPhoneOrEmail(
+      login.phoneOrEmail,
+    );
     // console.log(user);
     if (!user) {
-      throw new UnauthorizedException('username is wrong');
+      throw new UnauthorizedException('phone or email is wrong');
     }
 
     const isPasswordValid = await bcrypt.compare(login.password, user.password);

@@ -12,6 +12,7 @@ import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { Role } from 'src/common/enums/role.enum';
+import { RolePermissionsArrayDto } from './dto/permission.dto';
 
 @Auth([Role.ADMIN])
 @Controller('role')
@@ -41,5 +42,10 @@ export class RoleController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.roleService.remove(+id);
+  }
+
+  @Post('validacion-role')
+  validacionRole(@Body() data: RolePermissionsArrayDto) {
+    return { ok: 'ok' };
   }
 }

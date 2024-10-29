@@ -7,6 +7,11 @@ export class CreateUserDto {
   @MinLength(1)
   username: string;
 
+  @Transform(({ value }) => value.trim())
+  @IsString()
+  @MinLength(1)
+  phone: string;
+
   @IsEmail()
   email: string;
 

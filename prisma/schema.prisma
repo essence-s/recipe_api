@@ -87,19 +87,22 @@ model RecipeCategory {
 }
 
 model User {
-  id            Int             @id @default(autoincrement())
-  username      String          @unique
-  email         String          @unique
-  password      String
-  roleId        Int
-  role          Role            @relation(fields: [roleId], references: [id])
+  id       Int     @id @default(autoincrement())
+  username String  @unique
+  email    String? @unique
+  phone    String  @unique
+  password String
+  state    String  @default("active")
+  roleId   Int
+  role     Role    @relation(fields: [roleId], references: [id])
+
   recipes       Recipe[]
   PendingRecipe PendingRecipe[]
 }
 
 model Role {
-  id   Int    @id @default(autoincrement())
-  name String @unique
+  id         Int    @id @default(autoincrement())
+  name       String @unique
   // auth       String @default("{create:false,delete:false,update:false,find:false}")
   // role       String @default("{create:false,delete:false,update:false,find:false}")
   // users      String @default("{create:false,delete:false,update:false,find:false}")
@@ -107,8 +110,8 @@ model Role {
   // ingredient String @default("{create:false,delete:false,update:false,find:false}")
   // category   String @default("{create:false,delete:false,update:false,find:false}")
   // search     String @default("{find:true}")
-
-  user User[]
+  permission Json   @default("[]")
+  user       User[]
 }
 
 /////////PENDING

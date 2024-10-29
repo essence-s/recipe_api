@@ -16,6 +16,8 @@ export class UsersService {
         email: register.email,
         password: await bcrypt.hash(register.password, 10),
         roleId: register.roleId,
+        phone: register.phone,
+        state: '',
       },
     });
   }
@@ -23,6 +25,19 @@ export class UsersService {
   findOneByUsername(username: string) {
     return this.prisma.user.findUnique({
       where: { username },
+      include: {
+        role: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+  }
+
+  findOneByPhoneOrEmail(phoneOrEmail: string) {
+    return this.prisma.user.findFirst({
+      where: { OR: [{ phone: phoneOrEmail }, { email: phoneOrEmail }] },
       include: {
         role: {
           select: {
