@@ -1,0 +1,15 @@
+meta {
+  name: findMatchesGG
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{BACKEND_URL}}/search/matches/?query=ar
+  body: none
+  auth: none
+}
+
+params:query {
+  query: ar
+}

@@ -20,7 +20,7 @@ export class RoleController {
   constructor(private readonly roleService: RoleService) {}
 
   @Post()
-  create(@Body() createRoleDto: CreateRoleDto) {
+  create(@Body() createRoleDto) {
     return this.roleService.create(createRoleDto);
   }
 
@@ -35,7 +35,7 @@ export class RoleController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
+  update(@Param('id') id: string, @Body() updateRoleDto) {
     return this.roleService.update(+id, updateRoleDto);
   }
 

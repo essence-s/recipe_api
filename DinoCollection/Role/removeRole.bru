@@ -1,11 +1,11 @@
 meta {
-  name: getCategory
+  name: removeRole
   type: http
-  seq: 1
+  seq: 4
 }
 
-get {
-  url: {{BACKEND_URL}}/category
+delete {
+  url: {{BACKEND_URL}}/role/4
   body: json
   auth: bearer
 }

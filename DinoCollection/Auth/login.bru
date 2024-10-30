@@ -12,7 +12,11 @@ post {
 
 body:json {
   {
-    "username": "ardilla@gmail.com",
+    "phoneOrEmail": "9991",
     "password": "tunometecabrasarabambiche"
   }
+}
+
+vars:post-response {
+  bearerToken: res.body.token
 }

@@ -1,0 +1,21 @@
+meta {
+  name: updateRole
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{BACKEND_URL}}/role/4
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}
+
+body:json {
+  {
+    "name":"doooo"
+  }
+}

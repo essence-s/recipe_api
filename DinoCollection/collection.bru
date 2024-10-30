@@ -1,0 +1,11 @@
+auth {
+  mode: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFyZGlsbGEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MzAyNDU1NjAsImV4cCI6MTczMDMzMTk2MH0.0I5El46WyxQfTEu-F9RR8NOp234WdsNbnpx-2lwbmSc
+}
+
+vars:post-response {
+  bearerToken: res.body.token
+}
