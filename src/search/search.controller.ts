@@ -19,4 +19,10 @@ export class SearchController {
     return this.searchService.findMatchesRecipe([query, categories]);
     // return this.searchService.findMatchesTitleRecipe(query);
   }
+
+  @Get('matchesGG')
+  async findManyGG(@Query('query') query, @Query('categories') categories) {
+    return this.searchService.findManyGG([query, categories]);
+    // return this.searchService.findMatchesTitleRecipe(query);
+  }
 }

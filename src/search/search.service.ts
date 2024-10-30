@@ -1,7 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { title } from 'process';
+import { Prisma, Recipe } from '@prisma/client';
+import {
+  PaginatedResult,
+  PaginateFunction,
+  paginator,
+} from 'src/common/prismaFun/paginator';
 import { PrismaService } from 'src/prisma.service';
 
+const paginate: PaginateFunction = paginator({ perPage: 10 });
 @Injectable()
 export class SearchService {
   constructor(private prisma: PrismaService) {}
@@ -42,9 +48,50 @@ export class SearchService {
     });
   }
 
-  async findMatchesRecipe(matches) {
+  // probandoo
+  async findManyGG(matches): Promise<PaginatedResult<Recipe>> {
     let [query, categoriesParam] = matches;
     console.log(categoriesParam);
+    const categories =
+      categoriesParam != 'undefined' && categoriesParam
+        ? categoriesParam.split(',')
+        : [];
+    console.log(categories);
+    const page = { page: 0, perPage: 2 };
+
+    return paginate(
+      this.prisma.recipe,
+      {
+        where: {
+          AND: [
+            {
+              title: {
+                contains: query,
+                mode: 'insensitive',
+              },
+            },
+            // ...categories.map((category) => ({
+            //   categories: {
+            //     some: {
+            //       category: {
+            //         name: category,
+            //       },
+            //     },
+            //   },
+            // })),
+          ],
+        },
+        // orderBy,
+      },
+      {
+        ...page,
+      },
+    );
+  }
+
+  async findMatchesRecipe(matches) {
+    let [query, categoriesParam] = matches;
+    console.log(matches);
     const categories =
       categoriesParam != 'undefined' && categoriesParam
         ? categoriesParam.split(',')
@@ -56,7 +103,7 @@ export class SearchService {
           {
             title: {
               contains: query,
-              // mode: 'insensitive',
+              mode: 'insensitive',
             },
           },
           ...categories.map((category) => ({
