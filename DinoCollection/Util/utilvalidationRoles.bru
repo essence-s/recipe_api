@@ -11,14 +11,15 @@ post {
 }
 
 auth:bearer {
-  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFyZGlsbGFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzMwMjA2NDIwLCJleHAiOjE3MzAyOTI4MjB9.yhMGjJlbI7Av8ty3cU4135Ifhvyg5vg9BzKhlc25Q-g
+  token: {{bearerToken}}
 }
 
 body:json {
   {
-    "permissions": [
+    "name":"dinooa",
+    "permission": [
       {
-        "name": "auth",
+        "name": "recipe",
         "permission": {
           "create": true,
           "delete": true,
@@ -27,11 +28,48 @@ body:json {
         }
       },
       {
-        "name": "recipe",
+        "name": "recipe-pending",
         "permission": {
           "create": true,
-          "delete": true
-          
+          "delete": true,
+          "find": true,
+          "update": true
+        }
+      },
+      {
+        "name": "role",
+        "permission": {
+          "create": true,
+          "delete": true,
+          "find": true,
+          "update": true
+        }
+      },
+      {
+        "name": "users",
+        "permission": {
+          "create": true,
+          "delete": true,
+          "find": true,
+          "update": true
+        }
+      },
+      {
+        "name": "category",
+        "permission": {
+          "create": true,
+          "delete": true,
+          "find": true,
+          "update": true
+        }
+      },
+      {
+        "name": "category-group",
+        "permission": {
+          "create": true,
+          "delete": true,
+          "find": true,
+          "update": true
         }
       }
     ]

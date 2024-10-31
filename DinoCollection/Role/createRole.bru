@@ -16,7 +16,62 @@ auth:bearer {
 
 body:json {
   {
-    "name":"dino",
-    "permission": []
+    "name":"nombredepermiso",
+    "permission": [
+      {
+        "name": "recipe",
+        "permission": {
+          "create": true,
+          "delete": true,
+          "find": true,
+          "update": true
+        }
+      },
+      {
+        "name": "recipe-pending",
+        "permission": {
+          "create": true,
+          "delete": true,
+          "find": true,
+          "update": true
+        }
+      },
+      {
+        "name": "role",
+        "permission": {
+          "create": true,
+          "delete": true,
+          "find": true,
+          "update": true
+        }
+      },
+      {
+        "name": "users",
+        "permission": {
+          "create": true,
+          "delete": true,
+          "find": true,
+          "update": true
+        }
+      },
+      {
+        "name": "category",
+        "permission": {
+          "create": true,
+          "delete": true,
+          "find": true,
+          "update": true
+        }
+      },
+      {
+        "name": "category-group",
+        "permission": {
+          "create": true,
+          "delete": true,
+          "find": true,
+          "update": true
+        }
+      }
+    ]
   }
 }

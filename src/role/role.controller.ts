@@ -20,7 +20,7 @@ export class RoleController {
   constructor(private readonly roleService: RoleService) {}
 
   @Post()
-  create(@Body() createRoleDto) {
+  create(@Body() createRoleDto: RolePermissionsArrayDto) {
     return this.roleService.create(createRoleDto);
   }
 
@@ -35,7 +35,10 @@ export class RoleController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRoleDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateRoleDto: RolePermissionsArrayDto,
+  ) {
     return this.roleService.update(+id, updateRoleDto);
   }
 
@@ -46,6 +49,6 @@ export class RoleController {
 
   @Post('validacion-role')
   validacionRole(@Body() data: RolePermissionsArrayDto) {
-    return { ok: 'ok' };
+    return this.roleService.createPermission(data);
   }
 }

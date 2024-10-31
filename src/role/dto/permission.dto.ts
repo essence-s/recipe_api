@@ -13,7 +13,7 @@ import {
   ValidatorConstraintInterface,
 } from 'class-validator';
 
-class AuthPermissionDto {
+class RecipePermissionDto {
   @IsBoolean()
   create: boolean;
 
@@ -27,12 +27,72 @@ class AuthPermissionDto {
   find: boolean;
 }
 
-class RecipePermissionDto {
+class RecipePendingPermissionDto {
   @IsBoolean()
   create: boolean;
 
   @IsBoolean()
   delete: boolean;
+
+  @IsBoolean()
+  update: boolean;
+
+  @IsBoolean()
+  find: boolean;
+}
+
+class RolePermissionDto {
+  @IsBoolean()
+  create: boolean;
+
+  @IsBoolean()
+  delete: boolean;
+
+  @IsBoolean()
+  update: boolean;
+
+  @IsBoolean()
+  find: boolean;
+}
+class UsersPermissionDto {
+  @IsBoolean()
+  create: boolean;
+
+  @IsBoolean()
+  delete: boolean;
+
+  @IsBoolean()
+  update: boolean;
+
+  @IsBoolean()
+  find: boolean;
+}
+class CategoryPermissionDto {
+  @IsBoolean()
+  create: boolean;
+
+  @IsBoolean()
+  delete: boolean;
+
+  @IsBoolean()
+  update: boolean;
+
+  @IsBoolean()
+  find: boolean;
+}
+
+class CategoryGroupPermissionDto {
+  @IsBoolean()
+  create: boolean;
+
+  @IsBoolean()
+  delete: boolean;
+
+  @IsBoolean()
+  update: boolean;
+
+  @IsBoolean()
+  find: boolean;
 }
 
 @ValidatorConstraint({ async: false })
@@ -44,11 +104,23 @@ export class ValidatePermissionDtoConstraint
     let dtoClass;
 
     switch (name) {
-      case 'auth':
-        dtoClass = AuthPermissionDto;
-        break;
       case 'recipe':
         dtoClass = RecipePermissionDto;
+        break;
+      case 'recipe-pending':
+        dtoClass = RecipePendingPermissionDto;
+        break;
+      case 'role':
+        dtoClass = RolePermissionDto;
+        break;
+      case 'users':
+        dtoClass = UsersPermissionDto;
+        break;
+      case 'category':
+        dtoClass = CategoryPermissionDto;
+        break;
+      case 'category-group':
+        dtoClass = CategoryGroupPermissionDto;
         break;
       default:
         return false; // Nombre no reconocido
@@ -87,9 +159,12 @@ export class GenericRolePermissionDto {
 }
 
 export class RolePermissionsArrayDto {
+  @IsString()
+  name: string;
+
   @IsArray()
   @ArrayNotEmpty()
   @ValidateNested({ each: true })
   @Type(() => GenericRolePermissionDto)
-  permissions: GenericRolePermissionDto[];
+  permission: GenericRolePermissionDto[];
 }

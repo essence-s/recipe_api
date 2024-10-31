@@ -11,6 +11,10 @@ export class RoleService {
     return this.prisma.role.create({ data: createRoleDto });
   }
 
+  createPermission(createRoleDto) {
+    return this.prisma.role.create({ data: createRoleDto });
+  }
+
   findAll() {
     return this.prisma.role.findMany();
   }

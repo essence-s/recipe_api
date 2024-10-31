@@ -43,8 +43,9 @@ export const paginator = (
       meta: {
         total,
         lastPage,
-        currentPage: page,
         perPage,
+        currentPage: page,
+
         prev: page > 1 ? page - 1 : null,
         next: page < lastPage ? page + 1 : null,
       },

@@ -57,7 +57,7 @@ export class SearchService {
         ? categoriesParam.split(',')
         : [];
     console.log(categories);
-    const page = { page: 0, perPage: 2 };
+    const page = { page: 2, perPage: 2 };
 
     return paginate(
       this.prisma.recipe,

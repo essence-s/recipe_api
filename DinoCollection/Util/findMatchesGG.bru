@@ -7,9 +7,13 @@ meta {
 get {
   url: {{BACKEND_URL}}/search/matchesGG/?query=
   body: none
-  auth: none
+  auth: bearer
 }
 
 params:query {
   query: 
+}
+
+auth:bearer {
+  token: {{bearerToken}}
 }
