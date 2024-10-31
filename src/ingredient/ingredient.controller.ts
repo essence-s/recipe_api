@@ -7,7 +7,7 @@ export class IngredientController {
 
   @Post()
   async createIngredient(@Body() ingredients) {
-    console.log('dadad', ingredients);
+    // console.log('dadad', ingredients);
 
     return this.ingredientService.createIngredient(ingredients);
   }

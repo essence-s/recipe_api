@@ -2,17 +2,28 @@ import { Injectable } from '@nestjs/common';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { PrismaService } from 'src/prisma.service';
+import { MemoRoleService } from 'src/memo-role/memo-role.service';
 
 @Injectable()
 export class RoleService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private memoRoleService: MemoRoleService,
+  ) {}
 
-  create(createRoleDto) {
-    return this.prisma.role.create({ data: createRoleDto });
+  async create(createRoleDto) {
+    const result = await this.prisma.role.create({ data: createRoleDto });
+
+    if (result) this.memoRoleService.loadRoles();
+
+    return result;
   }
 
-  createPermission(createRoleDto) {
-    return this.prisma.role.create({ data: createRoleDto });
+  // test
+  async createPermission(createRoleDto) {
+    const result = await this.prisma.role.create({ data: createRoleDto });
+    if (result) this.memoRoleService.loadRoles();
+    return result;
   }
 
   findAll() {
@@ -25,11 +36,20 @@ export class RoleService {
     });
   }
 
-  update(id: number, updateRoleDto) {
-    return this.prisma.role.update({ where: { id }, data: updateRoleDto });
+  async update(id: number, updateRoleDto) {
+    const result = await this.prisma.role.update({
+      where: { id },
+      data: updateRoleDto,
+    });
+    if (result) this.memoRoleService.loadRoles();
+
+    return result;
   }
 
-  remove(id: number) {
-    return this.prisma.role.delete({ where: { id } });
+  async remove(id: number) {
+    const result = await this.prisma.role.delete({ where: { id } });
+    if (result) this.memoRoleService.loadRoles();
+
+    return result;
   }
 }

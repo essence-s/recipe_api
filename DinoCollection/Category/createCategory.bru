@@ -7,13 +7,17 @@ meta {
 post {
   url: {{BACKEND_URL}}/category
   body: json
-  auth: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{bearerToken}}
 }
 
 body:json {
   {
     "id":13,
-    "name":"principal",
+    "name":"lapruebaaa",
     "groupId":2
   }
 }

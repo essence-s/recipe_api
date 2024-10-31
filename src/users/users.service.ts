@@ -12,12 +12,13 @@ export class UsersService {
     // create(createUserDto: CreateUserDto) {
     return this.prisma.user.create({
       data: {
+        id: register.id,
         username: register.username,
         email: register.email,
         password: await bcrypt.hash(register.password, 10),
         roleId: register.roleId,
         phone: register.phone,
-        state: '',
+        state: register.state,
       },
     });
   }
@@ -49,18 +50,54 @@ export class UsersService {
   }
 
   findAll() {
-    return this.prisma.user.findMany();
+    return this.prisma.user.findMany({
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        phone: true,
+        password: true,
+        state: true,
+        createdAt: true,
+        updatedAt: true,
+
+        role: {
+          select: { id: true, name: true },
+        },
+      },
+    });
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} user`;
+    return this.prisma.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        phone: true,
+        password: true,
+        state: true,
+        createdAt: true,
+        updatedAt: true,
+
+        role: {
+          select: { id: true, name: true },
+        },
+      },
+    });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  update(id: number, updateUserDto) {
+    return this.prisma.user.update({
+      where: { id },
+      data: updateUserDto,
+    });
   }
 
   remove(id: number) {
-    return `This action removes a #${id} user`;
+    return this.prisma.user.delete({
+      where: { id },
+    });
   }
 }

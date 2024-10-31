@@ -5,7 +5,11 @@ meta {
 }
 
 post {
-  url: {{BACKEND_URL}}/recipe/1
+  url: {{BACKEND_URL}}/recipe/5
   body: json
-  auth: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{bearerToken}}
 }

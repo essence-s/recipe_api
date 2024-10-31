@@ -1,12 +1,12 @@
 meta {
-  name: getRecipes
+  name: removeUser
   type: http
-  seq: 1
+  seq: 4
 }
 
-get {
-  url: {{BACKEND_URL}}/recipe
-  body: json
+delete {
+  url: {{BACKEND_URL}}/users/11
+  body: none
   auth: bearer
 }
 

@@ -9,7 +9,10 @@ import {
 } from '@nestjs/common';
 import { CategoryGroupService } from './category-group.service';
 import { CategoryGroupDto } from './dto/category-group';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { Role } from 'src/common/enums/role.enum';
 
+@Auth([Role.ADMIN])
 @Controller('category-group')
 export class CategoryGroupController {
   constructor(private readonly categoryGroupService: CategoryGroupService) {}

@@ -18,7 +18,7 @@ export class RecipeService {
   // }
 
   async createRecipe(recipe) {
-    console.log({ recipe });
+    // console.log({ recipe });
     try {
       const recipeRes = await this.prisma.recipe.create({
         data: {
@@ -146,5 +146,9 @@ export class RecipeService {
     });
 
     return transaction;
+  }
+
+  remove(id: number) {
+    return this.prisma.recipe.delete({ where: { id } });
   }
 }

@@ -28,8 +28,38 @@ export class RolesGuard implements CanActivate {
     const validRoles = this.memoRoleService.getRoles().map((role) => role.name);
 
     const exists = validRoles.some((role) => role === contextRequest.user.role);
+
+    if (!exists) {
+      return false;
+    }
+
+    const urlRequest = contextRequest.originalUrl;
+    const match = urlRequest.match(/\/api\/v1\/([^/]+)/);
+    const result = match ? match[1] : null;
+    const method = contextRequest.method;
+
+    const changeMethod = {
+      GET: 'find',
+      POST: 'create',
+      DELETE: 'delete',
+      PATCH: 'update',
+    };
+
+    const methodConvert = changeMethod[method];
+
+    // console.log(result);
+    const dataRole = this.memoRoleService
+      .getRoles()
+      .find((role) => role.name == contextRequest.user.role);
+
+    const booleanPermission = dataRole.permission.find(
+      (permission) => permission.name == result,
+    ).permission[methodConvert];
+
+    console.log(booleanPermission);
+
     // const exists = roles.some((role) => role === user.role);
 
-    return exists;
+    return booleanPermission;
   }
 }

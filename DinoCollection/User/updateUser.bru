@@ -1,11 +1,11 @@
 meta {
-  name: createUser
+  name: updateUser
   type: http
-  seq: 3
+  seq: 5
 }
 
-post {
-  url: {{BACKEND_URL}}/users
+patch {
+  url: {{BACKEND_URL}}/users/11
   body: json
   auth: bearer
 }
@@ -16,12 +16,11 @@ auth:bearer {
 
 body:json {
   {
-    "id": 11,
-    "username": "dinosaurio",
+    "username": "dinosaurioGrande",
     "email": "dinosaurio@gmail.com",
     "phone": "9991432",
     "password": "dinosaurio",
     "state": "active",
-    "roleId": 7
+    "roleId": 3
   }
 }

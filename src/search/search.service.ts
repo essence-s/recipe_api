@@ -33,7 +33,7 @@ export class SearchService {
   }
 
   async findMatchesTitleRecipe(matches: string) {
-    console.log(matches);
+    // console.log(matches);
     const recipes = await this.prisma.recipe.findMany({
       where: {
         title: {

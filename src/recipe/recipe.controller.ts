@@ -1,8 +1,11 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { RecipeService } from './recipe.service';
 // import { Recipe } from './recipe.entity';
 // import { CreateRecipeDto } from './create-recipe.dto';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { Role } from 'src/common/enums/role.enum';
 
+@Auth([Role.ADMIN])
 @Controller('recipe')
 export class RecipeController {
   constructor(private readonly recipeService: RecipeService) {}
@@ -34,6 +37,11 @@ export class RecipeController {
   async pendingToRecipe(@Param('id') id) {
     return await this.recipeService.migratePendingRecipeToRecipe(parseInt(id));
     // return { id };
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.recipeService.remove(+id);
   }
 
   // @Get(':id')

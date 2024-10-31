@@ -3,6 +3,7 @@ import {
   ArrayNotEmpty,
   IsArray,
   IsBoolean,
+  IsOptional,
   IsString,
   registerDecorator,
   ValidateNested,
@@ -159,6 +160,9 @@ export class GenericRolePermissionDto {
 }
 
 export class RolePermissionsArrayDto {
+  @IsOptional()
+  id?: number;
+
   @IsString()
   name: string;
 

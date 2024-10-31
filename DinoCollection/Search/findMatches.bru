@@ -7,9 +7,13 @@ meta {
 get {
   url: {{BACKEND_URL}}/search/matches/?query=ar
   body: none
-  auth: none
+  auth: bearer
 }
 
 params:query {
   query: ar
+}
+
+auth:bearer {
+  token: {{bearerToken}}
 }

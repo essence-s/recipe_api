@@ -1,7 +1,22 @@
 import { Transform } from 'class-transformer';
-import { IsEmail, IsNumber, IsString, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  MinLength,
+} from 'class-validator';
+
+export enum UserState {
+  active = 'active',
+  disable = 'disable',
+}
 
 export class CreateUserDto {
+  @IsOptional()
+  id?: number;
+
   @Transform(({ value }) => value.trim())
   @IsString()
   @MinLength(1)
@@ -22,4 +37,7 @@ export class CreateUserDto {
 
   @IsNumber()
   roleId: number;
+
+  @IsEnum(UserState, { message: 'State must be either active or disable' })
+  state: UserState;
 }
