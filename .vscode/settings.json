@@ -1,7 +1,7 @@
 {
   "symbols.files.associations": {
-    "*.controller.ts": "nest",
-    "*.module.ts": "nest-module",
+    "*.controller.ts": "nest-controller",
+    "*.module.ts": "nest",
     "*.service.ts": "nest-service",
     "*.guard.ts": "nest-guard"
     // "app.module.ts": "nest-guard"
