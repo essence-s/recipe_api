@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { MemoRoleService } from './memo-role/memo-role.service';
+import { MemoRoleService } from './modules/memo-role/memo-role.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

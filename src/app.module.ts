@@ -1,19 +1,19 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { RecipeModule } from './recipe/recipe.module';
+import { RecipeModule } from './modules/recipe/recipe.module';
 // import { TypeOrmModule } from '@nestjs/typeorm';
-import { IngredientModule } from './ingredient/ingredient.module';
-import { CategoryModule } from './category/category.module';
-import { PendingRecipeModule } from './pending-recipe/pending-recipe.module';
+import { IngredientModule } from './modules/ingredient/ingredient.module';
+import { CategoryModule } from './modules/category/category.module';
+import { PendingRecipeModule } from './modules/pending-recipe/pending-recipe.module';
 import { UtilsModule } from './utils/utils.module';
-import { SearchModule } from './search/search.module';
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
-import { RoleModule } from './role/role.module';
+import { SearchModule } from './modules/search/search.module';
+import { UsersModule } from './modules/users/users.module';
+import { RoleModule } from './modules/role/role.module';
 import { PrismaModule } from './prisma.module';
-import { MemoRoleModule } from './memo-role/memo-role.module';
-import { CategoryGroupModule } from './category-group/category-group.module';
+import { MemoRoleModule } from './modules/memo-role/memo-role.module';
+import { CategoryGroupModule } from './modules/category-group/category-group.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [

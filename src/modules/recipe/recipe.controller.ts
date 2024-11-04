@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { RecipeService } from './recipe.service';
 // import { Recipe } from './recipe.entity';
 // import { CreateRecipeDto } from './create-recipe.dto';
-import { Auth } from 'src/auth/decorators/auth.decorator';
+import { Auth } from 'src/modules/auth/decorators/auth.decorator';
 import { Role } from 'src/common/enums/role.enum';
 
 @Auth([Role.ADMIN])

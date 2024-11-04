@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { categoryDto } from './dto/category.dto';
-import { Auth } from 'src/auth/decorators/auth.decorator';
+import { Auth } from 'src/modules/auth/decorators/auth.decorator';
 import { Role } from 'src/common/enums/role.enum';
 @Auth([Role.ADMIN])
 @Controller('category')
