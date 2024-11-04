@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
-import { MemoRoleModule } from 'src/modules/memo-role/memo-role.module';
+import { MemoRoleModule } from 'src/shared/memo-role/memo-role.module';
 import { UsersModule } from 'src/modules/users/users.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';

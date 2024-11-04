@@ -11,7 +11,7 @@ import { SearchModule } from './modules/search/search.module';
 import { UsersModule } from './modules/users/users.module';
 import { RoleModule } from './modules/role/role.module';
 import { PrismaModule } from './prisma.module';
-import { MemoRoleModule } from './modules/memo-role/memo-role.module';
+import { MemoRoleModule } from './shared/memo-role/memo-role.module';
 import { CategoryGroupModule } from './modules/category-group/category-group.module';
 import { AuthModule } from './modules/auth/auth.module';
 
