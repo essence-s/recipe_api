@@ -11,7 +11,7 @@ async function main() {
 
   const adminRole = await prisma.role.upsert({
     where: { name: 'admin' },
-    update: {},
+    update: { permission: permission },
     create: {
       name: 'admin',
       permission: permission,
@@ -20,7 +20,9 @@ async function main() {
 
   await prisma.user.upsert({
     where: { username },
-    update: {},
+    update: {
+      password: hashedPassword,
+    },
     create: {
       username,
       email,
@@ -36,7 +38,7 @@ async function main() {
 
 main()
   .then(async () => {
-    console.log('Admin user created or already exists.');
+    console.log('Admin user created or reset password');
     await prisma.$disconnect();
   })
   .catch(async (e) => {
