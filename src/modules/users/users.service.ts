@@ -1,14 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/prisma.service';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { CreateUserDto } from './dto/create-user.dto';
+import { UserDto } from './dto/user.dto';
 
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async create(register: CreateUserDto) {
+  async create(register: UserDto) {
     // create(createUserDto: CreateUserDto) {
     return this.prisma.user.create({
       data: {
@@ -88,16 +87,30 @@ export class UsersService {
     });
   }
 
-  update(id: number, updateUserDto) {
+  async update(id: number, updateUserDto: UserDto) {
     return this.prisma.user.update({
       where: { id },
-      data: updateUserDto,
+      data: {
+        id: updateUserDto.id,
+        username: updateUserDto.username,
+        email: updateUserDto.email,
+        password: await bcrypt.hash(updateUserDto.password, 10),
+        roleId: updateUserDto.roleId,
+        phone: updateUserDto.phone,
+        state: updateUserDto.state,
+      },
     });
   }
 
   remove(id: number) {
     return this.prisma.user.delete({
       where: { id },
+    });
+  }
+
+  removeMany(ids: { ids: [] }) {
+    return this.prisma.user.deleteMany({
+      where: { id: { in: ids.ids } },
     });
   }
 }

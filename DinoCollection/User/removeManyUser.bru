@@ -1,0 +1,25 @@
+meta {
+  name: removeManyUser
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{BACKEND_URL}}/users
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}
+
+body:json {
+  {
+    "ids": [
+      13,
+      14,
+      15
+    ]
+  }
+}

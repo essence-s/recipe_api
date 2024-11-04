@@ -5,6 +5,7 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  MaxLength,
   MinLength,
 } from 'class-validator';
 
@@ -13,7 +14,7 @@ export enum UserState {
   disable = 'disable',
 }
 
-export class CreateUserDto {
+export class UserDto {
   @IsOptional()
   id?: number;
 
@@ -33,6 +34,7 @@ export class CreateUserDto {
   @Transform(({ value }) => value.trim())
   @IsString()
   @MinLength(6)
+  @MaxLength(15)
   password: string;
 
   @IsNumber()
