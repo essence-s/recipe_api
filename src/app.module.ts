@@ -14,15 +14,17 @@ import { PrismaModule } from './prisma.module';
 import { MemoRoleModule } from './shared/memo-role/memo-role.module';
 import { CategoryGroupModule } from './modules/category-group/category-group.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
-    // TypeOrmModule.forRoot({
-    //   type: 'sqlite',
-    //   database: 'recipes_db.sqlite', // Nombre del archivo donde se almacenará la base de datos
-    //   autoLoadEntities: true,
-    //   synchronize: true, // Solo en desarrollo, no en producción
-    // }),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60, // Tiempo de vida de la ventana en segundos (ej. 1 minuto)
+        limit: 50, // Número máximo de solicitudes por IP en la ventana de tiempo
+      },
+    ]),
+
     MemoRoleModule,
     PrismaModule,
 
