@@ -61,22 +61,29 @@ export class RoleController {
 
     let result;
 
-    const deleteCascade = true;
+    const deleteCascade = false;
+
     if (!deleteCascade) {
-      try {
-        result = await this.roleService.remove(+id);
-      } catch (error) {
-        console.log(error);
-        console.log(error.meta);
+      // try {
+      //   result = await this.roleService.remove(+id);
+      // } catch (error) {
+      //   console.log(error);
+      //   console.log(error.meta);
 
-        if (error.code == 'P2003') {
-          return {
-            message: `${error.meta.modelName} esta ligado a ${error.meta.field_name}`,
-          };
-        }
+      //   if (error.code == 'P2003') {
+      const resultInfoRelation = await this.deleteCascade.infoIdRelation(
+        id,
+        dataPermission.role.functions.remove,
+      );
+      return resultInfoRelation;
 
-        return 'error';
-      }
+      //     return {
+      //       message: `${error.meta.modelName} esta ligado a ${error.meta.field_name}`,
+      //     };
+      //   }
+
+      //   return 'error';
+      // }
     } else {
       const resultInfoRelation = await this.deleteCascade.infoIdRelation(
         id,
