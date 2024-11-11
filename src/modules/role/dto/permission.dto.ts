@@ -114,7 +114,7 @@ export class ValidatePermissionDtoConstraint
       case 'role':
         dtoClass = RolePermissionDto;
         break;
-      case 'users':
+      case 'user':
         dtoClass = UsersPermissionDto;
         break;
       case 'category':

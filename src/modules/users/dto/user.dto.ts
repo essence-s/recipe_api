@@ -25,7 +25,7 @@ export class UserDto {
 
   @Transform(({ value }) => value.trim())
   @IsString()
-  @MinLength(1)
+  @MinLength(8)
   phone: string;
 
   @IsEmail()

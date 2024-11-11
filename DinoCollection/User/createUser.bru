@@ -5,7 +5,7 @@ meta {
 }
 
 post {
-  url: {{BACKEND_URL}}/users
+  url: {{BACKEND_URL}}/user
   body: json
   auth: bearer
 }
@@ -16,11 +16,12 @@ auth:bearer {
 
 body:json {
   {
-    "username": "hhhh",
-    "email": "hhhh@gmail.com",
-    "phone": "9956463324",
+    "id":26,
+    "username": "zzzzz",
+    "email": "zzzzz@gmail.com",
+    "phone": "98645644",
     "password": "dududu",
     "state": "active",
-    "roleId": 7
+    "roleId": 8
   }
 }

@@ -1,8 +1,8 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { ROLES_KEY } from '../decorators/roles.decorator';
-import { Role } from '../../../common/enums/role.enum';
+import { TYPE_REQUEST } from 'src/common/enums/type-request.enum';
 import { MemoRoleService } from 'src/shared/memo-role/memo-role.service';
+import { TYPE_REQUEST_KEY } from '../decorators/type-request.decorator';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -12,12 +12,13 @@ export class RolesGuard implements CanActivate {
   ) {}
 
   canActivate(context: ExecutionContext): boolean {
-    const roles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
+    const typeRequest = this.reflector.getAllAndOverride(
+      // const typeRequest = this.reflector.getAllAndOverride<TYPE_REQUEST[]>(
+      TYPE_REQUEST_KEY,
+      [context.getHandler(), context.getClass()],
+    );
 
-    if (!roles) {
+    if (!typeRequest) {
       return true;
     }
 

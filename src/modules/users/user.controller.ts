@@ -10,40 +10,42 @@ import {
 import { Role } from 'src/common/enums/role.enum';
 import { Auth } from 'src/modules/auth/decorators/auth.decorator';
 import { UserDto } from './dto/user.dto';
-import { UsersService } from './users.service';
+import { UserService } from './user.service';
+import { TYPE_REQUEST } from 'src/common/enums/type-request.enum';
 
 @Auth([Role.ADMIN])
-@Controller('users')
+@Controller('user')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly userService: UserService) {}
 
+  @Auth([TYPE_REQUEST.CREATE])
   @Post()
   async create(@Body() createUserDto: UserDto) {
-    return await this.usersService.create(createUserDto);
+    return await this.userService.create(createUserDto);
   }
 
   @Get()
   findAll() {
-    return this.usersService.findAll();
+    return this.userService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+    return this.userService.findOne(+id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UserDto) {
-    return this.usersService.update(+id, updateUserDto);
+    return this.userService.update(+id, updateUserDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+    return this.userService.remove(+id);
   }
 
   @Delete()
   removeMany(@Body() ids: { ids: [] }) {
-    return this.usersService.removeMany(ids);
+    return this.userService.removeMany(ids);
   }
 }
