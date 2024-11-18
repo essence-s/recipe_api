@@ -36,8 +36,8 @@ export class RecipeController {
     return await this.recipeService.findAll();
   }
 
-  @Post(':id')
-  // @Auth(dataPermission.recipe.functions.findOne)
+  @Get(':id')
+  @Auth(dataPermission.recipe.functions.findOne)
   async findOne(@Param('id') id) {
     return await this.recipeService.findId(parseInt(id));
     // return { id };

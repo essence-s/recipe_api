@@ -1,11 +1,11 @@
 meta {
-  name: getRecipeId
+  name: getPublicRecipeId
   type: http
-  seq: 2
+  seq: 1
 }
 
 get {
-  url: {{BACKEND_URL}}/recipe/5
+  url: {{BACKEND_URL}}/public/recipe/5
   body: json
   auth: bearer
 }
