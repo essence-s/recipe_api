@@ -4,6 +4,6 @@ import { AuthGuard } from '../guard/auth.guard';
 import { RolesGuard } from '../guard/roles.guard';
 import { Roles } from './type-request.decorator';
 
-export function Auth(typeRequest) {
+export function Auth(typeRequest?) {
   return applyDecorators(Roles(typeRequest), UseGuards(AuthGuard, RolesGuard));
 }

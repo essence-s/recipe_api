@@ -1,0 +1,19 @@
+meta {
+  name: removeRoleReassign
+  type: http
+  seq: 1
+}
+
+delete {
+  url: {{BACKEND_URL}}/role/8?reassignTo=dino
+  body: json
+  auth: bearer
+}
+
+params:query {
+  reassignTo: dino
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}

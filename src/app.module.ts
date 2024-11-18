@@ -3,19 +3,20 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { RecipeModule } from './modules/recipe/recipe.module';
 // import { TypeOrmModule } from '@nestjs/typeorm';
-import { IngredientModule } from './modules/ingredient/ingredient.module';
+import { ThrottlerModule } from '@nestjs/throttler';
+import { AuthModule } from './modules/auth/auth.module';
+import { CategoryGroupModule } from './modules/category-group/category-group.module';
 import { CategoryModule } from './modules/category/category.module';
+import { IngredientModule } from './modules/ingredient/ingredient.module';
 import { PendingRecipeModule } from './modules/pending-recipe/pending-recipe.module';
-import { UtilsModule } from './utils/utils.module';
+import { RoleModule } from './modules/role/role.module';
 import { SearchModule } from './modules/search/search.module';
 import { UsersModule } from './modules/users/user.module';
-import { RoleModule } from './modules/role/role.module';
 import { PrismaModule } from './prisma.module';
-import { MemoRoleModule } from './shared/memo-role/memo-role.module';
-import { CategoryGroupModule } from './modules/category-group/category-group.module';
-import { AuthModule } from './modules/auth/auth.module';
-import { ThrottlerModule } from '@nestjs/throttler';
 import { DeleteCascadeModule } from './shared/delete-cascade/delete-cascade.module';
+import { MemoRoleModule } from './shared/memo-role/memo-role.module';
+import { UtilsModule } from './utils/utils.module';
+// import { PublicModule } from './modules/public/public.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { DeleteCascadeModule } from './shared/delete-cascade/delete-cascade.modu
     UsersModule,
     RoleModule,
     CategoryGroupModule,
+    // PublicModule,
   ],
   controllers: [AppController],
   providers: [AppService],

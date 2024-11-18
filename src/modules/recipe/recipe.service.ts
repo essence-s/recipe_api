@@ -81,6 +81,44 @@ export class RecipeService {
     });
   }
 
+  async update(id: number, recipe) {
+    try {
+      const recipeRes = await this.prisma.recipe.update({
+        where: { id },
+        data: {
+          ...recipe,
+
+          categories: {
+            deleteMany: {},
+            create: recipe.categories.map((categoryId) => ({
+              category: { connect: { id: categoryId } },
+            })),
+          },
+          // ingredients: undefined,
+          // instructions: undefined,
+          ingredients: {
+            deleteMany: {},
+            create: [
+              {
+                name: recipe.ingredients,
+              },
+            ],
+          },
+          instructions: {
+            // deleteMany: {},
+            where:{},
+            update: [{ description: recipe.instructions }],
+          },
+        },
+      });
+
+      return recipeRes;
+    } catch (error) {
+      //No in production messague :V error.meta.cause
+      console.log(error);
+      throw new BadRequestException(error.meta.cause);
+    }
+  }
   // async findOne(id: number): Promise<Recipe> {
   //   return await this.recipeRepository.findOne({ where: { id } });
   // }

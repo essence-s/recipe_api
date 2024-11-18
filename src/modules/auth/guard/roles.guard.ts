@@ -24,34 +24,33 @@ export class RolesGuard implements CanActivate {
 
     // const { user } = context.switchToHttp().getRequest();
     const contextRequest = context.switchToHttp().getRequest();
-    // console.log(contextRequest);
 
-    const validRoles = this.memoRoleService.getRoles().map((role) => role.name);
+    // const urlRequest = contextRequest.originalUrl;
+    // const match = urlRequest.match(/\/api\/v1\/([^/]+)/);
+    // const result = match ? match[1] : null;
+    // const method = contextRequest.method;
 
-    const exists = validRoles.some((role) => role === contextRequest.user.role);
+    const result = typeRequest.name;
+    // const method = contextRequest.method;
 
-    if (!exists) {
-      return false;
-    }
+    // const changeMethod = {
+    //   GET: 'find',
+    //   POST: 'create',
+    //   DELETE: 'delete',
+    //   PATCH: 'update',
+    // };
 
-    const urlRequest = contextRequest.originalUrl;
-    const match = urlRequest.match(/\/api\/v1\/([^/]+)/);
-    const result = match ? match[1] : null;
-    const method = contextRequest.method;
-
-    const changeMethod = {
-      GET: 'find',
-      POST: 'create',
-      DELETE: 'delete',
-      PATCH: 'update',
-    };
-
-    const methodConvert = changeMethod[method];
+    // const methodConvert = changeMethod[method];
+    const methodConvert = typeRequest.typePermission;
 
     // console.log(result);
     const dataRole = this.memoRoleService
       .getRoles()
       .find((role) => role.name == contextRequest.user.role);
+
+    if (!dataRole) {
+      return false;
+    }
 
     const booleanPermission = dataRole.permission.find(
       (permission) => permission.name == result,

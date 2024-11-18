@@ -5,13 +5,14 @@ meta {
 }
 
 get {
-  url: {{BACKEND_URL}}/search/matches/?query=ar
+  url: {{BACKEND_URL}}/search/matches/?query=undefined&categories=Entrada
   body: none
   auth: bearer
 }
 
 params:query {
-  query: ar
+  query: undefined
+  categories: Entrada
 }
 
 auth:bearer {

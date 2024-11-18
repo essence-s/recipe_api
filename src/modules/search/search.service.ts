@@ -92,20 +92,26 @@ export class SearchService {
   async findMatchesRecipe(matches) {
     let [query, categoriesParam] = matches;
     console.log(matches);
+    query = query != 'undefined' ? query : '';
     const categories =
-      categoriesParam != 'undefined' && categoriesParam
-        ? categoriesParam.split(',')
+      categoriesParam != 'undefined'
+        ? categoriesParam
+          ? categoriesParam.split(',')
+          : []
         : [];
+    console.log(query);
     console.log(categories);
     const recipes = await this.prisma.recipe.findMany({
       where: {
         AND: [
-          {
-            title: {
-              contains: query,
-              mode: 'insensitive',
-            },
-          },
+          query
+            ? {
+                title: {
+                  contains: query,
+                  mode: 'insensitive',
+                },
+              }
+            : {},
           ...categories.map((category) => ({
             categories: {
               some: {

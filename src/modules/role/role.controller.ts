@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Req,
+  Query,
 } from '@nestjs/common';
 import { RoleService } from './role.service';
 import { CreateRoleDto } from './dto/create-role.dto';
@@ -29,21 +30,25 @@ export class RoleController {
   ) {}
 
   @Post()
+  @Auth(dataPermission.role.functions.create)
   create(@Body() createRoleDto: RolePermissionsArrayDto) {
     return this.roleService.create(createRoleDto);
   }
 
   @Get()
+  @Auth(dataPermission.role.functions.findAll)
   findAll() {
     return this.roleService.findAll();
   }
 
   @Get(':id')
+  @Auth(dataPermission.role.functions.findOne)
   findOne(@Param('id') id: string) {
     return this.roleService.findOne(+id);
   }
 
   @Patch(':id')
+  @Auth(dataPermission.role.functions.update)
   update(
     @Param('id') id: string,
     @Body() updateRoleDto: RolePermissionsArrayDto,
@@ -52,38 +57,39 @@ export class RoleController {
   }
 
   @Delete(':id')
-  @Auth(dataPermission.role.functions.remove)
+  @Auth()
   async remove(
     @Req() request: Request & { user: { role: string } },
     @Param('id') id: string,
+    @Query('reassignTo') idReassign,
+    @Query('deleteCascade') deleteCascade: boolean,
   ) {
     console.log(request);
 
-    let result;
-
-    const deleteCascade = false;
-
-    if (!deleteCascade) {
-      // try {
-      //   result = await this.roleService.remove(+id);
-      // } catch (error) {
-      //   console.log(error);
-      //   console.log(error.meta);
-
-      //   if (error.code == 'P2003') {
-      const resultInfoRelation = await this.deleteCascade.infoIdRelation(
+    if (idReassign) {
+      const resultReassing = await this.deleteCascade.reassign(
         id,
         dataPermission.role.functions.remove,
+        idReassign,
+        request.user.role,
       );
-      return resultInfoRelation;
 
-      //     return {
-      //       message: `${error.meta.modelName} esta ligado a ${error.meta.field_name}`,
-      //     };
-      //   }
+      return resultReassing;
+    }
 
-      //   return 'error';
-      // }
+    if (!deleteCascade) {
+      try {
+        return await this.roleService.remove(+id);
+      } catch (error) {
+        if (error.code == 'P2003') {
+          const resultInfoRelation = await this.deleteCascade.infoIdRelation(
+            id,
+            dataPermission.role.functions.remove,
+          );
+          return resultInfoRelation;
+        }
+        return error;
+      }
     } else {
       const resultInfoRelation = await this.deleteCascade.infoIdRelation(
         id,
@@ -97,12 +103,11 @@ export class RoleController {
 
       if (!hasPermissions) return;
 
-      result = await this.deleteCascade.deleteRelations(
+      const result = await this.deleteCascade.deleteRelations(
         [...resultInfoRelation].reverse(),
       );
+      return result;
     }
-
-    return result;
   }
 
   // tests

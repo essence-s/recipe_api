@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { MemoRoleService } from '../memo-role/memo-role.service';
 
@@ -69,7 +69,7 @@ export class DeleteCascadeService {
 
       dataPromises.push({
         name: item.name,
-        // checkRelation: item.checkRelation,
+        checkRelation: item.checkRelation,
         ids: dataDeleteId,
         permission: item.permission,
       });
@@ -110,13 +110,51 @@ export class DeleteCascadeService {
       .find((role) => role.name == roleUser);
 
     const checkingPermissions = arrayDeleteRelation.every((adr) => {
-      console.log(adr);
+      // console.log(adr);
       // console.log(ad)
-      console.log(dataRole.permission.find((perm) => perm.name == adr.name));
+      // console.log(dataRole.permission.find((perm) => perm.name == adr.name));
       return dataRole.permission.find((perm) => perm.name == adr.name)
         .permission[adr.permission];
     });
 
     return checkingPermissions;
+  }
+
+  async reassignTo(id, idReassign, checkRelation, table: string) {
+    const firstR = await this.prisma[table].updateMany({
+      where: {
+        [checkRelation]: +id,
+      },
+      data: {
+        [checkRelation]: +idReassign,
+      },
+    });
+
+    return firstR;
+  }
+
+  async reassign(id, tablecfuntion, idReassign, roleTokenRequest) {
+    const name = tablecfuntion.reassign.name;
+    const permission = tablecfuntion.reassign.permission;
+
+    const hasPermissions = this.checkingPermissions(roleTokenRequest, [
+      {
+        name: name,
+        permission: permission,
+      },
+    ]);
+
+    if (!hasPermissions) {
+      throw new UnauthorizedException('does not have the necessary permits');
+    }
+
+    const resultInfoRelation = await this.infoIdRelation(id, tablecfuntion);
+    const resultReassing = await this.reassignTo(
+      id,
+      idReassign,
+      resultInfoRelation[1].checkRelation,
+      resultInfoRelation[1].name,
+    );
+    return resultReassing;
   }
 }
