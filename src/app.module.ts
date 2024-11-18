@@ -16,7 +16,7 @@ import { PrismaModule } from './prisma.module';
 import { DeleteCascadeModule } from './shared/delete-cascade/delete-cascade.module';
 import { MemoRoleModule } from './shared/memo-role/memo-role.module';
 import { UtilsModule } from './utils/utils.module';
-// import { PublicModule } from './modules/public/public.module';
+import { PublicModule } from './modules/public/public.module';
 
 @Module({
   imports: [
@@ -40,7 +40,7 @@ import { UtilsModule } from './utils/utils.module';
     UsersModule,
     RoleModule,
     CategoryGroupModule,
-    // PublicModule,
+    PublicModule,
   ],
   controllers: [AppController],
   providers: [AppService],
