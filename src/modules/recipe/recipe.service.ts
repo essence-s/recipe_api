@@ -105,9 +105,10 @@ export class RecipeService {
             ],
           },
           instructions: {
-            // deleteMany: {},
-            where:{},
-            update: [{ description: recipe.instructions }],
+            deleteMany: {},
+            // where: {},
+            create: [{ description: recipe.instructions }],
+            // update: [{ description: recipe.instructions }],
           },
         },
       });
@@ -148,7 +149,7 @@ export class RecipeService {
           prepTime: pendingRecipe.prepTime,
           servings: pendingRecipe.servings,
           difficulty: pendingRecipe.difficulty,
-          authorId: pendingRecipe.authorId,
+          userId: pendingRecipe.userId,
           categories: {
             create: pendingRecipe.pendingCategories.map((pendingCategory) => ({
               categoryId: pendingCategory.pendingCategoryId,

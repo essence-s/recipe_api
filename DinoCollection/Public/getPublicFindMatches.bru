@@ -1,0 +1,16 @@
+meta {
+  name: getPublicFindMatches
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{BACKEND_URL}}/public/search/matches/?query&categories
+  body: none
+  auth: none
+}
+
+params:query {
+  query: 
+  categories: 
+}

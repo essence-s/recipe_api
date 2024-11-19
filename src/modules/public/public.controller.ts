@@ -1,17 +1,34 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { RecipeService } from '../recipe/recipe.service';
 import { PublicService } from './public.service';
+import { SearchService } from '../search/search.service';
+import { CategoryService } from '../category/category.service';
 
 @Controller('public')
 export class PublicController {
   constructor(
     private readonly publicService: PublicService,
     private readonly recipeService: RecipeService,
+    private readonly searchService: SearchService,
+    private readonly categoryService: CategoryService,
   ) {}
 
   @Get('recipe/:id')
   findOne(@Param('id') id) {
     return this.recipeService.findId(+id);
+  }
+
+  @Get('search/matches')
+  async findMatchesTitleRecipe(
+    @Query('query') query,
+    @Query('categories') categories,
+  ) {
+    return this.searchService.findMatchesRecipe([query, categories]);
+  }
+
+  @Get('category')
+  findAll() {
+    return this.categoryService.findAll();
   }
 
   // @Post()
