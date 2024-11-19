@@ -5,25 +5,31 @@ import { PrismaService } from 'src/prisma.service';
 export class PendingRecipeService {
   constructor(private prisma: PrismaService) {}
 
-  async createPendingRecipe(pendingRecipe) {
+  async createPendingRecipe({
+    categories,
+    ingredients,
+    instructions,
+    ...pendingRecipeG
+  }) {
     // console.log({ pendingRecipe });
-    const recipeRes = this.prisma.pendingRecipe.create({
+    let pendingRecipe: any = pendingRecipeG;
+    const recipeRes = await this.prisma.pendingRecipe.create({
       data: {
         ...pendingRecipe,
         pendingCategories: {
-          create: pendingRecipe.pendingCategories.map((categoryId) => ({
+          create: categories.map((categoryId) => ({
             pendingCategory: { connect: { id: categoryId } },
           })),
         },
         pendingIngredients: {
           create: [
             {
-              name: pendingRecipe.ingredients,
+              name: ingredients,
             },
           ],
         },
-        instructions: {
-          create: [{ description: pendingRecipe.instructions }],
+        pendingInstructions: {
+          create: [{ description: instructions }],
         },
       },
     });

@@ -1,8 +1,9 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { RecipeService } from '../recipe/recipe.service';
 import { PublicService } from './public.service';
 import { SearchService } from '../search/search.service';
 import { CategoryService } from '../category/category.service';
+import { PendingRecipeService } from '../pending-recipe/pending-recipe.service';
 
 @Controller('public')
 export class PublicController {
@@ -11,6 +12,7 @@ export class PublicController {
     private readonly recipeService: RecipeService,
     private readonly searchService: SearchService,
     private readonly categoryService: CategoryService,
+    private readonly pendingRecipe: PendingRecipeService,
   ) {}
 
   @Get('recipe/:id')
@@ -29,6 +31,11 @@ export class PublicController {
   @Get('category')
   findAll() {
     return this.categoryService.findAll();
+  }
+
+  @Post('pendingRecipe')
+  async create(@Body() createPendingRecipe) {
+    return await this.pendingRecipe.createPendingRecipe(createPendingRecipe);
   }
 
   // @Post()
