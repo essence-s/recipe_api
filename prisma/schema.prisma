@@ -73,12 +73,13 @@ model CategoryGroup {
 }
 
 model Category {
-  id      Int              @id @default(autoincrement())
-  name    String           @unique
-  groupId Int
-  group   CategoryGroup    @relation(fields: [groupId], references: [id])
-  recipes RecipeCategory[]
+  id                    Int                     @id @default(autoincrement())
+  name                  String                  @unique
+  groupId               Int
+  group                 CategoryGroup           @relation(fields: [groupId], references: [id])
+  recipes               RecipeCategory[]
   // PendingRecipeCategory PendingRecipeCategory[]
+  PendingRecipeCategory PendingRecipeCategory[]
 }
 
 model RecipeCategory {
@@ -164,7 +165,7 @@ model PendingRecipeInstruction {
 
 model PendingRecipeIngredient {
   id   Int    @id @default(autoincrement())
-  name String @unique
+  name String
 
   recipeId Int
   recipe   PendingRecipe @relation(fields: [recipeId], references: [id])
@@ -172,27 +173,27 @@ model PendingRecipeIngredient {
   // @@id([pendingRecipeId, pendingIngredientId])
 }
 
-model PendingCategoryGroup {
-  id   Int    @id @default(autoincrement())
-  name String @unique
-
-  PendingCategory PendingCategory[]
-}
-
-model PendingCategory {
-  id                    Int                     @id @default(autoincrement())
-  name                  String                  @unique
-  groupId               Int
-  group                 PendingCategoryGroup    @relation(fields: [groupId], references: [id])
-  PendingRecipeCategory PendingRecipeCategory[]
-}
-
 model PendingRecipeCategory {
   pendingRecipeId   Int
   pendingCategoryId Int
 
-  pendingRecipe   PendingRecipe   @relation(fields: [pendingRecipeId], references: [id])
-  pendingCategory PendingCategory @relation(fields: [pendingCategoryId], references: [id])
+  pendingRecipe   PendingRecipe @relation(fields: [pendingRecipeId], references: [id])
+  pendingCategory Category      @relation(fields: [pendingCategoryId], references: [id])
 
   @@id([pendingRecipeId, pendingCategoryId])
 }
+
+// model PendingCategoryGroup {
+//   id   Int    @id @default(autoincrement())
+//   name String @unique
+
+//   PendingCategory PendingCategory[]
+// }
+
+// model PendingCategory {
+//   id      Int                  @id @default(autoincrement())
+//   name    String               @unique
+//   groupId Int
+//   group   PendingCategoryGroup @relation(fields: [groupId], references: [id])
+//   // PendingRecipeCategory PendingRecipeCategory[]
+// }
