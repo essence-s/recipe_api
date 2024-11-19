@@ -157,4 +157,22 @@ export class DeleteCascadeService {
     );
     return resultReassing;
   }
+
+  async deleteCascade(id, dataPermisionG, roleTokenRequest) {
+    const resultInfoRelation = await this.infoIdRelation(id, dataPermisionG);
+
+    const hasPermissions = this.checkingPermissions(
+      roleTokenRequest,
+      resultInfoRelation,
+    );
+
+    if (!hasPermissions) {
+      throw new UnauthorizedException('does not have the necessary permits');
+    }
+
+    const result = await this.deleteRelations(
+      [...resultInfoRelation].reverse(),
+    );
+    return result;
+  }
 }

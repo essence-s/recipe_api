@@ -64,12 +64,13 @@ export class RoleController {
     @Query('reassignTo') idReassign,
     @Query('deleteCascade') deleteCascade: boolean,
   ) {
-    console.log(request);
+    // console.log(request);
+    const dataPermisionG = dataPermission.role.functions.remove;
 
     if (idReassign) {
       const resultReassing = await this.deleteCascade.reassign(
         id,
-        dataPermission.role.functions.remove,
+        dataPermisionG,
         idReassign,
         request.user.role,
       );
@@ -84,29 +85,18 @@ export class RoleController {
         if (error.code == 'P2003') {
           const resultInfoRelation = await this.deleteCascade.infoIdRelation(
             id,
-            dataPermission.role.functions.remove,
+            dataPermisionG,
           );
           return resultInfoRelation;
         }
         return error;
       }
     } else {
-      const resultInfoRelation = await this.deleteCascade.infoIdRelation(
+      return await this.deleteCascade.deleteCascade(
         id,
-        dataPermission.role.functions.remove,
-      );
-
-      const hasPermissions = this.deleteCascade.checkingPermissions(
+        dataPermisionG,
         request.user.role,
-        resultInfoRelation,
       );
-
-      if (!hasPermissions) return;
-
-      const result = await this.deleteCascade.deleteRelations(
-        [...resultInfoRelation].reverse(),
-      );
-      return result;
     }
   }
 

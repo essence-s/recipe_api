@@ -6,7 +6,7 @@ export class PendingRecipeService {
   constructor(private prisma: PrismaService) {}
 
   async createPendingRecipe(pendingRecipe) {
-    console.log({ pendingRecipe });
+    // console.log({ pendingRecipe });
     const recipeRes = this.prisma.pendingRecipe.create({
       data: {
         ...pendingRecipe,
@@ -16,11 +16,14 @@ export class PendingRecipeService {
           })),
         },
         pendingIngredients: {
-          create: pendingRecipe.pendingIngredients.map((ingredient) => ({
-            pendingIngredient: { connect: { id: ingredient.id } },
-            quantity: ingredient.quantity,
-            unit: ingredient.unit,
-          })),
+          create: [
+            {
+              name: pendingRecipe.ingredients,
+            },
+          ],
+        },
+        instructions: {
+          create: [{ description: pendingRecipe.instructions }],
         },
       },
     });
