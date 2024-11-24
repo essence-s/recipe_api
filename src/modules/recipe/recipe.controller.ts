@@ -54,10 +54,4 @@ export class RecipeController {
   remove(@Param('id') id: string) {
     return this.recipeService.remove(+id);
   }
-
-  @Post('pendingtorecipe/:id')
-  async pendingToRecipe(@Param('id') id) {
-    return await this.recipeService.migratePendingRecipeToRecipe(parseInt(id));
-    // return { id };
-  }
 }

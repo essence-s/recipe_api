@@ -124,69 +124,6 @@ export class RecipeService {
   //   return await this.recipeRepository.findOne({ where: { id } });
   // }
 
-  async migratePendingRecipeToRecipe(pendingRecipeId: number) {
-    const transaction = await this.prisma.$transaction(async (tx) => {
-      // Obtener los datos de la receta pendiente
-      const pendingRecipe = await tx.pendingRecipe.findUnique({
-        where: { id: pendingRecipeId },
-        include: {
-          pendingCategories: true,
-          pendingIngredients: true,
-        },
-      });
-
-      if (!pendingRecipe) {
-        throw new Error('La receta pendiente no existe');
-      }
-
-      // Insertar la receta en la tabla Recipe junto con las categorías e ingredientes relacionados
-      const newRecipe = await tx.recipe.create({
-        data: {
-          title: pendingRecipe.title,
-          description: pendingRecipe.description,
-          // instructions: pendingRecipe.instructions,
-          imageUrl: pendingRecipe.imageUrl,
-          prepTime: pendingRecipe.prepTime,
-          servings: pendingRecipe.servings,
-          difficulty: pendingRecipe.difficulty,
-          userId: pendingRecipe.userId,
-          categories: {
-            create: pendingRecipe.pendingCategories.map((pendingCategory) => ({
-              categoryId: pendingCategory.pendingCategoryId,
-            })),
-          },
-          ingredients: {
-            // create: pendingRecipe.pendingIngredients.map(
-            //   (pendingIngredient) => ({
-            //     ingredientId: pendingIngredient.pendingIngredientId,
-            //     quantity: pendingIngredient.quantity,
-            //     unit: pendingIngredient.unit,
-            //   }),
-            // ),
-          },
-        },
-      });
-
-      // Eliminar las categorías e ingredientes pendientes
-      await tx.pendingRecipeCategory.deleteMany({
-        where: { pendingRecipeId: pendingRecipe.id },
-      });
-
-      await tx.pendingRecipeIngredient.deleteMany({
-        // where: { pendingRecipeId: pendingRecipe.id },
-      });
-
-      // Eliminar la receta pendiente
-      await tx.pendingRecipe.delete({
-        where: { id: pendingRecipe.id },
-      });
-
-      return newRecipe;
-    });
-
-    return transaction;
-  }
-
   remove(id: number) {
     return this.prisma.recipe.delete({ where: { id } });
   }
