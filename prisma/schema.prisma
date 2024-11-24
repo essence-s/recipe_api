@@ -155,7 +155,7 @@ model PendingRecipe {
 model PendingRecipeInstruction {
   id          Int           @id @default(autoincrement())
   recipeId    Int
-  recipe      PendingRecipe @relation(fields: [recipeId], references: [id])
+  recipe      PendingRecipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   // instructionOrder Int
   description String
   // complementType   String?
@@ -168,7 +168,7 @@ model PendingRecipeIngredient {
   name String
 
   recipeId Int
-  recipe   PendingRecipe @relation(fields: [recipeId], references: [id])
+  recipe   PendingRecipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
 
   // @@id([pendingRecipeId, pendingIngredientId])
 }
@@ -177,7 +177,7 @@ model PendingRecipeCategory {
   pendingRecipeId   Int
   pendingCategoryId Int
 
-  pendingRecipe   PendingRecipe @relation(fields: [pendingRecipeId], references: [id])
+  pendingRecipe   PendingRecipe @relation(fields: [pendingRecipeId], references: [id], onDelete: Cascade)
   pendingCategory Category      @relation(fields: [pendingCategoryId], references: [id])
 
   @@id([pendingRecipeId, pendingCategoryId])
