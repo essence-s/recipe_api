@@ -66,16 +66,15 @@ export class RoleController {
   ) {
     // console.log(request);
     const dataPermisionG = dataPermission.role.functions.remove;
+    const roleTokenRequest = request.user.role;
 
     if (idReassign) {
-      const resultReassing = await this.deleteCascade.reassign(
+      return await this.deleteCascade.reassign(
         id,
         dataPermisionG,
         idReassign,
-        request.user.role,
+        roleTokenRequest,
       );
-
-      return resultReassing;
     }
 
     if (!deleteCascade) {
@@ -95,7 +94,7 @@ export class RoleController {
       return await this.deleteCascade.deleteCascade(
         id,
         dataPermisionG,
-        request.user.role,
+        roleTokenRequest,
       );
     }
   }
