@@ -1,15 +1,34 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { PendingRecipeService } from './pending-recipe.service';
 import { Auth } from 'src/modules/auth/decorators/auth.decorator';
 import { Role } from 'src/common/enums/role.enum';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { UploadImageService } from 'src/shared/upload-image/upload-image.service';
 
 // @Auth([Role.ADMIN])
 @Controller('pending-recipe')
 export class PendingRecipeController {
-  constructor(private readonly pendingRecipeService: PendingRecipeService) {}
+  constructor(
+    private readonly pendingRecipeService: PendingRecipeService,
+    private readonly uploadImageService: UploadImageService,
+  ) {}
 
   @Post()
-  async create(@Body() createRecipeDto) {
+  @UseInterceptors(FileInterceptor('image'))
+  async create(@UploadedFile() file, @Body() createRecipeDto) {
+    const resultData = await this.uploadImageService.createThumbnails(
+      file.buffer,
+    );
+    createRecipeDto.imageUrl = resultData.name;
+
     return await this.pendingRecipeService.createPendingRecipe(createRecipeDto);
   }
 
@@ -24,5 +43,23 @@ export class PendingRecipeController {
       parseInt(id),
     );
     // return { id };
+  }
+
+  // TEST
+  @Post('prueba')
+  @UseInterceptors(FileInterceptor('image'))
+  async createPedingRecipe(@UploadedFile() file, @Body() body) {
+    // return NextResponse.json(await createThumbnails());
+    // console.log(await request.formData());
+    // const resultData = await this.uploadImageService.createThumbnails(
+    //   file.buffer,
+    // );
+
+    // body.imageUrl = resultData.name;
+    console.log(body);
+    // console.log(file);
+    // return { hola: 'hello' };
+    // return this.uploadImageService.createThumbnails(file.buffer);
+    return body;
   }
 }

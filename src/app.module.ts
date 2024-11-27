@@ -17,6 +17,7 @@ import { DeleteCascadeModule } from './shared/delete-cascade/delete-cascade.modu
 import { MemoRoleModule } from './shared/memo-role/memo-role.module';
 import { UtilsModule } from './utils/utils.module';
 import { PublicModule } from './modules/public/public.module';
+import { UploadImageModule } from './shared/upload-image/upload-image.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { PublicModule } from './modules/public/public.module';
     DeleteCascadeModule,
     MemoRoleModule,
     PrismaModule,
+    UploadImageModule,
 
     RecipeModule,
     IngredientModule,

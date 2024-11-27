@@ -1,0 +1,25 @@
+meta {
+  name: createPendingRecipe
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{BACKEND_URL}}/pending-recipe/prueba
+  body: multipartForm
+  auth: none
+}
+
+body:multipart-form {
+  data: 2
+  image: @file(C:\Users\styv\Pictures\amiguitos.png)
+  title: comida dinosaurio28
+  description: El Arroz Chaufa es un plato emblemático de la gastronomía peruana, que combina influencias chinas y peruanas. Este delicioso arroz frito se prepara con pollo, huevo, cebolla y salsa de soja, ofreciendo un sabor único y un toque especial de jengibre.
+  instructions: <p> <span>PREPARACIÓN Preparar el relleno: Sellar la carne por tandas con una pizca de sal en una sartén con un poco de aceite caliente.</span> </p> <p> <br> </p> <p> <span >MONTAR Y SERVIR: Utiliza un molde individual para servir cada porción. Coloca una capa de arroz, seguida de una capa de relleno y otra capa de arroz. Acompaña con huevo frito y plátano frito.</span> </p> <p> <br> </p> <p> <span >TIPS: Plátanos para freír: Para obtener plátanos fritos perfectos, elige plátanos que estén maduros pero no demasiado blandos. Los plátanos bellacos o plátanos de la isla son ideales para freír. Recuerda que puedes encontrar la videoreceta en mi canal de YouTube, Sonqu. Allí te guiaré de manera sencilla para que tu plato salga delicioso. ¡No te la pierdas!</span> </p>
+  prepTime: 60
+  servings: 4
+  difficulty: facil
+  userId: 27
+  categories[0]: 3
+  categories[1]: 4
+}

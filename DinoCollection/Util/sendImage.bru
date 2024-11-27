@@ -1,0 +1,16 @@
+meta {
+  name: sendImage
+  type: http
+  seq: 7
+}
+
+post {
+  url: http://localhost:3000/api/upload
+  body: multipartForm
+  auth: none
+}
+
+body:multipart-form {
+  data: 2
+  image: @file(C:\Users\styv\Pictures\amiguitos.png)
+}

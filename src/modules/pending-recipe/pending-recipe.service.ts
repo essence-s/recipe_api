@@ -18,7 +18,7 @@ export class PendingRecipeService {
         ...pendingRecipe,
         pendingCategories: {
           create: categories.map((categoryId) => ({
-            pendingCategory: { connect: { id: categoryId } },
+            pendingCategory: { connect: { id: +categoryId } },
           })),
         },
         pendingIngredients: {
@@ -68,6 +68,7 @@ export class PendingRecipeService {
           prepTime: pendingRecipe.prepTime,
           servings: pendingRecipe.servings,
           difficulty: pendingRecipe.difficulty,
+          createdAt: pendingRecipe.createdAt,
           userId: pendingRecipe.userId,
           publicUserName: pendingRecipe.publicUserName,
           publicUserPhone: pendingRecipe.publicUserPhone,
