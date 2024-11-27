@@ -6,16 +6,24 @@ import {
   Param,
   Patch,
   Post,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { RecipeService } from './recipe.service';
 // import { Recipe } from './recipe.entity';
 // import { CreateRecipeDto } from './create-recipe.dto';
 import { dataPermission } from 'src/common/data-permission/data-permission';
 import { Auth } from 'src/modules/auth/decorators/auth.decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { CreateRecipeDto } from './create-recipe.dto';
+import { UploadImageService } from 'src/shared/upload-image/upload-image.service';
 
 @Controller('recipe')
 export class RecipeController {
-  constructor(private readonly recipeService: RecipeService) {}
+  constructor(
+    private readonly recipeService: RecipeService,
+    private readonly uploadImageService: UploadImageService,
+  ) {}
 
   // @Post()
   // async create(@Body() createRecipeDto): Promise<Recipe[]> {
@@ -24,9 +32,16 @@ export class RecipeController {
   // }
   @Post()
   @Auth(dataPermission.recipe.functions.create)
-  async create(@Body() createRecipeDto) {
-    // async create(@Body() createRecipeDto: CreateRecipeDto): Promise<Recipe> {
-    return await this.recipeService.createRecipe(createRecipeDto);
+  @UseInterceptors(FileInterceptor('image'))
+  async create(@UploadedFile() file, @Body() createRecipeDto: CreateRecipeDto) {
+    const resultData = await this.uploadImageService.createThumbnails(
+      file.buffer,
+    );
+    const recipeWithImageUrl = {
+      ...createRecipeDto,
+      imageUrl: resultData.name,
+    };
+    return await this.recipeService.createRecipe(recipeWithImageUrl);
   }
 
   @Get()

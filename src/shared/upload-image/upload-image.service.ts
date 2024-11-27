@@ -15,16 +15,16 @@ export class UploadImageService {
   async createThumbnails(file) {
     const data = [
       {
-        folderName: 'small',
-        width: 200,
+        folderName: 'large',
+        width: 1200,
       },
       {
         folderName: 'medium',
         width: 800,
       },
       {
-        folderName: 'large',
-        width: 1200,
+        folderName: 'small',
+        width: 200,
       },
     ];
     const name = uuidv4();

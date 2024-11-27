@@ -6,8 +6,14 @@ meta {
 
 post {
   url: {{BACKEND_URL}}/pending-recipe/prueba
-  body: multipartForm
+  body: json
   auth: none
+}
+
+body:json {
+  {
+    "dasda":43
+  }
 }
 
 body:multipart-form {

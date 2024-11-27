@@ -1,7 +1,7 @@
 import { Type } from 'class-transformer';
 import { IsArray, IsInt, IsNotEmpty, IsString, Min } from 'class-validator';
 
-export class CreateRecipeDto {
+export class CreatePendingRecipeDto {
   @IsNotEmpty()
   @IsString()
   title: string;
