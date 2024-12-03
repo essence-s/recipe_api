@@ -31,9 +31,15 @@ export const dataPermission = {
       remove: {
         name: 'user',
         typePermission: TYPE_REQUEST.DELETE,
-        requiredPermissions: [
+        reassign: {
+          name: 'recipe',
+          checkRelation: 'userId',
+          permission: TYPE_REQUEST.UPDATE,
+        },
+        verificationPermissions: [
           {
             name: 'recipe',
+            checkRelation: 'userId',
             permission: TYPE_REQUEST.DELETE,
           },
         ],
@@ -64,7 +70,7 @@ export const dataPermission = {
           },
           {
             name: 'recipe',
-            checkRelation: 'authorId',
+            checkRelation: 'userId',
             permission: TYPE_REQUEST.DELETE,
           },
           // {
@@ -90,15 +96,15 @@ export const dataPermission = {
     },
   },
   categoryGroup: {
-    name: 'categoryGroup',
+    name: 'category-group',
     functions: {
-      create: { name: 'categoryGroup', typePermission: TYPE_REQUEST.CREATE },
-      findAll: { name: 'categoryGroup', typePermission: TYPE_REQUEST.VIEW },
-      findOne: { name: 'categoryGroup', typePermission: TYPE_REQUEST.VIEW },
-      update: { name: 'categoryGroup', typePermission: TYPE_REQUEST.UPDATE },
-      remove: { name: 'categoryGroup', typePermission: TYPE_REQUEST.DELETE },
+      create: { name: 'category-group', typePermission: TYPE_REQUEST.CREATE },
+      findAll: { name: 'category-group', typePermission: TYPE_REQUEST.VIEW },
+      findOne: { name: 'category-group', typePermission: TYPE_REQUEST.VIEW },
+      update: { name: 'category-group', typePermission: TYPE_REQUEST.UPDATE },
+      remove: { name: 'category-group', typePermission: TYPE_REQUEST.DELETE },
       removeMany: {
-        name: 'categoryGroup',
+        name: 'category-group',
         typePermission: TYPE_REQUEST.DELETE,
       },
     },
