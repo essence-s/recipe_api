@@ -5,5 +5,6 @@ import { CategoryGroupController } from './category-group.controller';
 @Module({
   controllers: [CategoryGroupController],
   providers: [CategoryGroupService],
+  exports: [CategoryGroupService],
 })
 export class CategoryGroupModule {}

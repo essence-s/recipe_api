@@ -13,7 +13,7 @@ export class CategoryGroupService {
   }
 
   findAll() {
-    return this.prisma.categoryGroup.findMany();
+    return this.prisma.categoryGroup.findMany({ include: { Category: true } });
   }
 
   findOne(id: number) {
