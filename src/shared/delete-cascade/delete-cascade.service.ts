@@ -1,4 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { MemoRoleService } from '../memo-role/memo-role.service';
 
@@ -75,7 +80,13 @@ export class DeleteCascadeService {
       });
     }
     console.log(dataPromises);
-    return dataPromises;
+    throw new HttpException(
+      {
+        message: 'there are relationships',
+        relatedTables: dataPromises,
+      },
+      HttpStatus.BAD_REQUEST,
+    );
   }
 
   async deleteRelations(

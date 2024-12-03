@@ -74,7 +74,7 @@ export class RecipeService {
         id: recipeId,
       },
       include: {
-        categories: true,
+        categories: { select: { category: true } },
         ingredients: true,
         instructions: true,
       },

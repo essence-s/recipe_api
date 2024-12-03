@@ -13,10 +13,14 @@ import { UserDto } from './dto/user.dto';
 import { UserService } from './user.service';
 import { TYPE_REQUEST } from 'src/common/enums/type-request.enum';
 import { dataPermission } from 'src/common/data-permission/data-permission';
+import { DeleteCascadeService } from 'src/shared/delete-cascade/delete-cascade.service';
 
 @Controller('user')
 export class UsersController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly deleteCascade: DeleteCascadeService,
+  ) {}
 
   @Post()
   @Auth(dataPermission.user.functions.create)
@@ -44,8 +48,21 @@ export class UsersController {
 
   @Delete(':id')
   @Auth(dataPermission.user.functions.remove)
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const dataPermisionG = dataPermission.user.functions.remove;
+
+    try {
+      return await this.userService.remove(+id);
+    } catch (error) {
+      if (error.code == 'P2003') {
+        const resultInfoRelation = await this.deleteCascade.infoIdRelation(
+          id,
+          dataPermisionG,
+        );
+        return resultInfoRelation;
+      }
+      return error;
+    }
   }
 
   @Delete()

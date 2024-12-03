@@ -7,5 +7,9 @@ meta {
 get {
   url: {{BACKEND_URL}}/category-group
   body: json
-  auth: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{bearerToken}}
 }

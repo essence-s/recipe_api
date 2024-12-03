@@ -4,6 +4,7 @@ import { PublicService } from './public.service';
 import { SearchService } from '../search/search.service';
 import { CategoryService } from '../category/category.service';
 import { PendingRecipeService } from '../pending-recipe/pending-recipe.service';
+import { CategoryGroupService } from '../category-group/category-group.service';
 
 @Controller('public')
 export class PublicController {
@@ -12,6 +13,7 @@ export class PublicController {
     private readonly recipeService: RecipeService,
     private readonly searchService: SearchService,
     private readonly categoryService: CategoryService,
+    private readonly categoryGroupService: CategoryGroupService,
     private readonly pendingRecipe: PendingRecipeService,
   ) {}
 
@@ -31,6 +33,11 @@ export class PublicController {
   @Get('category')
   findAll() {
     return this.categoryService.findAll();
+  }
+
+  @Get('category-group')
+  findAllCG() {
+    return this.categoryGroupService.findAll();
   }
 
   @Post('pendingRecipe')
