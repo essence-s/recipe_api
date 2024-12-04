@@ -68,7 +68,7 @@ export class RecipeService {
     // return this.recipeRepository.find();
   }
 
-  async findId(recipeId): Promise<{}> {
+  async findId(recipeId) {
     return this.prisma.recipe.findUnique({
       where: {
         id: recipeId,

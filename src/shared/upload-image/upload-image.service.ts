@@ -10,23 +10,23 @@ cloudinary.config({
   api_secret: process.env.API_SECRET, // Click 'View API Keys' above to copy your API secret
 });
 
+const data = [
+  {
+    folderName: 'large',
+    width: 1200,
+  },
+  {
+    folderName: 'medium',
+    width: 800,
+  },
+  {
+    folderName: 'small',
+    width: 200,
+  },
+];
 @Injectable()
 export class UploadImageService {
   async createThumbnails(file) {
-    const data = [
-      {
-        folderName: 'large',
-        width: 1200,
-      },
-      {
-        folderName: 'medium',
-        width: 800,
-      },
-      {
-        folderName: 'small',
-        width: 200,
-      },
-    ];
     const name = uuidv4();
     const byteArrayBuffer = file;
     const promises = data.map(async (item) => {
@@ -54,5 +54,21 @@ export class UploadImageService {
     return {
       name,
     };
+  }
+
+  async deleteThumbnails(publicId) {
+    try {
+      const promises = data.map(async (item) => {
+        const result = await cloudinary.uploader.destroy(
+          `thumbnails/${item.folderName}/${publicId}`,
+        );
+        // console.log('Imagen eliminada:', result);
+        return result;
+      });
+
+      return await Promise.all(promises);
+    } catch (error) {
+      console.error('Error eliminando la imagen:', error);
+    }
   }
 }

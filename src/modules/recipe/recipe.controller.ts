@@ -66,7 +66,9 @@ export class RecipeController {
 
   @Delete(':id')
   @Auth(dataPermission.recipe.functions.remove)
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
+    const recipe = await this.recipeService.findId(parseInt(id));
+    await this.uploadImageService.deleteThumbnails(recipe.imageUrl);
     return this.recipeService.remove(+id);
   }
 }
