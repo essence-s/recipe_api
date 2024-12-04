@@ -19,19 +19,25 @@ datasource db {
 //   url      = env("DATABASE_URL")
 // }
 
+enum RecipeDifficulty {
+  facil
+  medio
+  dificil
+}
+
 model Recipe {
-  id              Int      @id @default(autoincrement())
+  id              Int              @id @default(autoincrement())
   title           String
   description     String
   imageUrl        String?
   videoUrl        String?
   prepTime        Int
   servings        Int
-  difficulty      String
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  difficulty      RecipeDifficulty @default(medio)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
   userId          Int?
-  user            User?    @relation(fields: [userId], references: [id])
+  user            User?            @relation(fields: [userId], references: [id])
   // publicUserId    Int
   // publicUser      PublicUsers @relation(fields: [publicUserId], references: [id])
   publicUserName  String?
@@ -130,18 +136,18 @@ model Role {
 
 /////////PENDING
 model PendingRecipe {
-  id              Int      @id @default(autoincrement())
+  id              Int              @id @default(autoincrement())
   title           String
   description     String
   imageUrl        String?
   videoUrl        String?
   prepTime        Int
   servings        Int
-  difficulty      String
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  difficulty      RecipeDifficulty @default(medio)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
   userId          Int
-  user            User     @relation(fields: [userId], references: [id])
+  user            User             @relation(fields: [userId], references: [id])
   publicUserName  String?
   publicUserPhone String?
 

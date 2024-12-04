@@ -1,6 +1,18 @@
 import { Type } from 'class-transformer';
-import { IsArray, IsInt, IsNotEmpty, IsString, Min } from 'class-validator';
+import {
+  IsArray,
+  IsEnum,
+  IsInt,
+  IsNotEmpty,
+  IsString,
+  Min,
+} from 'class-validator';
 
+enum RecipeDifficulty {
+  facil = 'facil',
+  medio = 'medio',
+  dificil = 'dificil',
+}
 export class CreateRecipeDto {
   @IsNotEmpty()
   @IsString()
@@ -24,9 +36,10 @@ export class CreateRecipeDto {
   @Min(0)
   servings: number;
 
-  @IsNotEmpty()
-  @IsString()
-  difficulty: string;
+  @IsEnum(RecipeDifficulty, {
+    message: 'the difficulty should be easy, facil, medio or dificil',
+  })
+  difficulty: RecipeDifficulty;
 
   @Type(() => Number)
   @IsInt()
