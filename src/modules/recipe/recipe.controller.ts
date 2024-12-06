@@ -10,13 +10,12 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { RecipeService } from './recipe.service';
-// import { Recipe } from './recipe.entity';
-// import { CreateRecipeDto } from './create-recipe.dto';
 import { dataPermission } from 'src/common/data-permission/data-permission';
 import { Auth } from 'src/modules/auth/decorators/auth.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateRecipeDto } from './create-recipe.dto';
 import { UploadImageService } from 'src/shared/upload-image/upload-image.service';
+import { UpdateRecipeDto } from './update-recipe.dto';
 
 @Controller('recipe')
 export class RecipeController {
@@ -25,11 +24,6 @@ export class RecipeController {
     private readonly uploadImageService: UploadImageService,
   ) {}
 
-  // @Post()
-  // async create(@Body() createRecipeDto): Promise<Recipe[]> {
-  //   // async create(@Body() createRecipeDto: CreateRecipeDto): Promise<Recipe> {
-  //   return await this.recipeService.create(createRecipeDto);
-  // }
   @Post()
   @Auth(dataPermission.recipe.functions.create)
   @UseInterceptors(FileInterceptor('image'))
@@ -60,8 +54,27 @@ export class RecipeController {
 
   @Patch(':id')
   @Auth(dataPermission.recipe.functions.update)
-  update(@Param('id') id: string, @Body() updateRecipeDto) {
-    return this.recipeService.update(+id, updateRecipeDto);
+  @UseInterceptors(FileInterceptor('image'))
+  async update(
+    @UploadedFile() file,
+    @Param('id') id: string,
+    @Body() updateRecipeDto: UpdateRecipeDto,
+  ) {
+    // eliminamos la imagen anterior
+    const recipe = await this.recipeService.findId(parseInt(id));
+    await this.uploadImageService.deleteThumbnails(recipe.imageUrl);
+
+    // creamos las miniaturas
+    const resultData = await this.uploadImageService.createThumbnails(
+      file.buffer,
+    );
+
+    const recipeWithImageUrl = {
+      ...updateRecipeDto,
+      imageUrl: resultData.name,
+    };
+
+    return this.recipeService.update(+id, recipeWithImageUrl);
   }
 
   @Delete(':id')
