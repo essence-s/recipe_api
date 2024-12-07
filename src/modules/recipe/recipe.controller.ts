@@ -62,10 +62,9 @@ export class RecipeController {
   ) {
     // eliminamos la imagen anterior
     const recipe = await this.recipeService.findId(parseInt(id));
-    await this.uploadImageService.deleteThumbnails(recipe.imageUrl);
 
-    // creamos las miniaturas
-    const resultData = await this.uploadImageService.createThumbnails(
+    const resultData = await this.uploadImageService.updateThumbnails(
+      recipe.imageUrl,
       file.buffer,
     );
 

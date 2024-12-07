@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
 import { v2 as cloudinary } from 'cloudinary';
 // import * as fs from 'fs';
@@ -27,33 +27,40 @@ const data = [
 @Injectable()
 export class UploadImageService {
   async createThumbnails(file) {
-    const name = uuidv4();
-    const byteArrayBuffer = file;
-    const promises = data.map(async (item) => {
-      return new Promise((resolve, reject) => {
-        cloudinary.uploader
-          .upload_stream(
-            {
-              public_id: name,
-              folder: `thumbnails/${item.folderName}`,
-              transformation: [{ fetch_format: 'webp', width: item.width }],
-            },
-            (err, result) => {
-              if (err) {
-                reject(err);
-              }
-              resolve(result);
-            },
-          )
-          .end(byteArrayBuffer);
+    try {
+      const name = uuidv4();
+      const byteArrayBuffer = file;
+      const promises = data.map(async (item) => {
+        return new Promise((resolve, reject) => {
+          cloudinary.uploader
+            .upload_stream(
+              {
+                public_id: name,
+                folder: `thumbnails/${item.folderName}`,
+                transformation: [{ fetch_format: 'webp', width: item.width }],
+              },
+              (err, result) => {
+                if (err) {
+                  reject(err);
+                }
+                resolve(result);
+              },
+            )
+            .end(byteArrayBuffer);
+        });
       });
-    });
 
-    await Promise.all(promises);
+      await Promise.all(promises);
 
-    return {
-      name,
-    };
+      return {
+        name,
+      };
+    } catch (error) {
+      throw new HttpException(
+        { message: 'error create Thumbnails' },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   async deleteThumbnails(publicId) {
@@ -69,6 +76,22 @@ export class UploadImageService {
       return await Promise.all(promises);
     } catch (error) {
       console.error('Error eliminando la imagen:', error);
+      throw new HttpException(
+        {
+          message: 'error delete Thumbnails',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
     }
+  }
+
+  async updateThumbnails(imageID, imageBuffer) {
+    // eliminamos la imagen anterior
+    await this.deleteThumbnails(imageID);
+
+    // creamos las miniaturas
+    const resultData = await this.createThumbnails(imageBuffer);
+
+    return resultData;
   }
 }
