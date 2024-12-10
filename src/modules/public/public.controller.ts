@@ -26,8 +26,13 @@ export class PublicController {
   async findMatchesTitleRecipe(
     @Query('query') query,
     @Query('categories') categories,
+    @Query('page') page,
+    @Query('perPage') perPage,
   ) {
-    return this.searchService.findMatchesRecipe([query, categories]);
+    return this.searchService.findMatchesRecipe([query, categories], {
+      page,
+      perPage,
+    });
   }
 
   @Get('category')

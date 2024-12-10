@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, Recipe } from '@prisma/client';
+import { Recipe } from '@prisma/client';
 import {
   PaginatedResult,
   PaginateFunction,
@@ -7,7 +7,7 @@ import {
 } from 'src/common/prismaFun/paginator';
 import { PrismaService } from 'src/prisma.service';
 
-const paginate: PaginateFunction = paginator({ perPage: 10 });
+const paginate: PaginateFunction = paginator({ perPage: 2 });
 @Injectable()
 export class SearchService {
   constructor(private prisma: PrismaService) {}
@@ -89,9 +89,10 @@ export class SearchService {
     );
   }
 
-  async findMatchesRecipe(matches) {
+  async findMatchesRecipe(matches, pagination?) {
     let [query, categoriesParam] = matches;
     console.log(matches);
+    console.log(pagination);
     query = query != 'undefined' ? query : '';
     const categories =
       categoriesParam != 'undefined'
@@ -101,33 +102,43 @@ export class SearchService {
         : [];
     console.log(query);
     console.log(categories);
-    const recipes = await this.prisma.recipe.findMany({
-      where: {
-        AND: [
-          query
-            ? {
-                title: {
-                  contains: query,
-                  mode: 'insensitive',
-                },
-              }
-            : {},
-          ...categories.map((category) => ({
-            categories: {
-              some: {
-                category: {
-                  name: category,
+
+    // const page = { page: 2, perPage: 2 };
+
+    const recipes = await paginate(
+      this.prisma.recipe,
+
+      {
+        where: {
+          AND: [
+            query
+              ? {
+                  title: {
+                    contains: query,
+                    mode: 'insensitive',
+                  },
+                }
+              : {},
+            ...categories.map((category) => ({
+              categories: {
+                some: {
+                  category: {
+                    name: category,
+                  },
                 },
               },
-            },
-          })),
-        ],
+            })),
+          ],
+        },
+        // include: {
+        //   categories: true,
+        //   ingredients: true,
+        // },
       },
-      // include: {
-      //   categories: true,
-      //   ingredients: true,
-      // },
-    });
+      {
+        ...pagination,
+      },
+    );
 
     // {
     //   categories: {
