@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePublicDto } from './dto/create-public.dto';
 import { UpdatePublicDto } from './dto/update-public.dto';
 
 @Injectable()
 export class PublicService {
-  create(createPublicDto: CreatePublicDto) {
+  create(createPublicDto) {
     return 'This action adds a new public';
   }
 

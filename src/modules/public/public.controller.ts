@@ -1,10 +1,22 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
-import { RecipeService } from '../recipe/recipe.service';
-import { PublicService } from './public.service';
-import { SearchService } from '../search/search.service';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { UploadImageService } from 'src/shared/upload-image/upload-image.service';
+import { CategoryGroupService } from '../category-group/category-group.service';
 import { CategoryService } from '../category/category.service';
 import { PendingRecipeService } from '../pending-recipe/pending-recipe.service';
-import { CategoryGroupService } from '../category-group/category-group.service';
+import { RecipeService } from '../recipe/recipe.service';
+import { SearchService } from '../search/search.service';
+import { CreatePublicPendingRecipeDto } from './dto/create-public.dto';
+import { PublicService } from './public.service';
 
 @Controller('public')
 export class PublicController {
@@ -14,7 +26,8 @@ export class PublicController {
     private readonly searchService: SearchService,
     private readonly categoryService: CategoryService,
     private readonly categoryGroupService: CategoryGroupService,
-    private readonly pendingRecipe: PendingRecipeService,
+    private readonly pendingRecipeService: PendingRecipeService,
+    private readonly uploadImageService: UploadImageService,
   ) {}
 
   @Get('recipe/:id')
@@ -45,9 +58,32 @@ export class PublicController {
     return this.categoryGroupService.findAll();
   }
 
+  // @Post('pendingRecipe')
+  // async create(@Body() createPendingRecipe) {
+  //   return await this.pendingRecipeService.createPendingRecipe(
+  //     createPendingRecipe,
+  //   );
+  // }
+
   @Post('pendingRecipe')
-  async create(@Body() createPendingRecipe) {
-    return await this.pendingRecipe.createPendingRecipe(createPendingRecipe);
+  @UseInterceptors(FileInterceptor('image'))
+  async create(
+    @UploadedFile() file,
+    @Body() createRecipeDto: CreatePublicPendingRecipeDto,
+  ) {
+    // const resultData = await this.uploadImageService.createThumbnails(
+    //   file.buffer,
+    // );
+    const pendingRecipeWithImageUrl = {
+      ...createRecipeDto,
+      // imageUrl: resultData.name || '',
+      imageUrl: 'XD',
+    };
+    // createRecipeDto.imageUrl = resultData.name;
+
+    return await this.pendingRecipeService.createPendingRecipe(
+      pendingRecipeWithImageUrl,
+    );
   }
 
   // @Post()
