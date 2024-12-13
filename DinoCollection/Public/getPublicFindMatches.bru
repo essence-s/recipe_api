@@ -5,12 +5,14 @@ meta {
 }
 
 get {
-  url: {{BACKEND_URL}}/public/search/matches/?query&categories
+  url: {{BACKEND_URL}}/public/search/matches/?query=arroz&categories&page=12&perPage
   body: none
   auth: none
 }
 
 params:query {
-  query: 
+  query: arroz
   categories: 
+  page: 12
+  perPage: 
 }
