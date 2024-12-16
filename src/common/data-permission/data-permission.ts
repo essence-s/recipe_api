@@ -36,7 +36,7 @@ export const dataPermission = {
           checkRelation: 'userId',
           permission: TYPE_REQUEST.UPDATE,
         },
-        verificationPermissions: [
+        permissionsDeleteCascade: [
           {
             name: 'recipe',
             checkRelation: 'userId',
@@ -62,7 +62,7 @@ export const dataPermission = {
           checkRelation: 'roleId',
           permission: TYPE_REQUEST.UPDATE,
         },
-        verificationPermissions: [
+        permissionsDeleteCascade: [
           {
             name: 'user',
             checkRelation: 'roleId',

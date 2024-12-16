@@ -103,25 +103,27 @@ enum UserState {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  username  String    @unique
-  email     String?   @unique
-  phone     String    @unique
-  password  String
-  state     UserState @default(active)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now()) @updatedAt
-  roleId    Int
-  role      Role      @relation(fields: [roleId], references: [id])
+  id         Int       @id @default(autoincrement())
+  username   String    @unique
+  email      String?   @unique
+  phone      String    @unique
+  password   String
+  state      UserState @default(active)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now()) @updatedAt
+  roleId     Int
+  role       Role      @relation(fields: [roleId], references: [id])
+  identifier String?   @unique
 
   recipes       Recipe[]
   PendingRecipe PendingRecipe[]
 }
 
 model Role {
-  id         Int    @id @default(autoincrement())
-  name       String @unique
-  permission Json   @default("[]")
+  id         Int     @id @default(autoincrement())
+  name       String  @unique
+  permission Json    @default("[]")
+  identifier String? @unique
 
   user User[]
 }

@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/prisma.service';
 import { UserDto } from './dto/user.dto';
@@ -103,7 +107,8 @@ export class UserService {
     });
   }
 
-  remove(id: number) {
+  async remove(id: number) {
+    await this.identifierSuperUser(id);
     return this.prisma.user.delete({
       where: { id },
     });
@@ -113,5 +118,17 @@ export class UserService {
     return this.prisma.user.deleteMany({
       where: { id: { in: ids.ids } },
     });
+  }
+
+  async identifierSuperUser(id: number) {
+    const superUser = await this.prisma.user.findUnique({ where: { id } });
+
+    if (!superUser) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+
+    if (superUser.identifier == 'superuser') {
+      throw new ForbiddenException('Cannot delete a superuser');
+    }
   }
 }

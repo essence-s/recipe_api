@@ -7,7 +7,7 @@ import {
 import { PrismaService } from 'src/prisma.service';
 import { MemoRoleService } from '../memo-role/memo-role.service';
 
-type verificationPermissions = {
+type permissionsDeleteCascade = {
   name: string;
   permission: any;
   ids: [];
@@ -25,19 +25,19 @@ export class DeleteCascadeService {
     tablecfuntion: {
       name: string;
       typePermission: string;
-      verificationPermissions: {
+      permissionsDeleteCascade: {
         name: string;
         checkRelation: string;
         permission: any;
       }[];
     },
-  ): Promise<verificationPermissions[] | any> {
+  ): Promise<permissionsDeleteCascade[] | any> {
     let dataDeleteId = [+idd];
     let dataPromises = [];
 
     const nameTable = tablecfuntion.name;
     const permissionFirst = tablecfuntion.typePermission;
-    const verificationPermissions = tablecfuntion.verificationPermissions;
+    const permissionsDeleteCascade = tablecfuntion.permissionsDeleteCascade;
 
     const firstR = await this.prisma[nameTable].findMany({
       where: {
@@ -57,7 +57,7 @@ export class DeleteCascadeService {
       permission: permissionFirst,
     });
 
-    for (const item of verificationPermissions) {
+    for (const item of permissionsDeleteCascade) {
       const dataDelete = await this.prisma[item.name].findMany({
         where: {
           [item.checkRelation]: { in: dataDeleteId },
@@ -80,13 +80,7 @@ export class DeleteCascadeService {
       });
     }
     console.log(dataPromises);
-    throw new HttpException(
-      {
-        message: 'there are relationships',
-        relatedTables: dataPromises,
-      },
-      HttpStatus.BAD_REQUEST,
-    );
+    return dataPromises;
   }
 
   async deleteRelations(
@@ -145,8 +139,9 @@ export class DeleteCascadeService {
   }
 
   async reassign(id, tablecfuntion, idReassign, roleTokenRequest) {
-    const name = tablecfuntion.reassign.name;
-    const permission = tablecfuntion.reassign.permission;
+    // const name = tablecfuntion.reassign.name;
+    // const permission = tablecfuntion.reassign.permission;
+    const { name, checkRelation, permission } = tablecfuntion.reassign;
 
     const hasPermissions = this.checkingPermissions(roleTokenRequest, [
       {
@@ -159,12 +154,13 @@ export class DeleteCascadeService {
       throw new UnauthorizedException('does not have the necessary permits');
     }
 
-    const resultInfoRelation = await this.infoIdRelation(id, tablecfuntion);
+    // const resultInfoRelation = await this.infoIdRelation(id, tablecfuntion);
+    // console.log('hola', resultInfoRelation);
     const resultReassing = await this.reassignTo(
       id,
       idReassign,
-      resultInfoRelation[1].checkRelation,
-      resultInfoRelation[1].name,
+      checkRelation,
+      name,
     );
     return resultReassing;
   }

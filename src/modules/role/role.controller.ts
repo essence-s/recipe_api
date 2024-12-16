@@ -77,26 +77,26 @@ export class RoleController {
       );
     }
 
-    if (!deleteCascade) {
-      try {
-        return await this.roleService.remove(+id);
-      } catch (error) {
-        if (error.code == 'P2003') {
-          const resultInfoRelation = await this.deleteCascade.infoIdRelation(
-            id,
-            dataPermisionG,
-          );
-          return resultInfoRelation;
-        }
-        return error;
-      }
-    } else {
-      return await this.deleteCascade.deleteCascade(
-        id,
-        dataPermisionG,
-        roleTokenRequest,
-      );
-    }
+    // if (!deleteCascade) {
+    //   try {
+    //     return await this.roleService.remove(+id);
+    //   } catch (error) {
+    //     if (error.code == 'P2003') {
+    //       const resultInfoRelation = await this.deleteCascade.infoIdRelation(
+    //         id,
+    //         dataPermisionG,
+    //       );
+    //       return resultInfoRelation;
+    //     }
+    //     return error;
+    //   }
+    // } else {
+    //   return await this.deleteCascade.deleteCascade(
+    //     id,
+    //     dataPermisionG,
+    //     roleTokenRequest,
+    //   );
+    // }
   }
 
   // tests

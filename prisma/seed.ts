@@ -10,7 +10,7 @@ async function main() {
   const hashedPassword = await bcrypt.hash(adminPassword, 10);
 
   const adminRole = await prisma.role.upsert({
-    where: { name: 'admin' },
+    where: { identifier: 'superrole' },
     update: {},
     create: {
       name: 'admin',
@@ -19,7 +19,7 @@ async function main() {
   });
 
   await prisma.user.upsert({
-    where: { username },
+    where: { identifier: 'superuser' },
     update: {},
     create: {
       username,
@@ -28,6 +28,7 @@ async function main() {
       roleId: adminRole.id,
       phone: '999999999',
       state: 'active',
+      identifier: 'superuser',
     },
   });
 

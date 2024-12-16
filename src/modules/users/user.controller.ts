@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  ForbiddenException,
   Get,
   Param,
   Patch,
@@ -59,7 +60,10 @@ export class UsersController {
           id,
           dataPermisionG,
         );
-        return resultInfoRelation;
+        throw new ForbiddenException({
+          message: 'there are relationships',
+          relatedTables: resultInfoRelation,
+        });
       }
       return error;
     }

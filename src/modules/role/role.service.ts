@@ -35,6 +35,10 @@ export class RoleService {
   }
 
   async update(id: number, updateRoleDto) {
+    const role = await this.findOne(id);
+    if (role.identifier == 'superrole') {
+    }
+
     const result = await this.prisma.role.update({
       where: { id },
       data: updateRoleDto,
