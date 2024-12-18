@@ -2,19 +2,18 @@ import {
   Body,
   Controller,
   Delete,
-  ForbiddenException,
   Get,
   Param,
   Patch,
   Post,
+  Query,
+  Req,
 } from '@nestjs/common';
-import { Role } from 'src/common/enums/role.enum';
+import { dataPermission } from 'src/common/data-permission/data-permission';
 import { Auth } from 'src/modules/auth/decorators/auth.decorator';
+import { DeleteCascadeService } from 'src/shared/delete-cascade/delete-cascade.service';
 import { UserDto } from './dto/user.dto';
 import { UserService } from './user.service';
-import { TYPE_REQUEST } from 'src/common/enums/type-request.enum';
-import { dataPermission } from 'src/common/data-permission/data-permission';
-import { DeleteCascadeService } from 'src/shared/delete-cascade/delete-cascade.service';
 
 @Controller('user')
 export class UsersController {
@@ -49,24 +48,28 @@ export class UsersController {
 
   @Delete(':id')
   @Auth(dataPermission.user.functions.remove)
-  async remove(@Param('id') id: string) {
+  async remove(
+    @Req() request: Request & { user: { role: string } },
+    @Param('id') id: string,
+    @Query('reassignTo') idReassign,
+    @Query('deleteCascade') deleteCascade: boolean,
+  ) {
     const dataPermisionG = dataPermission.user.functions.remove;
+    const roleTokenRequest = request.user.role;
 
-    try {
+    const funDelete = async () => {
       return await this.userService.remove(+id);
-    } catch (error) {
-      if (error.code == 'P2003') {
-        const resultInfoRelation = await this.deleteCascade.infoIdRelation(
-          id,
-          dataPermisionG,
-        );
-        throw new ForbiddenException({
-          message: 'there are relationships',
-          relatedTables: resultInfoRelation,
-        });
-      }
-      return error;
-    }
+    };
+
+    return this.deleteCascade.deleteCascadeOrReassign(
+      funDelete,
+      idReassign,
+      deleteCascade,
+
+      id,
+      dataPermisionG,
+      roleTokenRequest,
+    );
   }
 
   @Delete()
