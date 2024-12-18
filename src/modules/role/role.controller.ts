@@ -1,24 +1,20 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  Req,
+  Get,
+  Param,
+  Patch,
+  Post,
   Query,
+  Req,
 } from '@nestjs/common';
-import { RoleService } from './role.service';
-import { CreateRoleDto } from './dto/create-role.dto';
-import { UpdateRoleDto } from './dto/update-role.dto';
-import { Auth } from 'src/modules/auth/decorators/auth.decorator';
-import { Role } from 'src/common/enums/role.enum';
-import { RolePermissionsArrayDto } from './dto/permission.dto';
 import { dataPermission } from 'src/common/data-permission/data-permission';
+import { Auth } from 'src/modules/auth/decorators/auth.decorator';
 import { PrismaService } from 'src/prisma.service';
 import { DeleteCascadeService } from 'src/shared/delete-cascade/delete-cascade.service';
-import { ActiveUserInterface } from 'src/common/interfaces/active-user.interface';
+import { RolePermissionsArrayDto } from './dto/permission.dto';
+import { RoleService } from './role.service';
 
 // @Auth([Role.ADMIN])
 @Controller('role')
@@ -68,35 +64,19 @@ export class RoleController {
     const dataPermisionG = dataPermission.role.functions.remove;
     const roleTokenRequest = request.user.role;
 
-    if (idReassign) {
-      return await this.deleteCascade.reassign(
-        id,
-        dataPermisionG,
-        idReassign,
-        roleTokenRequest,
-      );
-    }
+    const funDelete = async () => {
+      return await this.roleService.remove(+id);
+    };
 
-    // if (!deleteCascade) {
-    //   try {
-    //     return await this.roleService.remove(+id);
-    //   } catch (error) {
-    //     if (error.code == 'P2003') {
-    //       const resultInfoRelation = await this.deleteCascade.infoIdRelation(
-    //         id,
-    //         dataPermisionG,
-    //       );
-    //       return resultInfoRelation;
-    //     }
-    //     return error;
-    //   }
-    // } else {
-    //   return await this.deleteCascade.deleteCascade(
-    //     id,
-    //     dataPermisionG,
-    //     roleTokenRequest,
-    //   );
-    // }
+    return this.deleteCascade.deleteCascadeOrReassign(
+      funDelete,
+      idReassign,
+      deleteCascade,
+
+      id,
+      dataPermisionG,
+      roleTokenRequest,
+    );
   }
 
   // tests
