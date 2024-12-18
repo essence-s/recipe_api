@@ -1,7 +1,8 @@
 import {
-  HttpException,
-  HttpStatus,
+  BadRequestException,
+  ForbiddenException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
@@ -48,7 +49,9 @@ export class DeleteCascadeService {
       },
     });
 
-    if (firstR.length == 0) return false;
+    if (firstR.length == 0) {
+      throw new NotFoundException(`${nameTable} with ID ${idd} not found`);
+    }
 
     dataPromises.push({
       name: nameTable,
@@ -91,17 +94,20 @@ export class DeleteCascadeService {
     }[],
   ) {
     const transaction = await this.prisma.$transaction(async (tx) => {
+      let results = [];
       for (const item of arrayDeleteRelation) {
         const dataDelete = await tx[item.name].deleteMany({
           where: {
             id: { in: item.ids },
           },
         });
-        console.log('dino ' + dataDelete);
-        if (!dataDelete) {
-          throw new Error('ff');
+        // console.log('dino ' + dataDelete);
+        if (dataDelete.count === 0) {
+          throw new Error(`No records were deleted for ${item.name}`);
         }
+        results.push(dataDelete);
       }
+      return results;
     });
 
     return transaction;
@@ -126,16 +132,26 @@ export class DeleteCascadeService {
   }
 
   async reassignTo(id, idReassign, checkRelation, table: string) {
-    const firstR = await this.prisma[table].updateMany({
-      where: {
-        [checkRelation]: +id,
-      },
-      data: {
-        [checkRelation]: +idReassign,
-      },
-    });
+    try {
+      const firstR = await this.prisma[table].updateMany({
+        where: {
+          [checkRelation]: +id,
+        },
+        data: {
+          [checkRelation]: +idReassign,
+        },
+      });
 
-    return firstR;
+      if (firstR.count == 0) {
+        throw new NotFoundException(
+          `no records found with ${checkRelation} ${id} in the ${table} table`,
+        );
+      }
+
+      return firstR;
+    } catch (error) {
+      throw error;
+    }
   }
 
   async reassign(id, tablecfuntion, idReassign, roleTokenRequest) {
@@ -156,13 +172,7 @@ export class DeleteCascadeService {
 
     // const resultInfoRelation = await this.infoIdRelation(id, tablecfuntion);
     // console.log('hola', resultInfoRelation);
-    const resultReassing = await this.reassignTo(
-      id,
-      idReassign,
-      checkRelation,
-      name,
-    );
-    return resultReassing;
+    return await this.reassignTo(id, idReassign, checkRelation, name);
   }
 
   async deleteCascade(id, dataPermisionG, roleTokenRequest) {
@@ -181,5 +191,58 @@ export class DeleteCascadeService {
       [...resultInfoRelation].reverse(),
     );
     return result;
+  }
+
+  async deleteCascadeOrReassign(
+    funcDelete,
+    idReassign,
+    deleteCascade,
+    id,
+    dataPermisionG,
+    roleTokenRequest,
+  ) {
+    const hasReassignTo = idReassign !== undefined;
+    const hasDeleteCascade = deleteCascade !== undefined;
+    // console.log({ hasDeleteCascade, deleteCascade });
+    if (hasReassignTo && hasDeleteCascade) {
+      throw new BadRequestException(
+        'Only one of "reassignTo" or "deleteCascade" query parameters can be provided.',
+      );
+    }
+
+    // if (!hasReassignTo && !hasDeleteCascade) {
+    //   throw new BadRequestException(
+    //     'You must provide either "reassignTo" or "deleteCascade" query parameter.',
+    //   );
+    // }
+
+    if (hasReassignTo) {
+      return await this.reassign(
+        id,
+        dataPermisionG,
+        idReassign,
+        roleTokenRequest,
+      );
+    }
+
+    if (deleteCascade) {
+      return await this.deleteCascade(id, dataPermisionG, roleTokenRequest);
+    } else if (!deleteCascade) {
+      try {
+        return await funcDelete();
+      } catch (error) {
+        if (error.code == 'P2003') {
+          const resultInfoRelation = await this.infoIdRelation(
+            id,
+            dataPermisionG,
+          );
+          throw new ForbiddenException({
+            message: 'there are relationships',
+            relatedTables: resultInfoRelation,
+          });
+        }
+        throw new ForbiddenException(error);
+      }
+    }
   }
 }
