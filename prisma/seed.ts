@@ -75,7 +75,7 @@ const permission = [
     },
   },
   {
-    name: 'users',
+    name: 'user',
     permission: {
       create: true,
       delete: true,
