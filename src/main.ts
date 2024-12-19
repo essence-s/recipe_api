@@ -7,7 +7,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const memoRoleService = app.get(MemoRoleService);
+  console.log('...Obteniendo roles de la base de datos');
   await memoRoleService.loadRoles();
+  console.log('Roles Obtenidos 🙌');
 
   app.setGlobalPrefix('api/v1');
 
