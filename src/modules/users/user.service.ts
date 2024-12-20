@@ -1,6 +1,7 @@
 import {
   ForbiddenException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
@@ -13,18 +14,21 @@ export class UserService {
   constructor(private prisma: PrismaService) {}
 
   async create(register: UserDto) {
-    // create(createUserDto: CreateUserDto) {
-    return this.prisma.user.create({
-      data: {
-        id: register.id,
-        username: register.username,
-        email: register.email,
-        password: await bcrypt.hash(register.password, 10),
-        roleId: register.roleId,
-        phone: register.phone,
-        state: register.state,
-      },
-    });
+    try {
+      return await this.prisma.user.create({
+        data: {
+          id: register.id,
+          username: register.username,
+          email: register.email,
+          password: await bcrypt.hash(register.password, 10),
+          roleId: register.roleId,
+          phone: register.phone,
+          state: register.state,
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
   }
 
   findOneByUsername(username: string) {
