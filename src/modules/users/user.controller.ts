@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -36,13 +37,16 @@ export class UsersController {
 
   @Get(':id')
   @Auth(dataPermission.user.functions.findOne)
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.userService.findOne(+id);
   }
 
   @Patch(':id')
   @Auth(dataPermission.user.functions.update)
-  update(@Param('id') id: string, @Body() updateUserDto: UserDto) {
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUserDto: UserDto,
+  ) {
     return this.userService.update(+id, updateUserDto);
   }
 
@@ -50,7 +54,7 @@ export class UsersController {
   @Auth(dataPermission.user.functions.remove)
   async remove(
     @Req() request: Request & { user: { role: string } },
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Query('reassignTo') idReassign,
     @Query('deleteCascade') deleteCascade: boolean,
   ) {
@@ -66,7 +70,7 @@ export class UsersController {
       idReassign,
       deleteCascade,
 
-      id,
+      [+id],
       dataPermisionG,
       roleTokenRequest,
     );
