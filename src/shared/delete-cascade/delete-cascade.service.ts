@@ -87,14 +87,30 @@ export class DeleteCascadeService {
   }
 
   async deleteRelations(
-    arrayDeleteRelation: {
+    groupArrayDeleteRelation: {
       name: string;
       permission: any;
       ids: [];
-    }[],
+    }[][],
   ) {
+    const arrayDeleteRelation = groupArrayDeleteRelation.reduce(
+      (acc, arrayDeleteRelation) => {
+        arrayDeleteRelation.forEach((item) => {
+          const exist = acc.find((accItem) => accItem.name == item.name);
+          if (!exist) {
+            acc.unshift(item);
+          } else {
+            exist.ids.push(...item.ids);
+          }
+        });
+        return acc;
+      },
+      [],
+    );
+
     const transaction = await this.prisma.$transaction(async (tx) => {
       let results = [];
+
       for (const item of arrayDeleteRelation) {
         const dataDelete = await tx[item.name].deleteMany({
           where: {
@@ -107,6 +123,7 @@ export class DeleteCascadeService {
         }
         results.push(dataDelete);
       }
+
       return results;
     });
 
@@ -131,11 +148,11 @@ export class DeleteCascadeService {
     return checkingPermissions;
   }
 
-  async reassignTo(id, idReassign, checkRelation, table: string) {
+  async reassignTo(ids: number[], idReassign, checkRelation, table: string) {
     try {
       const firstR = await this.prisma[table].updateMany({
         where: {
-          [checkRelation]: +id,
+          [checkRelation]: { in: ids },
         },
         data: {
           [checkRelation]: +idReassign,
@@ -144,7 +161,7 @@ export class DeleteCascadeService {
 
       if (firstR.count == 0) {
         throw new NotFoundException(
-          `no records found with ${checkRelation} ${id} in the ${table} table`,
+          `no records found with ${checkRelation} [${ids.join(', ')}] in the ${table} table`,
         );
       }
 
@@ -154,7 +171,7 @@ export class DeleteCascadeService {
     }
   }
 
-  async reassign(id, tablecfuntion, idReassign, roleTokenRequest) {
+  async reassign(ids: number[], tablecfuntion, idReassign, roleTokenRequest) {
     // const name = tablecfuntion.reassign.name;
     // const permission = tablecfuntion.reassign.permission;
     const { name, checkRelation, permission } = tablecfuntion.reassign;
@@ -172,32 +189,35 @@ export class DeleteCascadeService {
 
     // const resultInfoRelation = await this.infoIdRelation(id, tablecfuntion);
     // console.log('hola', resultInfoRelation);
-    return await this.reassignTo(id, idReassign, checkRelation, name);
+    return await this.reassignTo(ids, idReassign, checkRelation, name);
   }
 
-  async deleteCascade(id, dataPermisionG, roleTokenRequest) {
-    const resultInfoRelation = await this.infoIdRelation(id, dataPermisionG);
+  async deleteCascade(ids: number[], dataPermisionG, roleTokenRequest) {
+    const promisesResultInfoRelations = ids.map(async (id) => {
+      return await this.infoIdRelation(id, dataPermisionG);
+    });
+
+    const resultInfoRelationsArrays = await Promise.all(
+      promisesResultInfoRelations,
+    );
 
     const hasPermissions = this.checkingPermissions(
       roleTokenRequest,
-      resultInfoRelation,
+      resultInfoRelationsArrays[0],
     );
 
     if (!hasPermissions) {
       throw new UnauthorizedException('does not have the necessary permits');
     }
 
-    const result = await this.deleteRelations(
-      [...resultInfoRelation].reverse(),
-    );
-    return result;
+    return await this.deleteRelations([...resultInfoRelationsArrays]);
   }
 
   async deleteCascadeOrReassign(
     funcDelete,
     idReassign,
     deleteCascade,
-    id,
+    ids: number[],
     dataPermisionG,
     roleTokenRequest,
   ) {
@@ -218,7 +238,7 @@ export class DeleteCascadeService {
 
     if (hasReassignTo) {
       return await this.reassign(
-        id,
+        ids,
         dataPermisionG,
         idReassign,
         roleTokenRequest,
@@ -226,14 +246,14 @@ export class DeleteCascadeService {
     }
 
     if (deleteCascade) {
-      return await this.deleteCascade(id, dataPermisionG, roleTokenRequest);
+      return await this.deleteCascade(ids, dataPermisionG, roleTokenRequest);
     } else if (!deleteCascade) {
       try {
         return await funcDelete();
       } catch (error) {
         if (error.code == 'P2003') {
           const resultInfoRelation = await this.infoIdRelation(
-            id,
+            ids,
             dataPermisionG,
           );
           throw new ForbiddenException({
