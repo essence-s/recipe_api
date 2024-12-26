@@ -71,7 +71,7 @@ export class DeleteCascadeService {
       });
 
       dataDeleteId = dataDelete.map((dd) => dd.id);
-      console.log(dataDeleteId);
+      // console.log(dataDeleteId);
 
       if (dataDeleteId.length == 0) break;
 
@@ -82,7 +82,7 @@ export class DeleteCascadeService {
         permission: item.permission,
       });
     }
-    console.log(dataPromises);
+    // console.log(dataPromises);
     return dataPromises;
   }
 
@@ -137,10 +137,11 @@ export class DeleteCascadeService {
       .getRoles()
       .find((role) => role.name == roleUser);
 
+    if (dataRole.length == 0) {
+      throw new NotFoundException(`Role with name ${roleUser} not found`);
+    }
+
     const checkingPermissions = arrayDeleteRelation.every((adr) => {
-      // console.log(adr);
-      // console.log(ad)
-      // console.log(dataRole.permission.find((perm) => perm.name == adr.name));
       return dataRole.permission.find((perm) => perm.name == adr.name)
         .permission[adr.permission];
     });
@@ -201,9 +202,19 @@ export class DeleteCascadeService {
       promisesResultInfoRelations,
     );
 
+    const maxArrayPermissions = resultInfoRelationsArrays.reduce(
+      (acc, item) => {
+        if (item.length > acc.length) {
+          return item;
+        }
+        return acc;
+      },
+      [],
+    );
+
     const hasPermissions = this.checkingPermissions(
       roleTokenRequest,
-      resultInfoRelationsArrays[0],
+      maxArrayPermissions,
     );
 
     if (!hasPermissions) {
