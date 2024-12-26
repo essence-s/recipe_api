@@ -15,6 +15,7 @@ async function main() {
     create: {
       name: 'admin',
       permission: permission,
+      identifier: 'superrole',
     },
   });
 
