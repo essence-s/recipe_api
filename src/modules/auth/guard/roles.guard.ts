@@ -46,17 +46,17 @@ export class RolesGuard implements CanActivate {
     // console.log(result);
     const dataRole = this.memoRoleService
       .getRoles()
-      .find((role) => role.name == contextRequest.user.role);
+      .find((role) => role.id == contextRequest.user.idRole);
 
     if (!dataRole) {
       return false;
     }
 
-    const booleanPermission = dataRole.permission.find(
-      (permission) => permission.name == result,
-    ).permission[methodConvert];
+    const booleanPermission = (dataRole.permission as any[]).find(
+      (permission: any) => permission.name == result,
+    )?.permission[methodConvert];
 
-    console.log(booleanPermission);
+    // console.log(booleanPermission);
 
     // const exists = roles.some((role) => role === user.role);
 

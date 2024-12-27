@@ -135,15 +135,16 @@ export class DeleteCascadeService {
   checkingPermissions(roleUser, arrayDeleteRelation) {
     const dataRole = this.memoRoleService
       .getRoles()
-      .find((role) => role.name == roleUser);
+      .find((role) => role.id == roleUser);
 
-    if (dataRole.length == 0) {
+    if (!dataRole) {
       throw new NotFoundException(`Role with name ${roleUser} not found`);
     }
 
     const checkingPermissions = arrayDeleteRelation.every((adr) => {
-      return dataRole.permission.find((perm) => perm.name == adr.name)
-        .permission[adr.permission];
+      return (dataRole.permission as any[]).find(
+        (perm) => perm.name == adr.name,
+      ).permission[adr.permission];
     });
 
     return checkingPermissions;

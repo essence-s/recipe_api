@@ -56,14 +56,14 @@ export class RoleController {
   @Delete(':id')
   @Auth()
   async remove(
-    @Req() request: Request & { user: { role: string } },
+    @Req() request: Request & { user: { role: string; idRole: string } },
     @Param('id', ParseIntPipe) id: number,
     @Query('reassignTo') idReassign,
     @Query('deleteCascade') deleteCascade: boolean,
   ) {
     // console.log(request);
     const dataPermisionG = dataPermission.role.functions.remove;
-    const roleTokenRequest = request.user.role;
+    const roleTokenRequest = request.user.idRole;
 
     const funDelete = async () => {
       return await this.roleService.remove(+id);

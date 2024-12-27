@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
+import { Role } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class MemoRoleService {
-  private roles = [];
+  private roles: Role[] = [];
 
   constructor(private readonly prisma: PrismaService) {}
 
