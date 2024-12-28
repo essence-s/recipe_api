@@ -138,7 +138,7 @@ export class DeleteCascadeService {
       .find((role) => role.id == roleUser);
 
     if (!dataRole) {
-      throw new NotFoundException(`Role with name ${roleUser} not found`);
+      throw new NotFoundException(`Role with id ${roleUser} not found`);
     }
 
     const checkingPermissions = arrayDeleteRelation.every((adr) => {
