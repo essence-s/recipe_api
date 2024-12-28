@@ -1,4 +1,9 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { TYPE_REQUEST } from 'src/common/enums/type-request.enum';
 import { MemoRoleService } from 'src/shared/memo-role/memo-role.service';
@@ -22,25 +27,8 @@ export class RolesGuard implements CanActivate {
       return true;
     }
 
-    // const { user } = context.switchToHttp().getRequest();
     const contextRequest = context.switchToHttp().getRequest();
-
-    // const urlRequest = contextRequest.originalUrl;
-    // const match = urlRequest.match(/\/api\/v1\/([^/]+)/);
-    // const result = match ? match[1] : null;
-    // const method = contextRequest.method;
-
     const result = typeRequest.name;
-    // const method = contextRequest.method;
-
-    // const changeMethod = {
-    //   GET: 'find',
-    //   POST: 'create',
-    //   DELETE: 'delete',
-    //   PATCH: 'update',
-    // };
-
-    // const methodConvert = changeMethod[method];
     const methodConvert = typeRequest.typePermission;
 
     // console.log(result);
@@ -48,8 +36,16 @@ export class RolesGuard implements CanActivate {
       .getRoles()
       .find((role) => role.id == contextRequest.user.idRole);
 
+    // console.log(dataRole);
     if (!dataRole) {
       return false;
+    }
+
+    const tokenDate = new Date(contextRequest.user.iat * 1000);
+    const dateUpdateAtRole = new Date(dataRole.updatedAt);
+    if (tokenDate < dateUpdateAtRole) {
+      // return false;
+      throw new UnauthorizedException('Token expired or role updated');
     }
 
     const booleanPermission = (dataRole.permission as any[]).find(
@@ -57,8 +53,6 @@ export class RolesGuard implements CanActivate {
     )?.permission[methodConvert];
 
     // console.log(booleanPermission);
-
-    // const exists = roles.some((role) => role === user.role);
 
     return booleanPermission;
   }

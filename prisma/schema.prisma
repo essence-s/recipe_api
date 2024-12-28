@@ -120,10 +120,11 @@ model User {
 }
 
 model Role {
-  id         Int     @id @default(autoincrement())
-  name       String  @unique
-  permission Json    @default("[]")
-  identifier String? @unique
+  id         Int      @id @default(autoincrement())
+  name       String   @unique
+  permission Json     @default("[]")
+  identifier String?  @unique
+  updatedAt  DateTime @default(now()) @updatedAt
 
   user User[]
 }
