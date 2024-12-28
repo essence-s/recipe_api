@@ -43,9 +43,13 @@ export class RolesGuard implements CanActivate {
 
     const tokenDate = new Date(contextRequest.user.iat * 1000);
     const dateUpdateAtRole = new Date(dataRole.updatedAt);
+    if (!contextRequest.user?.iat || !dataRole?.updatedAt) {
+      throw new UnauthorizedException('Invalid token or role data');
+    }
     if (tokenDate < dateUpdateAtRole) {
-      // return false;
-      throw new UnauthorizedException('Token expired or role updated');
+      throw new UnauthorizedException(
+        `Token expired. Role was updated on ${dateUpdateAtRole.toISOString()}`,
+      );
     }
 
     const booleanPermission = (dataRole.permission as any[]).find(
