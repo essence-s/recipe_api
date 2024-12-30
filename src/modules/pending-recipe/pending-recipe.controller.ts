@@ -56,21 +56,21 @@ export class PendingRecipeController {
   }
 
   // TEST
-  @Post('prueba')
-  @UseInterceptors(FileInterceptor('image'))
-  async createPedingRecipe(
-    @UploadedFile() file,
-    @Body() body: CreatePendingRecipeDto,
-  ) {
-    const resultData = await this.uploadImageService.createThumbnails(
-      file.buffer,
-    );
-    const recipeWithImageUrl = {
-      ...body,
-      imageUrl: resultData.name,
-    };
-    console.log(recipeWithImageUrl);
+  // @Post('prueba')
+  // @UseInterceptors(FileInterceptor('image'))
+  // async createPedingRecipe(
+  //   @UploadedFile() file,
+  //   @Body() body: CreatePendingRecipeDto,
+  // ) {
+  //   const resultData = await this.uploadImageService.createThumbnails(
+  //     file.buffer,
+  //   );
+  //   const recipeWithImageUrl = {
+  //     ...body,
+  //     imageUrl: resultData.name,
+  //   };
+  //   // console.log(recipeWithImageUrl);
 
-    return recipeWithImageUrl;
-  }
+  //   // return {d:recipeWithImageUrl};
+  // }
 }

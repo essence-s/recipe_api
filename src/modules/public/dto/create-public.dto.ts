@@ -4,6 +4,7 @@ import {
   IsEnum,
   IsInt,
   IsNotEmpty,
+  IsOptional,
   IsString,
   Min,
 } from 'class-validator';
@@ -55,11 +56,11 @@ export class CreatePublicPendingRecipeDto {
   @IsString()
   ingredients: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  publicUserName: string;
+  publicUserName?: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  publicUserPhone: string;
+  publicUserPhone?: string;
 }

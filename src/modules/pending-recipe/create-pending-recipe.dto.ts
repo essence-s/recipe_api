@@ -1,6 +1,19 @@
 import { Type } from 'class-transformer';
-import { IsArray, IsInt, IsNotEmpty, IsString, Min } from 'class-validator';
+import {
+  IsArray,
+  IsEnum,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Min,
+} from 'class-validator';
 
+enum RecipeDifficulty {
+  facil = 'facil',
+  medio = 'medio',
+  dificil = 'dificil',
+}
 export class CreatePendingRecipeDto {
   @IsNotEmpty()
   @IsString()
@@ -24,14 +37,15 @@ export class CreatePendingRecipeDto {
   @Min(0)
   servings: number;
 
-  @IsNotEmpty()
-  @IsString()
-  difficulty: string;
+  @IsEnum(RecipeDifficulty, {
+    message: 'the difficulty should be easy, facil, medio or dificil',
+  })
+  difficulty: RecipeDifficulty;
 
-  @Type(() => Number)
-  @IsInt()
-  @Min(0)
-  userId: number;
+  // @Type(() => Number)
+  // @IsInt()
+  // @Min(0)
+  // userId: number;
 
   @IsArray()
   @Type(() => Number)
@@ -41,4 +55,12 @@ export class CreatePendingRecipeDto {
   @IsNotEmpty()
   @IsString()
   ingredients: string;
+
+  @IsOptional()
+  @IsString()
+  publicUserName?: string;
+
+  @IsOptional()
+  @IsString()
+  publicUserPhone?: string;
 }

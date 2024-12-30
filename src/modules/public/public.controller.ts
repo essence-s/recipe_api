@@ -71,13 +71,13 @@ export class PublicController {
     @UploadedFile() file,
     @Body() createRecipeDto: CreatePublicPendingRecipeDto,
   ) {
-    // const resultData = await this.uploadImageService.createThumbnails(
-    //   file.buffer,
-    // );
+    const resultData = await this.uploadImageService.createThumbnails(
+      file.buffer,
+    );
     const pendingRecipeWithImageUrl = {
       ...createRecipeDto,
-      // imageUrl: resultData.name || '',
-      imageUrl: 'XD',
+      imageUrl: resultData.name,
+      // imageUrl: 'XD',
     };
     // createRecipeDto.imageUrl = resultData.name;
 

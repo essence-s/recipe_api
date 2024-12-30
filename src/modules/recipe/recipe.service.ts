@@ -1,10 +1,14 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
+import { UploadImageService } from 'src/shared/upload-image/upload-image.service';
 // import { Recipe } from './recipe.entity';
 
 @Injectable()
 export class RecipeService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private readonly uploadImageService: UploadImageService,
+  ) {}
 
   // async create(createRecipeDto): Promise<Recipe[]> {
   //   // async create(createRecipeDto: CreateRecipeDto): Promise<Recipe> {
@@ -46,8 +50,9 @@ export class RecipeService {
       return recipeRes;
     } catch (error) {
       //No in production messague :V error.meta.cause
-      console.log(error);
-      throw new BadRequestException(error.meta.cause);
+      // console.log(error);
+      this.uploadImageService.deleteThumbnails(recipe.imageUrl);
+      throw new BadRequestException(error);
     }
   }
 
