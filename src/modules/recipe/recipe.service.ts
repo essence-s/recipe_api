@@ -69,16 +69,26 @@ export class RecipeService {
   }
 
   async findId(recipeId) {
-    return this.prisma.recipe.findUnique({
-      where: {
-        id: recipeId,
-      },
-      include: {
-        categories: { select: { category: true } },
-        ingredients: true,
-        instructions: true,
-      },
-    });
+    try {
+      const result = await this.prisma.recipe.findUnique({
+        where: {
+          id: recipeId,
+        },
+        include: {
+          categories: { select: { category: true } },
+          ingredients: true,
+          instructions: true,
+        },
+      });
+
+      if (!result) {
+        throw new BadRequestException(`Recipe with ID ${recipeId} not found`);
+      }
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
   }
 
   async update(id: number, recipe) {
