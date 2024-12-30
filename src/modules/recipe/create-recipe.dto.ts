@@ -4,6 +4,7 @@ import {
   IsEnum,
   IsInt,
   IsNotEmpty,
+  IsOptional,
   IsString,
   Min,
 } from 'class-validator';
@@ -25,6 +26,10 @@ export class CreateRecipeDto {
   @IsNotEmpty()
   @IsString()
   instructions: string;
+
+  @IsOptional()
+  @IsString()
+  videoUrl?: string;
 
   @Type(() => Number)
   @IsInt()

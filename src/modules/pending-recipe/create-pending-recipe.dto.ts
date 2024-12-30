@@ -27,6 +27,10 @@ export class CreatePendingRecipeDto {
   @IsString()
   instructions: string;
 
+  @IsOptional()
+  @IsString()
+  videoUrl?: string;
+
   @Type(() => Number)
   @IsInt()
   @Min(0)
