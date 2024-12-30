@@ -129,14 +129,6 @@ model Role {
   user User[]
 }
 
-// model PublicUsers {
-//   id    Int     @id @default(autoincrement())
-//   name  String? @default("unknown")
-//   phone String?
-
-//   Recipe Recipe[]
-// }
-
 /////////PENDING
 model PendingRecipe {
   id              Int              @id @default(autoincrement())
@@ -191,18 +183,3 @@ model PendingRecipeCategory {
 
   @@id([pendingRecipeId, pendingCategoryId])
 }
-
-// model PendingCategoryGroup {
-//   id   Int    @id @default(autoincrement())
-//   name String @unique
-
-//   PendingCategory PendingCategory[]
-// }
-
-// model PendingCategory {
-//   id      Int                  @id @default(autoincrement())
-//   name    String               @unique
-//   groupId Int
-//   group   PendingCategoryGroup @relation(fields: [groupId], references: [id])
-//   // PendingRecipeCategory PendingRecipeCategory[]
-// }

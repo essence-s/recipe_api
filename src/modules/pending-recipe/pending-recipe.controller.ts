@@ -7,12 +7,12 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { PendingRecipeService } from './pending-recipe.service';
-import { Auth } from 'src/modules/auth/decorators/auth.decorator';
-import { Role } from 'src/common/enums/role.enum';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { dataPermission } from 'src/common/data-permission/data-permission';
+import { Auth } from 'src/modules/auth/decorators/auth.decorator';
 import { UploadImageService } from 'src/shared/upload-image/upload-image.service';
 import { CreatePendingRecipeDto } from './create-pending-recipe.dto';
+import { PendingRecipeService } from './pending-recipe.service';
 
 // @Auth([Role.ADMIN])
 @Controller('pending-recipe')
@@ -48,6 +48,7 @@ export class PendingRecipeController {
   }
 
   @Post('pendingtorecipe/:id')
+  @Auth(dataPermission.pendingRecipe.functions.pendingToRecipe)
   async pendingToRecipe(@Param('id') id) {
     return await this.pendingRecipeService.migratePendingRecipeToRecipe(
       parseInt(id),

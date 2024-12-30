@@ -1,8 +1,9 @@
 enum TYPE_REQUEST {
-  VIEW = 'find',
+  VIEW = 'view',
   UPDATE = 'update',
   DELETE = 'delete',
   CREATE = 'create',
+  APPROVE = 'approve',
 }
 
 enum ROUTE {}
@@ -95,16 +96,36 @@ export const dataPermission = {
       removeMany: { name: 'recipe', typePermission: TYPE_REQUEST.DELETE },
     },
   },
-  categoryGroup: {
-    name: 'category-group',
+
+  pendingRecipe: {
+    name: 'pendingRecipe',
     functions: {
-      create: { name: 'category-group', typePermission: TYPE_REQUEST.CREATE },
-      findAll: { name: 'category-group', typePermission: TYPE_REQUEST.VIEW },
-      findOne: { name: 'category-group', typePermission: TYPE_REQUEST.VIEW },
-      update: { name: 'category-group', typePermission: TYPE_REQUEST.UPDATE },
-      remove: { name: 'category-group', typePermission: TYPE_REQUEST.DELETE },
+      create: { name: 'pendingRecipe', typePermission: TYPE_REQUEST.CREATE },
+      findAll: { name: 'pendingRecipe', typePermission: TYPE_REQUEST.VIEW },
+      findOne: { name: 'pendingRecipe', typePermission: TYPE_REQUEST.VIEW },
+      update: { name: 'pendingRecipe', typePermission: TYPE_REQUEST.UPDATE },
+      remove: { name: 'pendingRecipe', typePermission: TYPE_REQUEST.DELETE },
       removeMany: {
-        name: 'category-group',
+        name: 'pendingRecipe',
+        typePermission: TYPE_REQUEST.DELETE,
+      },
+      pendingToRecipe: {
+        name: 'pendingRecipe',
+        typePermission: TYPE_REQUEST.APPROVE,
+      },
+    },
+  },
+
+  categoryGroup: {
+    name: 'categoryGroup',
+    functions: {
+      create: { name: 'categoryGroup', typePermission: TYPE_REQUEST.CREATE },
+      findAll: { name: 'categoryGroup', typePermission: TYPE_REQUEST.VIEW },
+      findOne: { name: 'categoryGroup', typePermission: TYPE_REQUEST.VIEW },
+      update: { name: 'categoryGroup', typePermission: TYPE_REQUEST.UPDATE },
+      remove: { name: 'categoryGroup', typePermission: TYPE_REQUEST.DELETE },
+      removeMany: {
+        name: 'categoryGroup',
         typePermission: TYPE_REQUEST.DELETE,
       },
     },
