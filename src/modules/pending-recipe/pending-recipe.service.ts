@@ -63,7 +63,7 @@ export class PendingRecipeService {
       });
 
       if (!pendingRecipe) {
-        throw new Error('La receta pendiente no existe');
+        throw new BadRequestException('La receta pendiente no existe');
       }
 
       // Insertar la receta en la tabla Recipe junto con las categorías e ingredientes relacionados

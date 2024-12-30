@@ -98,19 +98,19 @@ export const dataPermission = {
   },
 
   pendingRecipe: {
-    name: 'pendingRecipe',
+    name: 'recipePending',
     functions: {
-      create: { name: 'pendingRecipe', typePermission: TYPE_REQUEST.CREATE },
-      findAll: { name: 'pendingRecipe', typePermission: TYPE_REQUEST.VIEW },
-      findOne: { name: 'pendingRecipe', typePermission: TYPE_REQUEST.VIEW },
-      update: { name: 'pendingRecipe', typePermission: TYPE_REQUEST.UPDATE },
-      remove: { name: 'pendingRecipe', typePermission: TYPE_REQUEST.DELETE },
+      create: { name: 'recipePending', typePermission: TYPE_REQUEST.CREATE },
+      findAll: { name: 'recipePending', typePermission: TYPE_REQUEST.VIEW },
+      findOne: { name: 'recipePending', typePermission: TYPE_REQUEST.VIEW },
+      update: { name: 'recipePending', typePermission: TYPE_REQUEST.UPDATE },
+      remove: { name: 'recipePending', typePermission: TYPE_REQUEST.DELETE },
       removeMany: {
-        name: 'pendingRecipe',
+        name: 'recipePending',
         typePermission: TYPE_REQUEST.DELETE,
       },
       pendingToRecipe: {
-        name: 'pendingRecipe',
+        name: 'recipePending',
         typePermission: TYPE_REQUEST.APPROVE,
       },
     },
