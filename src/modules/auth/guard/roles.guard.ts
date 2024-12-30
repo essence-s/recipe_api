@@ -56,6 +56,9 @@ export class RolesGuard implements CanActivate {
       (permission: any) => permission.name == result,
     )?.permission[methodConvert];
 
+    if (!booleanPermission) {
+      throw new UnauthorizedException('does not have the necessary permits');
+    }
     // console.log(booleanPermission);
 
     return booleanPermission;
