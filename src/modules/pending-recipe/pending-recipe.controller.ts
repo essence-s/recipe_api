@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Req,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -13,6 +14,7 @@ import { Auth } from 'src/modules/auth/decorators/auth.decorator';
 import { UploadImageService } from 'src/shared/upload-image/upload-image.service';
 import { CreatePendingRecipeDto } from './create-pending-recipe.dto';
 import { PendingRecipeService } from './pending-recipe.service';
+import { RequestWithUser } from 'src/common/types/request-with-user.type';
 
 // @Auth([Role.ADMIN])
 @Controller('pending-recipe')
@@ -49,9 +51,10 @@ export class PendingRecipeController {
 
   @Post('pendingtorecipe/:id')
   @Auth(dataPermission.pendingRecipe.functions.pendingToRecipe)
-  async pendingToRecipe(@Param('id') id) {
+  async pendingToRecipe(@Req() request: RequestWithUser, @Param('id') id) {
     return await this.pendingRecipeService.migratePendingRecipeToRecipe(
       parseInt(id),
+      request.user.userId,
     );
     // return { id };
   }

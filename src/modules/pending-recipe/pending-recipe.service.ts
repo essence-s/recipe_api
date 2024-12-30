@@ -50,7 +50,7 @@ export class PendingRecipeService {
     return this.prisma.pendingRecipe.findMany();
   }
 
-  async migratePendingRecipeToRecipe(pendingRecipeId: number) {
+  async migratePendingRecipeToRecipe(pendingRecipeId: number, userId: number) {
     const transaction = await this.prisma.$transaction(async (tx) => {
       // Obtener los datos de la receta pendiente
       const pendingRecipe = await tx.pendingRecipe.findUnique({
@@ -78,7 +78,7 @@ export class PendingRecipeService {
           servings: pendingRecipe.servings,
           difficulty: pendingRecipe.difficulty,
           createdAt: pendingRecipe.createdAt,
-          userId: pendingRecipe.userId,
+          userId: userId,
           publicUserName: pendingRecipe.publicUserName,
           publicUserPhone: pendingRecipe.publicUserPhone,
           categories: {

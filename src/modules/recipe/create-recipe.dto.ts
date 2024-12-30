@@ -46,10 +46,10 @@ export class CreateRecipeDto {
   })
   difficulty: RecipeDifficulty;
 
-  @Type(() => Number)
-  @IsInt()
-  @Min(0)
-  userId: number;
+  // @Type(() => Number)
+  // @IsInt()
+  // @Min(0)
+  // userId: number;
 
   @IsArray()
   @Type(() => Number)

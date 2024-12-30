@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Req,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -16,6 +17,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateRecipeDto } from './create-recipe.dto';
 import { UploadImageService } from 'src/shared/upload-image/upload-image.service';
 import { UpdateRecipeDto } from './update-recipe.dto';
+import { RequestWithUser } from 'src/common/types/request-with-user.type';
 
 @Controller('recipe')
 export class RecipeController {
@@ -27,13 +29,18 @@ export class RecipeController {
   @Post()
   @Auth(dataPermission.recipe.functions.create)
   @UseInterceptors(FileInterceptor('image'))
-  async create(@UploadedFile() file, @Body() createRecipeDto: CreateRecipeDto) {
+  async create(
+    @Req() request: RequestWithUser,
+    @UploadedFile() file,
+    @Body() createRecipeDto: CreateRecipeDto,
+  ) {
     const resultData = await this.uploadImageService.createThumbnails(
       file.buffer,
     );
     const recipeWithImageUrl = {
       ...createRecipeDto,
       imageUrl: resultData.name,
+      userId: request.user.userId,
     };
     return await this.recipeService.createRecipe(recipeWithImageUrl);
   }
