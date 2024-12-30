@@ -51,54 +51,55 @@ const permission = [
   {
     name: 'recipe',
     permission: {
+      view: true,
       create: true,
       delete: true,
-      find: true,
       update: true,
     },
   },
   {
-    name: 'recipe-pending',
+    name: 'recipePending',
     permission: {
+      view: true,
       create: true,
       delete: true,
-      find: true,
       update: true,
+      approve: true,
     },
   },
   {
     name: 'role',
     permission: {
+      view: true,
       create: true,
       delete: true,
-      find: true,
       update: true,
     },
   },
   {
     name: 'user',
     permission: {
+      view: true,
       create: true,
       delete: true,
-      find: true,
       update: true,
     },
   },
   {
     name: 'category',
     permission: {
+      view: true,
       create: true,
       delete: true,
-      find: true,
       update: true,
     },
   },
   {
-    name: 'category-group',
+    name: 'categoryGroup',
     permission: {
+      view: true,
       create: true,
       delete: true,
-      find: true,
       update: true,
     },
   },
