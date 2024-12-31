@@ -5,9 +5,14 @@ meta {
 }
 
 delete {
-  url: {{BACKEND_URL}}/role/19
+  url: {{BACKEND_URL}}/role/8
   body: json
   auth: bearer
+}
+
+params:query {
+  ~deleteCascade: true
+  ~reassignTo: 7
 }
 
 auth:bearer {

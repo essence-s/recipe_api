@@ -10,6 +10,11 @@ delete {
   auth: bearer
 }
 
+params:query {
+  ~deleteCascade: true
+  ~reassignTo: 7
+}
+
 auth:bearer {
   token: {{bearerToken}}
 }
