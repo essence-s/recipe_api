@@ -11,6 +11,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { dataPermission } from 'src/common/data-permission/data-permission';
+import { RequestWithUser } from 'src/common/types/request-with-user.type';
 import { Auth } from 'src/modules/auth/decorators/auth.decorator';
 import { PrismaService } from 'src/prisma.service';
 import { DeleteCascadeService } from 'src/shared/delete-cascade/delete-cascade.service';
@@ -56,7 +57,7 @@ export class RoleController {
   @Delete(':id')
   @Auth()
   async remove(
-    @Req() request: Request & { user: { role: string; idRole: string } },
+    @Req() request: RequestWithUser,
     @Param('id', ParseIntPipe) id: number,
     @Query('reassignTo') idReassign,
     @Query('deleteCascade') deleteCascade: boolean,

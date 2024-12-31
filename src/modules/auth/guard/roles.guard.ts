@@ -5,7 +5,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { TYPE_REQUEST } from 'src/common/enums/type-request.enum';
 import { MemoRoleService } from 'src/shared/memo-role/memo-role.service';
 import { TYPE_REQUEST_KEY } from '../decorators/type-request.decorator';
 
@@ -38,7 +37,9 @@ export class RolesGuard implements CanActivate {
 
     // console.log(dataRole);
     if (!dataRole) {
-      return false;
+      throw new UnauthorizedException(
+        `Role not found with id ${contextRequest.user.idRole}, try logging in again`,
+      );
     }
 
     const tokenDate = new Date(contextRequest.user.iat * 1000);
@@ -48,7 +49,7 @@ export class RolesGuard implements CanActivate {
     }
     if (tokenDate < dateUpdateAtRole) {
       throw new UnauthorizedException(
-        `Token expired. Role was updated on ${dateUpdateAtRole.toISOString()}`,
+        `Token expired. Role was updated on ${dateUpdateAtRole.toISOString()},try logging in again`,
       );
     }
 

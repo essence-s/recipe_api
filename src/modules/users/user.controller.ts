@@ -11,6 +11,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { dataPermission } from 'src/common/data-permission/data-permission';
+import { RequestWithUser } from 'src/common/types/request-with-user.type';
 import { Auth } from 'src/modules/auth/decorators/auth.decorator';
 import { DeleteCascadeService } from 'src/shared/delete-cascade/delete-cascade.service';
 import { UserDto } from './dto/user.dto';
@@ -53,7 +54,7 @@ export class UsersController {
   @Delete(':id')
   @Auth(dataPermission.user.functions.remove)
   async remove(
-    @Req() request: Request & { user: { role: string; idRole: string } },
+    @Req() request: RequestWithUser,
     @Param('id', ParseIntPipe) id: number,
     @Query('reassignTo') idReassign,
     @Query('deleteCascade') deleteCascade: boolean,
