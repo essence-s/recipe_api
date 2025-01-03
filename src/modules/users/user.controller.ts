@@ -60,7 +60,7 @@ export class UsersController {
     @Query('deleteCascade') deleteCascade: boolean,
   ) {
     const dataPermisionG = dataPermission.user.functions.remove;
-    const roleTokenRequest = request.user.idRole;
+    const userRole = request.role;
 
     const funDelete = async () => {
       return await this.userService.remove(+id);
@@ -73,7 +73,7 @@ export class UsersController {
 
       [+id],
       dataPermisionG,
-      roleTokenRequest,
+      userRole,
     );
   }
 

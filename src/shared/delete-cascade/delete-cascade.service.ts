@@ -132,17 +132,9 @@ export class DeleteCascadeService {
     // return arrayDeleteRelation;
   }
 
-  checkingPermissions(roleUser, arrayDeleteRelation) {
-    const dataRole = this.memoRoleService
-      .getRoles()
-      .find((role) => role.id == roleUser);
-
-    if (!dataRole) {
-      throw new NotFoundException(`Role with id ${roleUser} not found`);
-    }
-
+  async checkingPermissions(userRole, arrayDeleteRelation) {
     const checkingPermissions = arrayDeleteRelation.every((adr) => {
-      return (dataRole.permission as any[]).find(
+      return (userRole.permission as any[]).find(
         (perm) => perm.name == adr.name,
       ).permission[adr.permission];
     });
@@ -173,12 +165,12 @@ export class DeleteCascadeService {
     }
   }
 
-  async reassign(ids: number[], tablecfuntion, idReassign, roleTokenRequest) {
+  async reassign(ids: number[], tablecfuntion, idReassign, userRole) {
     // const name = tablecfuntion.reassign.name;
     // const permission = tablecfuntion.reassign.permission;
     const { name, checkRelation, permission } = tablecfuntion.reassign;
 
-    const hasPermissions = this.checkingPermissions(roleTokenRequest, [
+    const hasPermissions = await this.checkingPermissions(userRole, [
       {
         name: name,
         permission: permission,
@@ -194,7 +186,7 @@ export class DeleteCascadeService {
     return await this.reassignTo(ids, idReassign, checkRelation, name);
   }
 
-  async deleteCascade(ids: number[], dataPermisionG, roleTokenRequest) {
+  async deleteCascade(ids: number[], dataPermisionG, userRole) {
     const promisesResultInfoRelations = ids.map(async (id) => {
       return await this.infoIdRelation(id, dataPermisionG);
     });
@@ -213,8 +205,8 @@ export class DeleteCascadeService {
       [],
     );
 
-    const hasPermissions = this.checkingPermissions(
-      roleTokenRequest,
+    const hasPermissions = await this.checkingPermissions(
+      userRole,
       maxArrayPermissions,
     );
 
@@ -231,7 +223,7 @@ export class DeleteCascadeService {
     deleteCascade,
     ids: number[],
     dataPermisionG,
-    roleTokenRequest,
+    userRole,
   ) {
     const hasReassignTo = idReassign !== undefined;
     const hasDeleteCascade = deleteCascade !== undefined;
@@ -249,16 +241,11 @@ export class DeleteCascadeService {
     // }
 
     if (hasReassignTo) {
-      return await this.reassign(
-        ids,
-        dataPermisionG,
-        idReassign,
-        roleTokenRequest,
-      );
+      return await this.reassign(ids, dataPermisionG, idReassign, userRole);
     }
 
     if (deleteCascade) {
-      return await this.deleteCascade(ids, dataPermisionG, roleTokenRequest);
+      return await this.deleteCascade(ids, dataPermisionG, userRole);
     } else if (!deleteCascade) {
       try {
         return await funcDelete();

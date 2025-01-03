@@ -13,18 +13,17 @@ import {
 import { dataPermission } from 'src/common/data-permission/data-permission';
 import { RequestWithUser } from 'src/common/types/request-with-user.type';
 import { Auth } from 'src/modules/auth/decorators/auth.decorator';
-import { PrismaService } from 'src/prisma.service';
 import { DeleteCascadeService } from 'src/shared/delete-cascade/delete-cascade.service';
+import { MemoRoleService } from 'src/shared/memo-role/memo-role.service';
 import { RolePermissionsArrayDto } from './dto/permission.dto';
 import { RoleService } from './role.service';
 
-// @Auth([Role.ADMIN])
 @Controller('role')
 export class RoleController {
   constructor(
     private readonly roleService: RoleService,
-    private readonly prisma: PrismaService,
     private readonly deleteCascade: DeleteCascadeService,
+    private readonly memoRoleService: MemoRoleService,
   ) {}
 
   @Post()
@@ -55,7 +54,7 @@ export class RoleController {
   }
 
   @Delete(':id')
-  @Auth()
+  @Auth(dataPermission.role.functions.remove)
   async remove(
     @Req() request: RequestWithUser,
     @Param('id', ParseIntPipe) id: number,
@@ -64,21 +63,25 @@ export class RoleController {
   ) {
     // console.log(request);
     const dataPermisionG = dataPermission.role.functions.remove;
-    const roleTokenRequest = request.user.idRole;
+    const userRole = request.role;
 
     const funDelete = async () => {
       return await this.roleService.remove(+id);
     };
 
-    return this.deleteCascade.deleteCascadeOrReassign(
+    const result = await this.deleteCascade.deleteCascadeOrReassign(
       funDelete,
       idReassign,
       deleteCascade,
 
       [+id],
       dataPermisionG,
-      roleTokenRequest,
+      userRole,
     );
+
+    this.memoRoleService.loadRoles();
+
+    return result;
   }
 
   // tests

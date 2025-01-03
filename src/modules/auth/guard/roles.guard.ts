@@ -15,7 +15,7 @@ export class RolesGuard implements CanActivate {
     private readonly memoRoleService: MemoRoleService,
   ) {}
 
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const typeRequest = this.reflector.getAllAndOverride(
       // const typeRequest = this.reflector.getAllAndOverride<TYPE_REQUEST[]>(
       TYPE_REQUEST_KEY,
@@ -31,16 +31,19 @@ export class RolesGuard implements CanActivate {
     const methodConvert = typeRequest.typePermission;
 
     // console.log(result);
-    const dataRole = this.memoRoleService
-      .getRoles()
-      .find((role) => role.id == contextRequest.user.idRole);
+    const roles = await this.memoRoleService.getRoles();
+
+    const dataRole = roles.find(
+      (role) => role.id == contextRequest.user.idRole,
+    );
 
     // console.log(dataRole);
     if (!dataRole) {
       throw new UnauthorizedException(
-        `Role not found with id ${contextRequest.user.idRole}, try logging in again`,
+        'your permissions role has not been found, try logging in again',
       );
     }
+    contextRequest.role = dataRole;
 
     const tokenDate = new Date(contextRequest.user.iat * 1000);
     const dateUpdateAtRole = new Date(dataRole.updatedAt);

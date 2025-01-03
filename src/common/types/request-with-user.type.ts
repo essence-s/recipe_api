@@ -6,4 +6,10 @@ export interface RequestWithUser extends Request {
     idRole: string;
     userId: number;
   };
+  role: {
+    id: number;
+    name: string;
+    permission: any[];
+    updatedAt: string;
+  };
 }

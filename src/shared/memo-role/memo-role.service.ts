@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Role } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 
@@ -10,12 +10,22 @@ export class MemoRoleService {
 
   // Cargar roles desde la base de datos
   async loadRoles() {
+    // console.log('loadRoles');
     this.roles = await this.prisma.role.findMany();
-    // console.log(this.roles.map((role) => role.permission));
   }
 
   // Obtener la lista de roles
-  getRoles() {
-    return this.roles;
+  async getRoles() {
+    const roles = this.roles;
+    if (roles.length === 0) {
+      await this.loadRoles();
+      if (this.roles.length === 0) {
+        throw new UnauthorizedException(
+          'Check the seed because no roles were found.',
+        );
+      }
+    }
+
+    return roles;
   }
 }
