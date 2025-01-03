@@ -3,7 +3,6 @@ import {
   ForbiddenException,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { MemoRoleService } from '../memo-role/memo-role.service';
@@ -178,7 +177,7 @@ export class DeleteCascadeService {
     ]);
 
     if (!hasPermissions) {
-      throw new UnauthorizedException('does not have the necessary permits');
+      throw new ForbiddenException('does not have the necessary permits');
     }
 
     // const resultInfoRelation = await this.infoIdRelation(id, tablecfuntion);
@@ -211,7 +210,7 @@ export class DeleteCascadeService {
     );
 
     if (!hasPermissions) {
-      throw new UnauthorizedException('does not have the necessary permits');
+      throw new ForbiddenException('does not have the necessary permits');
     }
 
     return await this.deleteRelations([...resultInfoRelationsArrays]);

@@ -1,6 +1,7 @@
 import {
   CanActivate,
   ExecutionContext,
+  ForbiddenException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -61,7 +62,7 @@ export class RolesGuard implements CanActivate {
     )?.permission[methodConvert];
 
     if (!booleanPermission) {
-      throw new UnauthorizedException('does not have the necessary permits');
+      throw new ForbiddenException('does not have the necessary permits');
     }
     // console.log(booleanPermission);
 
