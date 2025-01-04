@@ -1,4 +1,5 @@
 import { Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { SearchPublicDto } from '../public/dto/search-public.dto';
 import { SearchService } from './search.service';
 
 @Controller('search')
@@ -12,12 +13,16 @@ export class SearchController {
   }
 
   @Get('matches')
-  async findMatchesTitleRecipe(
-    @Query('query') query,
-    @Query('categories') categories,
-  ) {
-    return this.searchService.findMatchesRecipe([query, categories]);
-    // return this.searchService.findMatchesTitleRecipe(query);
+  async findMatchesTitleRecipe(@Query() queryG: SearchPublicDto) {
+    const { query, difficulty, categories, page, perPage } = queryG;
+
+    return this.searchService.findMatchesRecipe(
+      [query, difficulty, categories],
+      {
+        page,
+        perPage,
+      },
+    );
   }
 
   @Get('matchesGG')

@@ -17,6 +17,7 @@ import { RecipeService } from '../recipe/recipe.service';
 import { SearchService } from '../search/search.service';
 import { CreatePublicPendingRecipeDto } from './dto/create-public.dto';
 import { PublicService } from './public.service';
+import { SearchPublicDto } from './dto/search-public.dto';
 
 @Controller('public')
 export class PublicController {
@@ -36,16 +37,16 @@ export class PublicController {
   }
 
   @Get('search/matches')
-  async findMatchesTitleRecipe(
-    @Query('query') query,
-    @Query('categories') categories,
-    @Query('page') page,
-    @Query('perPage') perPage,
-  ) {
-    return this.searchService.findMatchesRecipe([query, categories], {
-      page,
-      perPage,
-    });
+  async findMatchesTitleRecipe(@Query() queryG: SearchPublicDto) {
+    const { query, difficulty, categories, page, perPage } = queryG;
+
+    return this.searchService.findMatchesRecipe(
+      [query, difficulty, categories],
+      {
+        page,
+        perPage,
+      },
+    );
   }
 
   @Get('category')
@@ -57,13 +58,6 @@ export class PublicController {
   findAllCG() {
     return this.categoryGroupService.findAll();
   }
-
-  // @Post('pendingRecipe')
-  // async create(@Body() createPendingRecipe) {
-  //   return await this.pendingRecipeService.createPendingRecipe(
-  //     createPendingRecipe,
-  //   );
-  // }
 
   @Post('pendingRecipe')
   @UseInterceptors(FileInterceptor('image'))
@@ -85,29 +79,4 @@ export class PublicController {
       pendingRecipeWithImageUrl,
     );
   }
-
-  // @Post()
-  // create(@Body() createPublicDto: CreatePublicDto) {
-  //   return this.publicService.create(createPublicDto);
-  // }
-
-  // @Get()
-  // findAll() {
-  //   return this.publicService.findAll();
-  // }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.publicService.findOne(+id);
-  // }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updatePublicDto: UpdatePublicDto) {
-  //   return this.publicService.update(+id, updatePublicDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.publicService.remove(+id);
-  // }
 }

@@ -7,7 +7,7 @@ import {
 } from 'src/common/prismaFun/paginator';
 import { PrismaService } from 'src/prisma.service';
 
-const paginate: PaginateFunction = paginator({ perPage: 2 });
+const paginate: PaginateFunction = paginator({ perPage: 4 });
 @Injectable()
 export class SearchService {
   constructor(private prisma: PrismaService) {}
@@ -30,22 +30,6 @@ export class SearchService {
     });
 
     return recipes;
-  }
-
-  async findMatchesTitleRecipe(matches: string) {
-    // console.log(matches);
-    const recipes = await this.prisma.recipe.findMany({
-      where: {
-        title: {
-          contains: matches,
-          // mode: 'insensitive',
-        },
-      },
-      // include: {
-      //   categories: true,
-      //   ingredients: true,
-      // },
-    });
   }
 
   // probandoo
@@ -90,7 +74,7 @@ export class SearchService {
   }
 
   async findMatchesRecipe(matches, pagination?) {
-    let [query, categoriesParam] = matches;
+    let [query, difficulty, categoriesParam] = matches;
     console.log(matches);
     console.log(pagination);
     query = query != 'undefined' ? query : '';
@@ -111,14 +95,15 @@ export class SearchService {
       {
         where: {
           AND: [
-            query
-              ? {
-                  title: {
-                    contains: query,
-                    mode: 'insensitive',
-                  },
-                }
-              : {},
+            {
+              ...(query && {
+                title: {
+                  contains: query,
+                  mode: 'insensitive',
+                },
+              }),
+              ...(difficulty && { difficulty: difficulty }),
+            },
             ...categories.map((category) => ({
               categories: {
                 some: {
@@ -128,6 +113,7 @@ export class SearchService {
                 },
               },
             })),
+            {},
           ],
         },
         // include: {
