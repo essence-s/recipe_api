@@ -5,13 +5,13 @@ meta {
 }
 
 delete {
-  url: {{BACKEND_URL}}/role/8
-  body: json
+  url: {{BACKEND_URL}}/role/10?deleteCascade=true
+  body: none
   auth: bearer
 }
 
 params:query {
-  ~deleteCascade: true
+  deleteCascade: true
   ~reassignTo: 7
 }
 

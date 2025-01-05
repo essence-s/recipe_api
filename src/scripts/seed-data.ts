@@ -18,7 +18,7 @@ async function main() {
       data: ['Desayuno', 'Entrada', 'Almuerzo', 'Postre', 'Cena', 'Bebida'],
     },
     { title: 'Sabor', data: ['Dulce', 'Salado', 'Amargo'] },
-    { title: 'Dificultad', data: ['Dificil', 'Medio', 'Facil'] },
+    // { title: 'Dificultad', data: ['Dificil', 'Medio', 'Facil'] },
     // { title: 'Comidas por Lugar', data: [] },
     // { title: 'Comidas por Evento', data: [] },
     // { title: 'Más populares', data: [] },

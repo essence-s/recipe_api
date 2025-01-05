@@ -1,0 +1,26 @@
+meta {
+  name: get-memory-roles
+  type: http
+  seq: 10
+}
+
+get {
+  url: {{BACKEND_URL}}/utils/get-memory-roles
+  body: json
+  auth: bearer
+}
+
+headers {
+  : 
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFyZGlsbGEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3Mjk2MTcxMDEsImV4cCI6MTcyOTcwMzUwMX0.lXlYugs5ZZUQbsptnbYhSuYOWp-uTUwqy7oFQbYWJe8
+}
+
+body:json {
+  {
+    "username": "ardilla",
+    "password": "tunometecabrasarabambiche"
+  }
+}
