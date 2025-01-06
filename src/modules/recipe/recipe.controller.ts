@@ -4,20 +4,21 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Req,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { RecipeService } from './recipe.service';
-import { dataPermission } from 'src/common/data-permission/data-permission';
-import { Auth } from 'src/modules/auth/decorators/auth.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { CreateRecipeDto } from './create-recipe.dto';
-import { UploadImageService } from 'src/shared/upload-image/upload-image.service';
-import { UpdateRecipeDto } from './update-recipe.dto';
+import { dataPermission } from 'src/common/data-permission/data-permission';
 import { RequestWithUser } from 'src/common/types/request-with-user.type';
+import { Auth } from 'src/modules/auth/decorators/auth.decorator';
+import { UploadImageService } from 'src/shared/upload-image/upload-image.service';
+import { CreateRecipeDto } from './create-recipe.dto';
+import { RecipeService } from './recipe.service';
+import { UpdateRecipeDto } from './update-recipe.dto';
 
 @Controller('recipe')
 export class RecipeController {
@@ -54,8 +55,8 @@ export class RecipeController {
 
   @Get(':id')
   @Auth(dataPermission.recipe.functions.findOne)
-  async findOne(@Param('id') id) {
-    return await this.recipeService.findId(parseInt(id));
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return await this.recipeService.findId(+id);
     // return { id };
   }
 
@@ -64,11 +65,11 @@ export class RecipeController {
   @UseInterceptors(FileInterceptor('image'))
   async update(
     @UploadedFile() file,
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateRecipeDto: UpdateRecipeDto,
   ) {
     // eliminamos la imagen anterior
-    const recipe = await this.recipeService.findId(parseInt(id));
+    const recipe = await this.recipeService.findId(+id);
 
     const resultData = await this.uploadImageService.updateThumbnails(
       recipe.imageUrl,
@@ -85,8 +86,8 @@ export class RecipeController {
 
   @Delete(':id')
   @Auth(dataPermission.recipe.functions.remove)
-  async remove(@Param('id') id: string) {
-    const recipe = await this.recipeService.findId(parseInt(id));
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    const recipe = await this.recipeService.findId(+id);
     await this.uploadImageService.deleteThumbnails(recipe.imageUrl);
     return this.recipeService.remove(+id);
   }

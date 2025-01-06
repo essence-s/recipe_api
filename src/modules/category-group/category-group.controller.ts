@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
 } from '@nestjs/common';
@@ -30,14 +31,14 @@ export class CategoryGroupController {
 
   @Get(':id')
   @Auth(dataPermission.categoryGroup.functions.findOne)
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.categoryGroupService.findOne(+id);
   }
 
   @Patch(':id')
   @Auth(dataPermission.categoryGroup.functions.update)
   update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateCategoryGroupDto: CategoryGroupDto,
   ) {
     return this.categoryGroupService.update(+id, updateCategoryGroupDto);
@@ -45,7 +46,7 @@ export class CategoryGroupController {
 
   @Delete(':id')
   @Auth(dataPermission.categoryGroup.functions.remove)
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.categoryGroupService.remove(+id);
   }
 }
