@@ -1,9 +1,9 @@
+// import { ValidationPipe } from '@nestjs/common';
 import { plainToInstance, Type } from 'class-transformer';
 import {
   ArrayNotEmpty,
   IsArray,
   IsBoolean,
-  IsOptional,
   IsString,
   registerDecorator,
   ValidateNested,
@@ -25,7 +25,7 @@ class RecipePermissionDto {
   update: boolean;
 
   @IsBoolean()
-  find: boolean;
+  view: boolean;
 }
 
 class RecipePendingPermissionDto {
@@ -39,7 +39,10 @@ class RecipePendingPermissionDto {
   update: boolean;
 
   @IsBoolean()
-  find: boolean;
+  view: boolean;
+
+  @IsBoolean()
+  approve: boolean;
 }
 
 class RolePermissionDto {
@@ -53,7 +56,7 @@ class RolePermissionDto {
   update: boolean;
 
   @IsBoolean()
-  find: boolean;
+  view: boolean;
 }
 class UsersPermissionDto {
   @IsBoolean()
@@ -66,7 +69,7 @@ class UsersPermissionDto {
   update: boolean;
 
   @IsBoolean()
-  find: boolean;
+  view: boolean;
 }
 class CategoryPermissionDto {
   @IsBoolean()
@@ -79,7 +82,7 @@ class CategoryPermissionDto {
   update: boolean;
 
   @IsBoolean()
-  find: boolean;
+  view: boolean;
 }
 
 class CategoryGroupPermissionDto {
@@ -93,7 +96,7 @@ class CategoryGroupPermissionDto {
   update: boolean;
 
   @IsBoolean()
-  find: boolean;
+  view: boolean;
 }
 
 @ValidatorConstraint({ async: false })
@@ -108,7 +111,7 @@ export class ValidatePermissionDtoConstraint
       case 'recipe':
         dtoClass = RecipePermissionDto;
         break;
-      case 'recipe-pending':
+      case 'recipePending':
         dtoClass = RecipePendingPermissionDto;
         break;
       case 'role':
@@ -120,7 +123,7 @@ export class ValidatePermissionDtoConstraint
       case 'category':
         dtoClass = CategoryPermissionDto;
         break;
-      case 'category-group':
+      case 'categoryGroup':
         dtoClass = CategoryGroupPermissionDto;
         break;
       default:
@@ -129,7 +132,11 @@ export class ValidatePermissionDtoConstraint
 
     // Transforma y valida la estructura del permiso usando el DTO adecuado
     const dtoInstance = plainToInstance(dtoClass, permission);
-    const errors = validateSync(dtoInstance) || [];
+    const errors =
+      validateSync(dtoInstance, {
+        whitelist: true,
+        forbidNonWhitelisted: true,
+      }) || [];
 
     return errors.length === 0;
   }
@@ -160,9 +167,6 @@ export class GenericRolePermissionDto {
 }
 
 export class RolePermissionsArrayDto {
-  @IsOptional()
-  id?: number;
-
   @IsString()
   name: string;
 
