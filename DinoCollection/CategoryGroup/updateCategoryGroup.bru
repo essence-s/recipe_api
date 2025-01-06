@@ -7,7 +7,11 @@ meta {
 patch {
   url: {{BACKEND_URL}}/category-group/27
   body: json
-  auth: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{bearerToken}}
 }
 
 body:json {
