@@ -124,6 +124,7 @@ model Role {
   name       String   @unique
   permission Json     @default("[]")
   identifier String?  @unique
+  createdAt  DateTime @default(now())
   updatedAt  DateTime @default(now()) @updatedAt
 
   user User[]
