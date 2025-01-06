@@ -17,7 +17,6 @@ export class UserService {
     try {
       return await this.prisma.user.create({
         data: {
-          id: register.id,
           username: register.username,
           email: register.email,
           password: await bcrypt.hash(register.password, 10),
@@ -101,7 +100,6 @@ export class UserService {
     return this.prisma.user.update({
       where: { id },
       data: {
-        id: updateUserDto.id,
         username: updateUserDto.username,
         email: updateUserDto.email,
         password: await bcrypt.hash(updateUserDto.password, 10),

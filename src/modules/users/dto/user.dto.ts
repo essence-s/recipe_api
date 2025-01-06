@@ -15,9 +15,6 @@ export enum UserState {
 }
 
 export class UserDto {
-  @IsOptional()
-  id?: number;
-
   @Transform(({ value }) => value.trim())
   @IsString()
   @MinLength(1)
