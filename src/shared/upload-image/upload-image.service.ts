@@ -5,9 +5,9 @@ import { v2 as cloudinary } from 'cloudinary';
 import { v4 as uuidv4 } from 'uuid';
 
 cloudinary.config({
-  cloud_name: 'dc05tenjs',
-  api_key: '528321319335944',
-  api_secret: process.env.API_SECRET, // Click 'View API Keys' above to copy your API secret
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET, // Click 'View API Keys' above to copy your API secret
 });
 
 const data = [
@@ -28,7 +28,7 @@ const data = [
 export class UploadImageService {
   async createThumbnails(file) {
     try {
-      const name = uuidv4();
+      const name = 'cl1' + uuidv4();
       const byteArrayBuffer = file;
       const promises = data.map(async (item) => {
         return new Promise((resolve, reject) => {
