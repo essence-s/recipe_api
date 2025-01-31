@@ -35,12 +35,12 @@ export class SearchService {
   // probandoo
   async findManyGG(matches): Promise<PaginatedResult<Recipe>> {
     let [query, categoriesParam] = matches;
-    console.log(categoriesParam);
+    // console.log(categoriesParam);
     const categories =
       categoriesParam != 'undefined' && categoriesParam
         ? categoriesParam.split(',')
         : [];
-    console.log(categories);
+    // console.log(categories);
     const page = { page: 2, perPage: 2 };
 
     return paginate(
@@ -75,8 +75,8 @@ export class SearchService {
 
   async findMatchesRecipe(matches, pagination?) {
     let [query, difficulty, categoriesParam] = matches;
-    console.log(matches);
-    console.log(pagination);
+    // console.log(matches);
+    // console.log(pagination);
     query = query != 'undefined' ? query : '';
     const categories =
       categoriesParam != 'undefined'
@@ -84,8 +84,8 @@ export class SearchService {
           ? categoriesParam.split(',')
           : []
         : [];
-    console.log(query);
-    console.log(categories);
+    // console.log(query);
+    // console.log(categories);
 
     // const page = { page: 2, perPage: 2 };
 

@@ -60,7 +60,21 @@ export class RecipeService {
     // async findAll(): Promise<Recipe[]> {
     return this.prisma.recipe.findMany({
       include: {
-        categories: true,
+        user: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+        categories: {
+          include: {
+            category: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
         ingredients: true,
       },
     });
@@ -83,6 +97,31 @@ export class RecipeService {
 
       if (!result) {
         throw new BadRequestException(`Recipe with ID ${recipeId} not found`);
+      }
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async findTitle(recipeTitle) {
+    try {
+      const result = await this.prisma.recipe.findFirst({
+        where: {
+          title: recipeTitle,
+        },
+        include: {
+          categories: { select: { category: true } },
+          ingredients: true,
+          instructions: true,
+        },
+      });
+
+      if (!result) {
+        throw new BadRequestException(
+          `Recipe with Title ${recipeTitle} not found`,
+        );
       }
 
       return result;
@@ -126,7 +165,7 @@ export class RecipeService {
       return recipeRes;
     } catch (error) {
       //No in production messague :V error.meta.cause
-      console.log(error);
+      // console.log(error);
       throw new BadRequestException(error.meta.cause);
     }
   }

@@ -31,9 +31,14 @@ export class PublicController {
     private readonly uploadImageService: UploadImageService,
   ) {}
 
-  @Get('recipe/:id')
-  findOne(@Param('id') id) {
-    return this.recipeService.findId(+id);
+  // @Get('recipe/:id')
+  // findOne(@Param('id') id) {
+  //   return this.recipeService.findId(+id);
+  // }
+
+  @Get('recipe/:title')
+  findOneRecipeTitle(@Param('title') recipeTitle) {
+    return this.recipeService.findTitle(recipeTitle);
   }
 
   @Get('search/matches')
