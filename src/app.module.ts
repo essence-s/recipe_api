@@ -15,9 +15,10 @@ import { UsersModule } from './modules/users/user.module';
 import { PrismaModule } from './prisma.module';
 import { DeleteCascadeModule } from './shared/delete-cascade/delete-cascade.module';
 import { MemoRoleModule } from './shared/memo-role/memo-role.module';
-import { UtilsModule } from './utils/utils.module';
+import { UtilsModule } from './utilsPrub/utils.module';
 import { PublicModule } from './modules/public/public.module';
 import { UploadImageModule } from './shared/upload-image/upload-image.module';
+import { CryptoModule } from './shared/crypto/crypto.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { UploadImageModule } from './shared/upload-image/upload-image.module';
     MemoRoleModule,
     PrismaModule,
     UploadImageModule,
+    CryptoModule,
 
     RecipeModule,
     IngredientModule,
