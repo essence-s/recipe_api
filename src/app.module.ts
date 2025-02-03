@@ -2,8 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { RecipeModule } from './modules/recipe/recipe.module';
-// import { TypeOrmModule } from '@nestjs/typeorm';
-import { ThrottlerModule } from '@nestjs/throttler';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AuthModule } from './modules/auth/auth.module';
 import { CategoryGroupModule } from './modules/category-group/category-group.module';
 import { CategoryModule } from './modules/category/category.module';
@@ -15,10 +14,11 @@ import { UsersModule } from './modules/users/user.module';
 import { PrismaModule } from './prisma.module';
 import { DeleteCascadeModule } from './shared/delete-cascade/delete-cascade.module';
 import { MemoRoleModule } from './shared/memo-role/memo-role.module';
-import { UtilsModule } from './utilsPrub/utils.module';
+// import { UtilsModule } from './utilsPrub/utils.module';
 import { PublicModule } from './modules/public/public.module';
 import { UploadImageModule } from './shared/upload-image/upload-image.module';
 import { CryptoModule } from './shared/crypto/crypto.module';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -38,15 +38,22 @@ import { CryptoModule } from './shared/crypto/crypto.module';
     IngredientModule,
     CategoryModule,
     PendingRecipeModule,
-    UtilsModule,
     SearchModule,
     AuthModule,
     UsersModule,
     RoleModule,
     CategoryGroupModule,
     PublicModule,
+
+    // UtilsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class AppModule {}

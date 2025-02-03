@@ -2,14 +2,16 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserService } from 'src/modules/users/user.service';
 
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
+// import * as bcrypt from 'bcrypt';
 import { loginDto } from './dto/login.dto';
+import { CryptoService } from 'src/shared/crypto/crypto.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UserService,
     private readonly jwtService: JwtService,
+    private readonly cryptoService: CryptoService,
   ) {}
 
   async login(login: loginDto) {
@@ -25,7 +27,11 @@ export class AuthService {
       throw new UnauthorizedException('account is disabled');
     }
 
-    const isPasswordValid = await bcrypt.compare(login.password, user.password);
+    const isPasswordValid = this.cryptoService.compare(
+      login.password,
+      user.password,
+    );
+    // const isPasswordValid = await bcrypt.compare(login.password, user.password);
 
     if (!isPasswordValid) {
       throw new UnauthorizedException('password invalid');

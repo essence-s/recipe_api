@@ -82,4 +82,10 @@ export class UsersController {
   removeMany(@Body() ids: { ids: [] }) {
     return this.userService.removeMany(ids);
   }
+
+  @Get('getpsu/:id')
+  @Auth(dataPermission.user.functions.viewPassword)
+  viewPassword(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.viewPassword(+id);
+  }
 }

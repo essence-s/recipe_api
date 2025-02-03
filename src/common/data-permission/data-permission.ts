@@ -29,6 +29,7 @@ export const dataPermission = {
       findAll: { name: 'user', typePermission: TYPE_REQUEST.VIEW },
       findOne: { name: 'user', typePermission: TYPE_REQUEST.VIEW },
       update: { name: 'user', typePermission: TYPE_REQUEST.UPDATE },
+      viewPassword: { name: 'user', typePermission: TYPE_REQUEST.VIEW },
       remove: {
         name: 'user',
         typePermission: TYPE_REQUEST.DELETE,
