@@ -29,10 +29,11 @@ export class UserDto {
   @IsEmail()
   email?: string;
 
-  @Transform(({ value }) => value.trim())
+  // @Transform(({ value }) => value.trim())
+  @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
   @IsString()
   @MinLength(6)
-  @MaxLength(15)
+  @MaxLength(25)
   password: string;
 
   @IsNumber()

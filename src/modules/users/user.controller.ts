@@ -16,6 +16,7 @@ import { Auth } from 'src/modules/auth/decorators/auth.decorator';
 import { DeleteCascadeService } from 'src/shared/delete-cascade/delete-cascade.service';
 import { UserDto } from './dto/user.dto';
 import { UserService } from './user.service';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('user')
 export class UsersController {
@@ -46,7 +47,7 @@ export class UsersController {
   @Auth(dataPermission.user.functions.update)
   update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() updateUserDto: UserDto,
+    @Body() updateUserDto: UpdateUserDto,
   ) {
     return this.userService.update(+id, updateUserDto);
   }

@@ -103,17 +103,28 @@ export class UserService {
 
   async update(id: number, updateUserDto: UpdateUserDto) {
     try {
+      console.log(updateUserDto);
+
+      const data = {
+        username: updateUserDto.username,
+        email: updateUserDto.email,
+        password: updateUserDto.password
+          ? this.cryptoService.encryptPassword(updateUserDto.password)
+          : null,
+        // password: this.cryptoService.encryptPassword(updateUserDto.password),
+        // password: await bcrypt.hash(updateUserDto.password, 10),
+        roleId: updateUserDto.roleId,
+        phone: updateUserDto.phone,
+        state: updateUserDto.state,
+      };
+
+      const cleanedData = Object.fromEntries(
+        Object.entries(data).filter(([_, value]) => value != null),
+      );
+
       return await this.prisma.user.update({
         where: { id },
-        data: {
-          username: updateUserDto.username,
-          email: updateUserDto.email,
-          password: this.cryptoService.encryptPassword(updateUserDto.password),
-          // password: await bcrypt.hash(updateUserDto.password, 10),
-          roleId: updateUserDto.roleId,
-          phone: updateUserDto.phone,
-          state: updateUserDto.state,
-        },
+        data: cleanedData,
       });
     } catch (error) {
       throw new InternalServerErrorException(error);
