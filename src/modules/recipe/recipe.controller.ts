@@ -68,11 +68,13 @@ export class RecipeController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateRecipeDto: UpdateRecipeDto,
   ) {
-    // eliminamos la imagen anterior
     const recipe = await this.recipeService.findId(+id);
 
-    const resultData = await this.uploadImageService.updateThumbnails(
-      recipe.imageUrl,
+    // const resultData = await this.uploadImageService.updateThumbnails(
+    //   recipe.imageUrl,
+    //   file.buffer,
+    // );
+    const resultData = await this.uploadImageService.createThumbnails(
       file.buffer,
     );
 
@@ -81,7 +83,11 @@ export class RecipeController {
       imageUrl: resultData.name,
     };
 
-    return this.recipeService.update(+id, recipeWithImageUrl);
+    const data = await this.recipeService.update(+id, recipeWithImageUrl);
+
+    await this.uploadImageService.deleteThumbnails(recipe.imageUrl);
+
+    return data;
   }
 
   @Delete(':id')

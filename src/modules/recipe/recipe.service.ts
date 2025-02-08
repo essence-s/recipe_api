@@ -180,8 +180,9 @@ export class RecipeService {
       return recipeRes;
     } catch (error) {
       //No in production messague :V error.meta.cause
-      console.log(error);
-      throw new BadRequestException(error.meta.cause);
+      this.uploadImageService.deleteThumbnails(recipe.imageUrl);
+      // console.log(error);
+      throw new BadRequestException('Error updating recipe');
     }
   }
   // async findOne(id: number): Promise<Recipe> {
