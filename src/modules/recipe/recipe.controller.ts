@@ -36,18 +36,21 @@ export class RecipeController {
     @UploadedFile() file,
     @Body() createRecipeDto: CreateRecipeDto,
   ) {
-    if (!file?.buffer) {
-      throw new BadRequestException('Image is required');
-    }
-
-    const resultData = await this.uploadImageService.createThumbnails(
-      file.buffer,
-    );
-    const recipeWithImageUrl = {
+    let recipeWithImageUrl: any = {
       ...createRecipeDto,
-      imageUrl: resultData.name,
       userId: request.user.userId,
     };
+
+    if (file?.buffer) {
+      const resultData = await this.uploadImageService.createThumbnails(
+        file.buffer,
+      );
+      recipeWithImageUrl = {
+        ...createRecipeDto,
+        imageUrl: resultData.name,
+      };
+    }
+
     return await this.recipeService.createRecipe(recipeWithImageUrl);
   }
 
