@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
+import { RevalidateService } from 'src/shared/revalidate/revalidate.service';
 import { UploadImageService } from 'src/shared/upload-image/upload-image.service';
 // import { Recipe } from './recipe.entity';
 
@@ -8,6 +9,7 @@ export class RecipeService {
   constructor(
     private prisma: PrismaService,
     private readonly uploadImageService: UploadImageService,
+    private revalidateService: RevalidateService,
   ) {}
 
   // async create(createRecipeDto): Promise<Recipe[]> {
@@ -55,6 +57,8 @@ export class RecipeService {
         },
       });
 
+      this.revalidateService.revalidate('/search');
+
       return recipeRes;
     } catch (error) {
       //No in production messague :V error.meta.cause
@@ -72,6 +76,11 @@ export class RecipeService {
           select: {
             id: true,
             username: true,
+            role: {
+              select: {
+                name: true,
+              },
+            },
           },
         },
         categories: {
@@ -177,6 +186,8 @@ export class RecipeService {
         },
       });
 
+      this.revalidateService.revalidate('/search');
+
       return recipeRes;
     } catch (error) {
       //No in production messague :V error.meta.cause
@@ -189,7 +200,14 @@ export class RecipeService {
   //   return await this.recipeRepository.findOne({ where: { id } });
   // }
 
-  remove(id: number) {
-    return this.prisma.recipe.delete({ where: { id } });
+  async remove(id: number) {
+    try {
+      const data = await this.prisma.recipe.delete({ where: { id } });
+      this.revalidateService.revalidate('/search');
+
+      return data;
+    } catch (error) {
+      throw new BadRequestException('Error updating recipe');
+    }
   }
 }

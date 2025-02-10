@@ -19,6 +19,7 @@ import { PublicModule } from './modules/public/public.module';
 import { UploadImageModule } from './shared/upload-image/upload-image.module';
 import { CryptoModule } from './shared/crypto/crypto.module';
 import { APP_GUARD } from '@nestjs/core';
+import { RevalidateModule } from './shared/revalidate/revalidate.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { APP_GUARD } from '@nestjs/core';
     PrismaModule,
     UploadImageModule,
     CryptoModule,
+    RevalidateModule,
 
     RecipeModule,
     IngredientModule,
