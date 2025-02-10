@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -35,6 +36,10 @@ export class RecipeController {
     @UploadedFile() file,
     @Body() createRecipeDto: CreateRecipeDto,
   ) {
+    if (!file?.buffer) {
+      throw new BadRequestException('Image is required');
+    }
+
     const resultData = await this.uploadImageService.createThumbnails(
       file.buffer,
     );
@@ -74,14 +79,18 @@ export class RecipeController {
     //   recipe.imageUrl,
     //   file.buffer,
     // );
-    const resultData = await this.uploadImageService.createThumbnails(
-      file.buffer,
-    );
+    let recipeWithImageUrl: any = updateRecipeDto;
 
-    const recipeWithImageUrl = {
-      ...updateRecipeDto,
-      imageUrl: resultData.name,
-    };
+    if (file?.buffer) {
+      const resultData = await this.uploadImageService.createThumbnails(
+        file.buffer,
+      );
+
+      recipeWithImageUrl = {
+        ...updateRecipeDto,
+        imageUrl: resultData.name,
+      };
+    }
 
     const data = await this.recipeService.update(+id, recipeWithImageUrl);
 
