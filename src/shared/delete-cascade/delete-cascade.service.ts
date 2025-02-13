@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   ForbiddenException,
+  HttpException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -258,6 +259,9 @@ export class DeleteCascadeService {
             message: 'there are relationships',
             relatedTables: resultInfoRelation,
           });
+        }
+        if (error instanceof HttpException) {
+          throw error;
         }
         throw new ForbiddenException(error);
       }
