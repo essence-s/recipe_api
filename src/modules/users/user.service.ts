@@ -35,19 +35,6 @@ export class UserService {
     }
   }
 
-  findOneByUsername(username: string) {
-    return this.prisma.user.findUnique({
-      where: { username },
-      include: {
-        role: {
-          select: {
-            name: true,
-          },
-        },
-      },
-    });
-  }
-
   findOneByPhoneOrEmail(phoneOrEmail: string) {
     return this.prisma.user.findFirst({
       where: { OR: [{ phone: phoneOrEmail }, { email: phoneOrEmail }] },
@@ -69,7 +56,6 @@ export class UserService {
         username: true,
         email: true,
         phone: true,
-        password: true,
         state: true,
         createdAt: true,
         updatedAt: true,
@@ -89,7 +75,6 @@ export class UserService {
         username: true,
         email: true,
         phone: true,
-        password: true,
         state: true,
         createdAt: true,
         updatedAt: true,
@@ -103,8 +88,6 @@ export class UserService {
 
   async update(id: number, updateUserDto: UpdateUserDto) {
     try {
-      console.log(updateUserDto);
-
       const data = {
         username: updateUserDto.username,
         email: updateUserDto.email,
