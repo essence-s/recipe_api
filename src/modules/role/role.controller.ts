@@ -17,6 +17,7 @@ import { DeleteCascadeService } from 'src/shared/delete-cascade/delete-cascade.s
 import { MemoRoleService } from 'src/shared/memo-role/memo-role.service';
 import { RolePermissionsArrayDto } from './dto/permission.dto';
 import { RoleService } from './role.service';
+import { UpdateRolePermissionsArrayDto } from './dto/update-role-pemissions.dto';
 
 @Controller('role')
 export class RoleController {
@@ -48,7 +49,7 @@ export class RoleController {
   @Auth(dataPermission.role.functions.update)
   update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() updateRoleDto: RolePermissionsArrayDto,
+    @Body() updateRoleDto: UpdateRolePermissionsArrayDto,
   ) {
     return this.roleService.update(+id, updateRoleDto);
   }
