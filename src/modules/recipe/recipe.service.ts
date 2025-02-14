@@ -2,7 +2,6 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { RevalidateService } from 'src/shared/revalidate/revalidate.service';
 import { UploadImageService } from 'src/shared/upload-image/upload-image.service';
-// import { Recipe } from './recipe.entity';
 
 @Injectable()
 export class RecipeService {
@@ -11,12 +10,6 @@ export class RecipeService {
     private readonly uploadImageService: UploadImageService,
     private revalidateService: RevalidateService,
   ) {}
-
-  // async create(createRecipeDto): Promise<Recipe[]> {
-  //   // async create(createRecipeDto: CreateRecipeDto): Promise<Recipe> {
-  //   const recipe = this.recipeRepository.create(createRecipeDto);
-  //   return await this.recipeRepository.save(recipe);
-  // }
 
   async createRecipe(recipe) {
     // console.log({ recipe });
@@ -93,6 +86,7 @@ export class RecipeService {
           },
         },
         ingredients: true,
+        instructions: true,
       },
     });
     // return { hello: 'helooooo' };
@@ -106,7 +100,27 @@ export class RecipeService {
           id: recipeId,
         },
         include: {
-          categories: { select: { category: true } },
+          user: {
+            select: {
+              id: true,
+              username: true,
+              role: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+          categories: {
+            include: {
+              category: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+
           ingredients: true,
           instructions: true,
         },
@@ -162,8 +176,7 @@ export class RecipeService {
               })),
             },
           }),
-          // ingredients: undefined,
-          // instructions: undefined,
+
           ...(recipe.ingredients && {
             ingredients: {
               deleteMany: {},
@@ -196,9 +209,6 @@ export class RecipeService {
       throw new BadRequestException('Error updating recipe');
     }
   }
-  // async findOne(id: number): Promise<Recipe> {
-  //   return await this.recipeRepository.findOne({ where: { id } });
-  // }
 
   async remove(id: number) {
     try {
