@@ -10,13 +10,12 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { dataPermission } from 'src/common/data-permission/data-permission';
+import { RequestWithUser } from 'src/common/types/request-with-user.type';
 import { Auth } from 'src/modules/auth/decorators/auth.decorator';
 import { UploadImageService } from 'src/shared/upload-image/upload-image.service';
 import { CreatePendingRecipeDto } from './create-pending-recipe.dto';
 import { PendingRecipeService } from './pending-recipe.service';
-import { RequestWithUser } from 'src/common/types/request-with-user.type';
 
-// @Auth([Role.ADMIN])
 @Controller('pending-recipe')
 export class PendingRecipeController {
   constructor(
@@ -30,14 +29,19 @@ export class PendingRecipeController {
     @UploadedFile() file,
     @Body() createRecipeDto: CreatePendingRecipeDto,
   ) {
-    const resultData = await this.uploadImageService.createThumbnails(
-      file.buffer,
-    );
-    const recipeWithImageUrl = {
+    let recipeWithImageUrl: any = {
       ...createRecipeDto,
-      imageUrl: resultData.name,
     };
-    // createRecipeDto.imageUrl = resultData.name;
+
+    if (file?.buffer) {
+      const resultData = await this.uploadImageService.createThumbnails(
+        file.buffer,
+      );
+      recipeWithImageUrl = {
+        ...recipeWithImageUrl,
+        imageUrl: resultData.name,
+      };
+    }
 
     return await this.pendingRecipeService.createPendingRecipe(
       recipeWithImageUrl,

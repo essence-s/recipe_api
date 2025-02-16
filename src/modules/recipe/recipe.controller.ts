@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -46,11 +45,10 @@ export class RecipeController {
         file.buffer,
       );
       recipeWithImageUrl = {
-        ...createRecipeDto,
+        ...recipeWithImageUrl,
         imageUrl: resultData.name,
       };
     }
-
     return await this.recipeService.createRecipe(recipeWithImageUrl);
   }
 
@@ -90,7 +88,7 @@ export class RecipeController {
       );
 
       recipeWithImageUrl = {
-        ...updateRecipeDto,
+        ...recipeWithImageUrl,
         imageUrl: resultData.name,
       };
     }

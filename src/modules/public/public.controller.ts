@@ -79,7 +79,7 @@ export class PublicController {
         file.buffer,
       );
       recipeWithImageUrl = {
-        ...createRecipeDto,
+        ...recipeWithImageUrl,
         imageUrl: resultData.name,
       };
     }
