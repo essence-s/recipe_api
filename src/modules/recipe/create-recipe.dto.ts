@@ -1,7 +1,6 @@
 import { Type } from 'class-transformer';
 import {
   IsArray,
-  IsEnum,
   IsInt,
   IsNotEmpty,
   IsOptional,
@@ -9,11 +8,11 @@ import {
   Min,
 } from 'class-validator';
 
-enum RecipeDifficulty {
-  facil = 'facil',
-  medio = 'medio',
-  dificil = 'dificil',
-}
+// enum RecipeDifficulty {
+//   facil = 'facil',
+//   medio = 'medio',
+//   dificil = 'dificil',
+// }
 export class CreateRecipeDto {
   @IsNotEmpty()
   @IsString()
@@ -31,20 +30,20 @@ export class CreateRecipeDto {
   @IsString()
   videoUrl?: string;
 
-  @Type(() => Number)
-  @IsInt()
-  @Min(0)
-  prepTime: number;
+  // @Type(() => Number)
+  // @IsInt()
+  // @Min(0)
+  // prepTime: number;
 
   @Type(() => Number)
   @IsInt()
   @Min(0)
   servings: number;
 
-  @IsEnum(RecipeDifficulty, {
-    message: 'the difficulty should be easy, facil, medio or dificil',
-  })
-  difficulty: RecipeDifficulty;
+  // @IsEnum(RecipeDifficulty, {
+  //   message: 'the difficulty should be easy, facil, medio or dificil',
+  // })
+  // difficulty: RecipeDifficulty;
 
   // @Type(() => Number)
   // @IsInt()

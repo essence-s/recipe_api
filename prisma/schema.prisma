@@ -26,18 +26,18 @@ enum RecipeDifficulty {
 }
 
 model Recipe {
-  id              Int              @id @default(autoincrement())
-  title           String           @unique
+  id              Int      @id @default(autoincrement())
+  title           String   @unique
   description     String
   imageUrl        String?
   videoUrl        String?
-  prepTime        Int
+  // prepTime        Int
   servings        Int
-  difficulty      RecipeDifficulty @default(medio)
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
+  // difficulty      RecipeDifficulty @default(medio)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
   userId          Int?
-  user            User?            @relation(fields: [userId], references: [id])
+  user            User?    @relation(fields: [userId], references: [id])
   // publicUserId    Int
   // publicUser      PublicUsers @relation(fields: [publicUserId], references: [id])
   publicUserName  String?
@@ -47,7 +47,7 @@ model Recipe {
   ingredients  RecipeIngredient[]
   instructions RecipeInstruction[]
 
-  @@index([title, difficulty])
+  @@index([title])
 }
 
 model RecipeInstruction {
@@ -132,18 +132,18 @@ model Role {
 
 /////////PENDING
 model PendingRecipe {
-  id              Int              @id @default(autoincrement())
+  id              Int      @id @default(autoincrement())
   title           String
   description     String
   imageUrl        String?
   videoUrl        String?
-  prepTime        Int
+  // prepTime        Int
   servings        Int
-  difficulty      RecipeDifficulty @default(medio)
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
+  // difficulty      RecipeDifficulty @default(medio)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
   userId          Int?
-  user            User?            @relation(fields: [userId], references: [id])
+  user            User?    @relation(fields: [userId], references: [id])
   publicUserName  String?
   publicUserPhone String?
 

@@ -31,20 +31,20 @@ export class CreatePublicPendingRecipeDto {
   @IsString()
   videoUrl?: string;
 
-  @Type(() => Number)
-  @IsInt()
-  @Min(0)
-  prepTime: number;
+  // @Type(() => Number)
+  // @IsInt()
+  // @Min(0)
+  // prepTime: number;
 
   @Type(() => Number)
   @IsInt()
   @Min(0)
   servings: number;
 
-  @IsEnum(RecipeDifficulty, {
-    message: 'the difficulty should be easy, facil, medio or dificil',
-  })
-  difficulty: RecipeDifficulty;
+  // @IsEnum(RecipeDifficulty, {
+  //   message: 'the difficulty should be easy, facil, medio or dificil',
+  // })
+  // difficulty: RecipeDifficulty;
 
   // @Type(() => Number)
   // @IsInt()

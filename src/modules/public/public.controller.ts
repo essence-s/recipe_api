@@ -70,18 +70,20 @@ export class PublicController {
     @UploadedFile() file,
     @Body() createRecipeDto: CreatePublicPendingRecipeDto,
   ) {
-    const resultData = await this.uploadImageService.createThumbnails(
-      file.buffer,
-    );
-    const pendingRecipeWithImageUrl = {
+    let recipeWithImageUrl: any = {
       ...createRecipeDto,
-      imageUrl: resultData.name,
-      // imageUrl: 'XD',
     };
-    // createRecipeDto.imageUrl = resultData.name;
 
-    return await this.pendingRecipeService.createPendingRecipe(
-      pendingRecipeWithImageUrl,
-    );
+    if (file?.buffer) {
+      const resultData = await this.uploadImageService.createThumbnails(
+        file.buffer,
+      );
+      recipeWithImageUrl = {
+        ...createRecipeDto,
+        imageUrl: resultData.name,
+      };
+    }
+
+    return await this.recipeService.createRecipe(recipeWithImageUrl);
   }
 }
