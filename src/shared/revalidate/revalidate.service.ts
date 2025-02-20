@@ -15,6 +15,8 @@ export class RevalidateService {
         path: path,
         secret: REVALIDATE_SECRET,
       }),
+    }).catch((e) => {
+      console.log('fallo la revalidación');
     });
   }
 }
