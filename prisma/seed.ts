@@ -58,7 +58,7 @@ const permission = [
     },
   },
   {
-    name: 'recipePending',
+    name: 'pendingRecipe',
     permission: {
       view: true,
       create: true,

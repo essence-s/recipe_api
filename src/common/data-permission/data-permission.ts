@@ -99,19 +99,19 @@ export const dataPermission = {
   },
 
   pendingRecipe: {
-    name: 'recipePending',
+    name: 'pendingRecipe',
     functions: {
-      create: { name: 'recipePending', typePermission: TYPE_REQUEST.CREATE },
-      findAll: { name: 'recipePending', typePermission: TYPE_REQUEST.VIEW },
-      findOne: { name: 'recipePending', typePermission: TYPE_REQUEST.VIEW },
-      update: { name: 'recipePending', typePermission: TYPE_REQUEST.UPDATE },
-      remove: { name: 'recipePending', typePermission: TYPE_REQUEST.DELETE },
+      create: { name: 'pendingRecipe', typePermission: TYPE_REQUEST.CREATE },
+      findAll: { name: 'pendingRecipe', typePermission: TYPE_REQUEST.VIEW },
+      findOne: { name: 'pendingRecipe', typePermission: TYPE_REQUEST.VIEW },
+      update: { name: 'pendingRecipe', typePermission: TYPE_REQUEST.UPDATE },
+      remove: { name: 'pendingRecipe', typePermission: TYPE_REQUEST.DELETE },
       removeMany: {
-        name: 'recipePending',
+        name: 'pendingRecipe',
         typePermission: TYPE_REQUEST.DELETE,
       },
       pendingToRecipe: {
-        name: 'recipePending',
+        name: 'pendingRecipe',
         typePermission: TYPE_REQUEST.APPROVE,
       },
     },
@@ -138,7 +138,32 @@ export const dataPermission = {
       findAll: { name: 'category', typePermission: TYPE_REQUEST.VIEW },
       findOne: { name: 'category', typePermission: TYPE_REQUEST.VIEW },
       update: { name: 'category', typePermission: TYPE_REQUEST.UPDATE },
-      remove: { name: 'category', typePermission: TYPE_REQUEST.DELETE },
+      remove: {
+        name: 'category',
+        typePermission: TYPE_REQUEST.DELETE,
+        reassign: {
+          name: 'recipeCategory',
+          checkRelation: 'categoryId',
+          permission: TYPE_REQUEST.UPDATE,
+          alternativeToTable: 'recipe',
+        },
+        permissionsDeleteCascade: [
+          {
+            name: 'recipeCategory',
+            checkRelation: 'categoryId',
+            permission: TYPE_REQUEST.UPDATE,
+            alternativeToTable: 'recipe',
+            intermediateTables: true,
+          },
+          {
+            name: 'pendingRecipeCategory',
+            checkRelation: 'pendingCategoryId',
+            permission: TYPE_REQUEST.UPDATE,
+            alternativeToTable: 'pendingRecipe',
+            intermediateTables: true,
+          },
+        ],
+      },
       removeMany: { name: 'category', typePermission: TYPE_REQUEST.DELETE },
     },
   },

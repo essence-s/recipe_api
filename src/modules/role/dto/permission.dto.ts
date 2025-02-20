@@ -28,7 +28,7 @@ class RecipePermissionDto {
   view: boolean;
 }
 
-class RecipePendingPermissionDto {
+class PendingRecipePermissionDto {
   @IsBoolean()
   create: boolean;
 
@@ -111,8 +111,8 @@ export class ValidatePermissionDtoConstraint
       case 'recipe':
         dtoClass = RecipePermissionDto;
         break;
-      case 'recipePending':
-        dtoClass = RecipePendingPermissionDto;
+      case 'pendingRecipe':
+        dtoClass = PendingRecipePermissionDto;
         break;
       case 'role':
         dtoClass = RolePermissionDto;
