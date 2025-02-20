@@ -5,9 +5,14 @@ meta {
 }
 
 delete {
-  url: {{BACKEND_URL}}/category/13
+  url: {{BACKEND_URL}}/category/3
   body: none
   auth: bearer
+}
+
+params:query {
+  ~deleteCascade: true
+  ~reassignTo: 3
 }
 
 auth:bearer {

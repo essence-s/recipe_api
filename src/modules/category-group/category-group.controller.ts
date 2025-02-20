@@ -7,15 +7,22 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
+  Req,
 } from '@nestjs/common';
 import { dataPermission } from 'src/common/data-permission/data-permission';
 import { Auth } from 'src/modules/auth/decorators/auth.decorator';
 import { CategoryGroupService } from './category-group.service';
 import { CategoryGroupDto } from './dto/category-group';
+import { RequestWithUser } from 'src/common/types/request-with-user.type';
+import { DeleteCascadeService } from 'src/shared/delete-cascade/delete-cascade.service';
 
 @Controller('category-group')
 export class CategoryGroupController {
-  constructor(private readonly categoryGroupService: CategoryGroupService) {}
+  constructor(
+    private readonly categoryGroupService: CategoryGroupService,
+    private readonly deleteCascade: DeleteCascadeService,
+  ) {}
 
   @Post()
   @Auth(dataPermission.categoryGroup.functions.create)
@@ -46,7 +53,27 @@ export class CategoryGroupController {
 
   @Delete(':id')
   @Auth(dataPermission.categoryGroup.functions.remove)
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.categoryGroupService.remove(+id);
+  remove(
+    @Req() request: RequestWithUser,
+    @Param('id', ParseIntPipe) id: number,
+    @Query('reassignTo') idReassign,
+    @Query('deleteCascade') deleteCascade: boolean,
+  ) {
+    const dataPermisionG = dataPermission.categoryGroup.functions.remove;
+    const userRole = request.role;
+
+    const funDelete = async () => {
+      return await this.categoryGroupService.remove(+id);
+    };
+
+    return this.deleteCascade.deleteCascadeOrReassign(
+      funDelete,
+      idReassign,
+      deleteCascade,
+
+      [+id],
+      dataPermisionG,
+      userRole,
+    );
   }
 }

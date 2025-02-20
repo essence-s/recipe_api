@@ -30,6 +30,8 @@ export class DeleteCascadeService {
         name: string;
         checkRelation: string;
         permission: any;
+        alternativeToTable?: string;
+        intermediateTables?: boolean;
       }[];
     },
   ): Promise<permissionsDeleteCascade[] | any> {
@@ -65,12 +67,15 @@ export class DeleteCascadeService {
         where: {
           [item.checkRelation]: { in: dataDeleteId },
         },
-        select: {
-          id: true,
-        },
+        // select: {
+        //   id: true,
+        // },
       });
-
-      dataDeleteId = dataDelete.map((dd) => dd.id);
+      const ids = dataDelete.map((dd) => dd.id);
+      // console.log(dataDelete);
+      if (!item.intermediateTables) {
+        dataDeleteId = ids;
+      }
       // console.log(dataDeleteId);
 
       if (dataDeleteId.length == 0) break;
@@ -78,8 +83,11 @@ export class DeleteCascadeService {
       dataPromises.push({
         name: item.name,
         checkRelation: item.checkRelation,
-        ids: dataDeleteId,
+        ids: ids,
         permission: item.permission,
+        ...(item.alternativeToTable && {
+          alternativeToTable: item.alternativeToTable,
+        }),
       });
     }
     // console.log(dataPromises);
@@ -133,10 +141,15 @@ export class DeleteCascadeService {
   }
 
   async checkingPermissions(userRole, arrayDeleteRelation) {
+    // console.log(arrayDeleteRelation);
     const checkingPermissions = arrayDeleteRelation.every((adr) => {
-      return (userRole.permission as any[]).find(
-        (perm) => perm.name == adr.name,
-      ).permission[adr.permission];
+      let table = adr.name;
+      if (adr.alternativeToTable) {
+        table = adr.alternativeToTable;
+      }
+      // console.log(table);
+      return (userRole.permission as any[]).find((perm) => perm.name == table)
+        ?.permission[adr.permission];
     });
 
     return checkingPermissions;
@@ -168,12 +181,14 @@ export class DeleteCascadeService {
   async reassign(ids: number[], tablecfuntion, idReassign, userRole) {
     // const name = tablecfuntion.reassign.name;
     // const permission = tablecfuntion.reassign.permission;
-    const { name, checkRelation, permission } = tablecfuntion.reassign;
+    const { name, checkRelation, permission, alternativeToTable } =
+      tablecfuntion.reassign;
 
     const hasPermissions = await this.checkingPermissions(userRole, [
       {
         name: name,
         permission: permission,
+        alternativeToTable,
       },
     ]);
 
