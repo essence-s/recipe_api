@@ -89,12 +89,14 @@ model Category {
 }
 
 model RecipeCategory {
+  id         Int      @id @default(autoincrement())
   recipeId   Int
   categoryId Int
   recipe     Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   category   Category @relation(fields: [categoryId], references: [id])
+  // @@id([recipeId, categoryId])
 
-  @@id([recipeId, categoryId])
+  @@unique([recipeId, categoryId])
 }
 
 enum UserState {
@@ -176,11 +178,13 @@ model PendingRecipeIngredient {
 }
 
 model PendingRecipeCategory {
+  id                Int @id @default(autoincrement())
   pendingRecipeId   Int
   pendingCategoryId Int
 
   pendingRecipe   PendingRecipe @relation(fields: [pendingRecipeId], references: [id], onDelete: Cascade)
   pendingCategory Category      @relation(fields: [pendingCategoryId], references: [id])
+  // @@id([pendingRecipeId, pendingCategoryId])
 
-  @@id([pendingRecipeId, pendingCategoryId])
+  @@unique([pendingRecipeId, pendingCategoryId])
 }
