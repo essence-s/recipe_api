@@ -14,20 +14,17 @@ export class SearchController {
 
   @Get('matches')
   async findMatchesTitleRecipe(@Query() queryG: SearchPublicDto) {
-    const { query, difficulty, categories, page, perPage } = queryG;
+    const { query, categories, page, perPage } = queryG;
 
-    return this.searchService.findMatchesRecipe(
-      [query, difficulty, categories],
-      {
-        page,
-        perPage,
-      },
-    );
+    return this.searchService.findMatchesRecipe([query, categories], {
+      page,
+      perPage,
+    });
   }
 
-  @Get('matchesGG')
-  async findManyGG(@Query('query') query, @Query('categories') categories) {
-    return this.searchService.findManyGG([query, categories]);
-    // return this.searchService.findMatchesTitleRecipe(query);
-  }
+  // @Get('matchesGG')
+  // async findManyGG(@Query('query') query, @Query('categories') categories) {
+  //   return this.searchService.findManyGG([query, categories]);
+  //   // return this.searchService.findMatchesTitleRecipe(query);
+  // }
 }

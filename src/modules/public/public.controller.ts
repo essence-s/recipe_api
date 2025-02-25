@@ -16,8 +16,8 @@ import { PendingRecipeService } from '../pending-recipe/pending-recipe.service';
 import { RecipeService } from '../recipe/recipe.service';
 import { SearchService } from '../search/search.service';
 import { CreatePublicPendingRecipeDto } from './dto/create-public.dto';
-import { PublicService } from './public.service';
 import { SearchPublicDto } from './dto/search-public.dto';
+import { PublicService } from './public.service';
 
 @Controller('public')
 export class PublicController {
@@ -43,15 +43,12 @@ export class PublicController {
 
   @Get('search/matches')
   async findMatchesTitleRecipe(@Query() queryG: SearchPublicDto) {
-    const { query, difficulty, categories, page, perPage } = queryG;
+    const { query, categories, page, perPage } = queryG;
 
-    return this.searchService.findMatchesRecipe(
-      [query, difficulty, categories],
-      {
-        page,
-        perPage,
-      },
-    );
+    return this.searchService.findMatchesRecipe([query, categories], {
+      page,
+      perPage,
+    });
   }
 
   @Get('category')

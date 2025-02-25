@@ -124,7 +124,36 @@ export const dataPermission = {
       findAll: { name: 'categoryGroup', typePermission: TYPE_REQUEST.VIEW },
       findOne: { name: 'categoryGroup', typePermission: TYPE_REQUEST.VIEW },
       update: { name: 'categoryGroup', typePermission: TYPE_REQUEST.UPDATE },
-      remove: { name: 'categoryGroup', typePermission: TYPE_REQUEST.DELETE },
+      remove: {
+        name: 'categoryGroup',
+        typePermission: TYPE_REQUEST.DELETE,
+        reassign: {
+          name: 'category',
+          checkRelation: 'groupId',
+          permission: TYPE_REQUEST.UPDATE,
+        },
+        permissionsDeleteCascade: [
+          {
+            name: 'category',
+            checkRelation: 'groupId ',
+            permission: TYPE_REQUEST.DELETE,
+          },
+          {
+            name: 'recipeCategory',
+            checkRelation: 'categoryId',
+            permission: TYPE_REQUEST.UPDATE,
+            alternativeToTable: 'recipe',
+            intermediateTables: true,
+          },
+          {
+            name: 'pendingRecipeCategory',
+            checkRelation: 'pendingCategoryId',
+            permission: TYPE_REQUEST.UPDATE,
+            alternativeToTable: 'pendingRecipe',
+            intermediateTables: true,
+          },
+        ],
+      },
       removeMany: {
         name: 'categoryGroup',
         typePermission: TYPE_REQUEST.DELETE,

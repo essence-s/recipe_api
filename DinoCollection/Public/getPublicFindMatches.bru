@@ -5,15 +5,14 @@ meta {
 }
 
 get {
-  url: {{BACKEND_URL}}/public/search/matches/?query=arroz&difficulty=facil&categories&page=1&perPage=2
+  url: {{BACKEND_URL}}/public/search/matches/?query=a
   body: none
   auth: none
 }
 
 params:query {
-  query: arroz
-  difficulty: facil
-  categories: 
-  page: 1
-  perPage: 2
+  query: a
+  ~perPage: 2
+  ~page: 1
+  ~categories: 
 }

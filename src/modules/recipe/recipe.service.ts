@@ -143,7 +143,27 @@ export class RecipeService {
           title: recipeTitle,
         },
         include: {
-          categories: { select: { category: true } },
+          user: {
+            select: {
+              id: true,
+              username: true,
+              role: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+          categories: {
+            include: {
+              category: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+
           ingredients: true,
           instructions: true,
         },
