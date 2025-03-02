@@ -76,10 +76,6 @@ export class RecipeController {
   ) {
     const recipe = await this.recipeService.findId(+id);
 
-    // const resultData = await this.uploadImageService.updateThumbnails(
-    //   recipe.imageUrl,
-    //   file.buffer,
-    // );
     let recipeWithImageUrl: any = updateRecipeDto;
 
     if (file?.buffer) {
@@ -95,7 +91,9 @@ export class RecipeController {
 
     const data = await this.recipeService.update(+id, recipeWithImageUrl);
 
-    await this.uploadImageService.deleteThumbnails(recipe.imageUrl);
+    if (file?.buffer) {
+      await this.uploadImageService.deleteThumbnails(recipe.imageUrl);
+    }
 
     return data;
   }

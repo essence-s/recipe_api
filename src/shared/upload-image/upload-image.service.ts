@@ -65,14 +65,6 @@ export class UploadImageService {
 
   async deleteThumbnails(publicId) {
     try {
-      // const promises = data.map(async (item) => {
-      //   const result = await cloudinary.uploader.destroy(
-      //     `thumbnails/${item.folderName}/${publicId}`,
-      //   );
-      //   // console.log('Imagen eliminada:', result);
-      //   return result;
-      // });
-
       const result2 = await cloudinary.api.delete_resources(
         data.map((item) => `thumbnails/${item.folderName}/${publicId}`),
       );
