@@ -35,7 +35,7 @@ export class SearchService {
     const categories =
       categoriesParam != 'undefined'
         ? categoriesParam
-          ? categoriesParam.split(',')
+          ? categoriesParam.split('|')
           : []
         : [];
     // console.log(query);
@@ -58,15 +58,26 @@ export class SearchService {
               }),
               // ...(difficulty && { difficulty: difficulty }),
             },
-            ...categories.map((category) => ({
-              categories: {
-                some: {
-                  category: {
-                    name: category,
+            {
+              OR: categories.map((category) => ({
+                categories: {
+                  some: {
+                    category: {
+                      name: category,
+                    },
                   },
                 },
-              },
-            })),
+              })),
+            },
+            // ...categories.map((category) => ({
+            //   categories: {
+            //     some: {
+            //       category: {
+            //         name: category,
+            //       },
+            //     },
+            //   },
+            // })),
             {},
           ],
         },
@@ -76,6 +87,15 @@ export class SearchService {
               id: true,
               username: true,
               role: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+          categories: {
+            include: {
+              category: {
                 select: {
                   name: true,
                 },
