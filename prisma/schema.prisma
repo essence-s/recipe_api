@@ -81,11 +81,14 @@ model CategoryGroup {
 model Category {
   id                    Int                     @id @default(autoincrement())
   name                  String                  @unique
+  icon                  String?
   groupId               Int
   group                 CategoryGroup           @relation(fields: [groupId], references: [id])
   recipes               RecipeCategory[]
   // PendingRecipeCategory PendingRecipeCategory[]
   PendingRecipeCategory PendingRecipeCategory[]
+
+  @@index([name])
 }
 
 model RecipeCategory {

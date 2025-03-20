@@ -57,6 +57,15 @@ export class SearchService {
                 },
               }),
               // ...(difficulty && { difficulty: difficulty }),
+              // OR: categories.map((category) => ({
+              //   categories: {
+              //     some: {
+              //       category: {
+              //         name: category,
+              //       },
+              //     },
+              //   },
+              // })),
             },
             {
               OR: categories.map((category) => ({
@@ -78,7 +87,7 @@ export class SearchService {
             //     },
             //   },
             // })),
-            {},
+            // {},
           ],
         },
         include: {
@@ -120,6 +129,36 @@ export class SearchService {
     //     },
     //   },
     // },
+
+    return recipes;
+  }
+
+  async findQueryRecipe(matches, pagination?) {
+    let [query] = matches;
+
+    // const page = { page: 2, perPage: 2 };
+
+    const recipes = await this.prisma.recipe.findMany({
+      where: {
+        ...(query && {
+          title: {
+            contains: query,
+            mode: 'insensitive',
+          },
+        }),
+      },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        servings: true,
+        imageUrl: true,
+        user: { select: { username: true } },
+        // _count: true,
+      },
+
+      take: 5,
+    });
 
     return recipes;
   }

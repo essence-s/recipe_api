@@ -42,10 +42,20 @@ export class PublicController {
   }
 
   @Get('search/matches')
-  async findMatchesTitleRecipe(@Query() queryG: SearchPublicDto) {
+  async findMatchesRecipe(@Query() queryG: SearchPublicDto) {
     const { query, categories, page, perPage } = queryG;
 
     return this.searchService.findMatchesRecipe([query, categories], {
+      page,
+      perPage,
+    });
+  }
+
+  @Get('search/query')
+  async findQueryRecipe(@Query() queryG: SearchPublicDto) {
+    const { query, page, perPage } = queryG;
+
+    return this.searchService.findQueryRecipe([query], {
       page,
       perPage,
     });

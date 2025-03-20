@@ -11,6 +11,7 @@ export class CategoryService {
       select: {
         id: true,
         name: true,
+        icon: true,
         group: {
           select: { id: true, name: true },
         },
