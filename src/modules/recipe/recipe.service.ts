@@ -237,7 +237,7 @@ export class RecipeService {
 
       return data;
     } catch (error) {
-      throw new BadRequestException('Error updating recipe');
+      throw new BadRequestException('Error remove recipe');
     }
   }
 }
