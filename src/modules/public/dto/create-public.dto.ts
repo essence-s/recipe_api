@@ -51,10 +51,10 @@ export class CreatePublicPendingRecipeDto {
   // @Min(0)
   // userId: number;
 
-  @IsArray()
-  @Type(() => Number)
-  @IsInt({ each: true })
-  categories: number[];
+  // @IsArray()
+  // @Type(() => Number)
+  // @IsInt({ each: true })
+  // categories: number[];
 
   @IsNotEmpty()
   @IsString()

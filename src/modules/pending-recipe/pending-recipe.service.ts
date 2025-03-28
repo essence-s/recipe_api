@@ -10,7 +10,7 @@ export class PendingRecipeService {
   ) {}
 
   async createPendingRecipe({
-    categories,
+    // categories,
     ingredients,
     instructions,
     ...pendingRecipeG
@@ -21,11 +21,11 @@ export class PendingRecipeService {
       const recipeRes = await this.prisma.pendingRecipe.create({
         data: {
           ...pendingRecipe,
-          pendingCategories: {
-            create: categories.map((categoryId) => ({
-              pendingCategory: { connect: { id: +categoryId } },
-            })),
-          },
+          // pendingCategories: {
+          //   create: categories.map((categoryId) => ({
+          //     pendingCategory: { connect: { id: +categoryId } },
+          //   })),
+          // },
           pendingIngredients: {
             create: [
               {

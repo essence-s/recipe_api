@@ -98,6 +98,8 @@ export class PublicController {
       };
     }
 
-    return await this.recipeService.createRecipe(recipeWithImageUrl);
+    return await this.pendingRecipeService.createPendingRecipe(
+      recipeWithImageUrl,
+    );
   }
 }
