@@ -1,0 +1,15 @@
+meta {
+  name: getPendingRecipe
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{BACKEND_URL}}/pending-recipe
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}

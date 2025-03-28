@@ -1,0 +1,23 @@
+meta {
+  name: updateRole
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{BACKEND_URL}}/contact/1
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}
+
+body:json {
+  {
+    "name": "eduardo",
+    "email": "dino2@gmail.com",
+    "message": "requiero informacion sobre un producto"
+  }
+}

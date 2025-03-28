@@ -1,0 +1,19 @@
+meta {
+  name: removeRole
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{BACKEND_URL}}/contact/5
+  body: none
+  auth: bearer
+}
+
+params:query {
+  ~reassignTo: 7
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}

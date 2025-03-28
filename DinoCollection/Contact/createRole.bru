@@ -1,0 +1,23 @@
+meta {
+  name: createRole
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{BACKEND_URL}}/contact
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}
+
+body:json {
+  {
+    "name": "eduardo2",
+    "email": "dino2@gmail.com",
+    "message": "requiero informacion sobre un producto"
+  }
+}

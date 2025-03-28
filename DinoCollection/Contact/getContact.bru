@@ -1,0 +1,15 @@
+meta {
+  name: getContact
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{BACKEND_URL}}/contact
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}
