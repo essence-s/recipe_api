@@ -1,0 +1,19 @@
+meta {
+  name: createContactMessage
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{BACKEND_URL}}/public/contact-message
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "eduardo",
+    "email": "dino@gmail.com",
+    "message": "requiero informacion sobre un producto"
+  }
+}

@@ -18,6 +18,8 @@ import { SearchService } from '../search/search.service';
 import { CreatePublicPendingRecipeDto } from './dto/create-public.dto';
 import { SearchPublicDto } from './dto/search-public.dto';
 import { PublicService } from './public.service';
+import { CreateContactDto } from '../contact/dto/create-contact.dto';
+import { ContactService } from '../contact/contact.service';
 
 @Controller('public')
 export class PublicController {
@@ -29,12 +31,17 @@ export class PublicController {
     private readonly categoryGroupService: CategoryGroupService,
     private readonly pendingRecipeService: PendingRecipeService,
     private readonly uploadImageService: UploadImageService,
+    private readonly contactService: ContactService,
   ) {}
 
   // @Get('recipe/:id')
   // findOne(@Param('id') id) {
   //   return this.recipeService.findId(+id);
   // }
+  @Post('contact-message')
+  createContactMessage(@Body() createContactDto: CreateContactDto) {
+    return this.contactService.create(createContactDto);
+  }
 
   @Get('recipe/:title')
   findOneRecipeTitle(@Param('title') recipeTitle) {

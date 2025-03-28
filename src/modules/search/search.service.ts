@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { PaginateFunction, paginator } from 'src/common/prismaFun/paginator';
 import {
   PaginateRawFunction,
   paginatorRaw,

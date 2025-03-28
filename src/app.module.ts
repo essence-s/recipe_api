@@ -20,6 +20,8 @@ import { UploadImageModule } from './shared/upload-image/upload-image.module';
 import { CryptoModule } from './shared/crypto/crypto.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RevalidateModule } from './shared/revalidate/revalidate.module';
+import { ContactModule } from './modules/contact/contact.module';
+import { ProductModule } from './modules/product/product.module';
 
 @Module({
   imports: [
@@ -46,6 +48,8 @@ import { RevalidateModule } from './shared/revalidate/revalidate.module';
     RoleModule,
     CategoryGroupModule,
     PublicModule,
+    ContactModule,
+    ProductModule,
 
     // UtilsModule,
   ],

@@ -6,6 +6,7 @@ import { SearchModule } from '../search/search.module';
 import { CategoryModule } from '../category/category.module';
 import { PendingRecipeModule } from '../pending-recipe/pending-recipe.module';
 import { CategoryGroupModule } from '../category-group/category-group.module';
+import { ContactModule } from '../contact/contact.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { CategoryGroupModule } from '../category-group/category-group.module';
     CategoryModule,
     CategoryGroupModule,
     PendingRecipeModule,
+    ContactModule,
   ],
   controllers: [PublicController],
   providers: [PublicService],

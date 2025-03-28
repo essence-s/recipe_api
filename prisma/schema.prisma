@@ -191,3 +191,29 @@ model PendingRecipeCategory {
 
   @@unique([pendingRecipeId, pendingCategoryId])
 }
+
+model Contact {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  message   String
+  createdAt DateTime @default(now())
+}
+
+model Product {
+  id          Int            @id @default(autoincrement())
+  name        String
+  description String?
+  price       Decimal
+  stock       Int            @default(0)
+  image       String?
+  createdAt   DateTime       @default(now())
+  images      ProductImage[]
+}
+
+model ProductImage {
+  id        Int     @id @default(autoincrement())
+  url       String // URL de la imagen
+  productId Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
