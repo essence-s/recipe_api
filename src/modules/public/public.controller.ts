@@ -38,6 +38,12 @@ export class PublicController {
   // findOne(@Param('id') id) {
   //   return this.recipeService.findId(+id);
   // }
+
+  @Get('count-recipes')
+  countRecipes() {
+    return this.recipeService.count();
+  }
+
   @Post('contact-message')
   createContactMessage(@Body() createContactDto: CreateContactDto) {
     return this.contactService.create(createContactDto);

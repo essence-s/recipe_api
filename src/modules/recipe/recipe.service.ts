@@ -240,4 +240,10 @@ export class RecipeService {
       throw new BadRequestException('Error remove recipe');
     }
   }
+
+  async count() {
+    return {
+      count: await this.prisma.recipe.count(),
+    };
+  }
 }
