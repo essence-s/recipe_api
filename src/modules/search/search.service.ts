@@ -85,7 +85,12 @@ export class SearchService {
           'username', u."username",
           'role', ur."name"
         ) AS "user",
-        json_agg(DISTINCT to_jsonb(json_build_object('id', c."id", 'name', c."name"))) AS "categories"
+        COALESCE(
+          json_agg(
+            DISTINCT to_jsonb(json_build_object('id', c."id", 'name', c."name"))
+          ) FILTER (WHERE c."id" IS NOT NULL),
+          '[]'::json
+        ) AS "categories"
       FROM "Recipe" r
       LEFT JOIN "User" u ON r."userId" = u."id"
       LEFT JOIN "Role" ur ON u."roleId" = ur."id"
