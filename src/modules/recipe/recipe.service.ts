@@ -246,4 +246,12 @@ export class RecipeService {
       count: await this.prisma.recipe.count(),
     };
   }
+
+  async findAllTitles() {
+    return this.prisma.recipe.findMany({
+      select: {
+        title: true,
+      },
+    });
+  }
 }

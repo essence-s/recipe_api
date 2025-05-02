@@ -54,6 +54,11 @@ export class PublicController {
     return this.recipeService.findTitle(recipeTitle);
   }
 
+  @Get('all-recipe-titles')
+  findAllRecipeTitles() {
+    return this.recipeService.findAllTitles();
+  }
+
   @Get('search/matches')
   async findMatchesRecipe(@Query() queryG: SearchPublicDto) {
     const { query, categories, page, perPage } = queryG;
